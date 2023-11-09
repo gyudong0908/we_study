@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Store from './reducer/store.js';
+import {Provider} from 'react-redux'
 import './index.css';
 
 import '@fontsource/lobster/400.css';
@@ -33,6 +35,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <Provider store={Store}>
     <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>,
 );
