@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {Stack, Typography, Toolbar, IconButton, Menu, Avatar, Tooltip} from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
@@ -8,6 +9,7 @@ import { styled } from '@mui/material/styles';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import AppBar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
+import CreateClassModal from '../MyModal/CreateClassModal';
 
 const userSettings = ['Calendar', '나의 노트', 'Setting', 'Logout'];
 const classSettings = ['클래스 만들기', '클래스 참여하기'];
@@ -29,14 +31,21 @@ const StyledBadge = styled(Badge)(({theme})=>({
     const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
     };
-  
+
     const handleCloseClassMenu = () => {
       setAnchorElClass(null);
     };
     const handleCloseUserMenu = () => {
       setAnchorElUser(null);
     };
-    
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOpenModal = () => {
+      setIsModalOpen(true);
+      handleCloseClassMenu();
+    };
+    const handleCloseModal = () => setIsModalOpen(false);
+
 
     return (
         <header>
@@ -130,12 +139,14 @@ const StyledBadge = styled(Badge)(({theme})=>({
                     onClose={handleCloseClassMenu}
                   >
                     {classSettings.map((setting) => (
-                      <MenuItem key={setting} onClick={handleCloseClassMenu}>
+                      <MenuItem key={setting} onClick={handleOpenModal}>
                         <Typography textAlign="center">{setting}</Typography>
                       </MenuItem>
                     ))}
                   </Menu>
+                  {isModalOpen && <CreateClassModal open={isModalOpen} handleClose={handleCloseModal} />}
                 </Stack>
+                
   
                 <Stack sx={{ flexGrow: 0 }}>
                   <Tooltip title="Open settings">
@@ -168,6 +179,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
                 </Stack>
             </Toolbar>
           </AppBar>
+          
       </header>
     );
   }
