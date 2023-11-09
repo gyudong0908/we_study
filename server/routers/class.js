@@ -21,37 +21,30 @@ router.get('/classes',function(req,res){
 
 router.post('/class',function(req,res){    
     const Authorization = "Bearer " + req.session.passport.user.accessToken;
-    axios.post(`https://classroom.googleapis.com/v1/courses`,{
+    axios.post(`https://classroom.googleapis.com/v1/courses`,req.body,{
         headers:{
             'Authorization': Authorization,
             'Accept' : 'application/json',
         }
     }).then((data)=>{
-        console.log('id입니다')
-        // console.log(data.data)
-        // axios.post(`https://classroom.googleapis.com/v1/courses/${data.data.id}/teachers`,{ "userId":"me"},{
-        //     headers:{
-        //         'Authorization': Authorization,
-        //         'Accept' : 'application/json',
-        //     }
-        // }).then(()=>{
-        //     console.log("변경완")
-        // }).catch((err)=>{
-        //     console.log(err.message)
-        // })
-        // axios.patch(`https://classroom.googleapis.com/v1/courses/?${data.data.id}&updateMask=courseState`,{
-        //    courseState
-        // },{headers:{
-        //     'Authorization': Authorization,
-        //     'Accept' : 'application/json',
-        // }}).then(()=>{
-        //     // models.create({
-        //     //     id: data.data.courses[0].id
-        //     // })    
-        // })
+        axios.put(`https://classroom.googleapis.com/v1/courses/${data.data.id}`,{ 
+            courseState : "ACTIVE",
+            name: data.data.name            
+        },{
+            headers:{
+                'Authorization': Authorization,
+                'Accept' : 'application/json',
+            }
+        }).then((updateData)=>{
+            models.class.create({
+                id : updateData.data.id
+            })
+        }).catch((err)=>{
+            console.log(err.message)
+        })
     }).catch((err)=>{
-        console.log(2)
         console.log(err.message);
     })
 })
+
 module.exports = router;
