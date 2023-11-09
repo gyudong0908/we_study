@@ -16,8 +16,8 @@ export default function MyPage() {
         direction: 'column',
         spacing: 'px',
         marginTop: '100px',
-        marginLeft: '300px',
-        marginRight: '65px',
+        marginLeft: '270px',
+        marginRight: '70px',
       }}
     >
       <Stack direction='column' spacing={10}>

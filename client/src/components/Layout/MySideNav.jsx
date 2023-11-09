@@ -37,7 +37,7 @@ function MySideNav(){
                 <ListItem key={text} disablePadding>
                     <ListItemButton>
                     <ListItemIcon>
-                        {index === 0 ? <MilitaryTechRoundedIcon /> : index % 2 === 0 ? <CalendarMonthRoundedIcon /> : <EditNoteRoundedIcon />}
+                        {index === 0 ? <MilitaryTechRoundedIcon /> : index % 2 === 0 ? <EditNoteRoundedIcon /> : <CalendarMonthRoundedIcon />}
                     </ListItemIcon>
                     <ListItemText primary={text} />
                     </ListItemButton>
