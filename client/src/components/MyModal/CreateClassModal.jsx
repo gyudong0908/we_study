@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {Stack, Typography, Modal, Button, TextField} from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
@@ -28,11 +28,11 @@ function CreateClassModal({open, handleClose}) {
         description : description,
         ownerId : "me"
       }
-      // axios.post('http://localhost:8081/class',data,{ withCredentials: true }).then(()=>{
-      //   alert('생성이 완료 되었습니다.');
-      // }).catch(err=>{
-      //   alert('오류발생',err);
-      // })
+    //   axios.post('http://localhost:8081/class',data,{ withCredentials: true }).then(()=>{
+    //     alert('생성이 완료 되었습니다.');
+    //   }).catch(err=>{
+    //     alert('오류발생',err);
+    //   })
     }
   }
 
@@ -50,7 +50,7 @@ function CreateClassModal({open, handleClose}) {
           </Typography>
           <Stack id="modal-modal-description">
             <TextField
-                id="outlined-basic"
+                id="className"
                 label="클래스 이름 (필수)"
                 variant="outlined"
                 fullWidth
@@ -61,7 +61,7 @@ function CreateClassModal({open, handleClose}) {
                 value={name}
                 />
             <TextField
-                id="outlined-basic"
+                id="teacherName"
                 label="교사 이름 (필수)"
                 variant="outlined"
                 fullWidth
@@ -72,7 +72,7 @@ function CreateClassModal({open, handleClose}) {
                 value={teacher}
                 />
             <TextField
-                id="outlined-basic"
+                id="classDesc"
                 label="클래스 소개 (선택)"
                 variant="outlined"
                 fullWidth
