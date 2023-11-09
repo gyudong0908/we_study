@@ -45,7 +45,7 @@ export default function ClassTabs({ isTeacher, curriculums, notices }) {
   const tabs = [
     {
       title: '대시보드',
-      content: <ClassDashboard curriculums={curriculums} />,
+      content: <ClassDashboard curriculums={curriculums} isTeacher={isTeacher} />,
     },
     {
       title: '공지사항',
