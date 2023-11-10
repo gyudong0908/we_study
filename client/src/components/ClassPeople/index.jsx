@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Stack, Box } from "@mui/material";
 import {Typography} from "@mui/material";
 import PeopleCompoent from "./ClassPeople";
 
@@ -17,12 +17,15 @@ export default function ClassPeople(){
                 <PeopleCompoent name = {"이창현"}></PeopleCompoent>
             </Stack>
             <Stack>
-                <Stack sx={{
+                <Box sx={{
                     borderBottom : '1px solid black',
                     paddingBottom : '5px',
+                    display: "flex",
+                    justifyContent: 'space-between'
                 }}>
                     <Typography variant='h4'>학생</Typography>
-                </Stack>
+                    <Typography variant='h4'>총 학생수 | {students.length}명</Typography>
+                </Box>
                 {
                     students.map(name=>{
                         return <PeopleCompoent name = {name}></PeopleCompoent>
