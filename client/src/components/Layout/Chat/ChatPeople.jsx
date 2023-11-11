@@ -2,14 +2,16 @@ import { Grid, Box, styled } from "@mui/material";
 import { Typography } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
+import { useEffect, useRef } from "react";
 
-export default function TalkPeople(props) {
+export default function ChatPeople(props) {
     const nows = ['이동규'];
+
     return (
-        <Box sx={{ cursor: 'pointer' }}>
+        <Box>
             {props.data.map(data => {
                 return (
-                    <Grid container sx={{ '&:hover': { background: 'rgba(0, 0, 0, 0.1)' } }} >
+                    <Grid container onClick={() => { props.onClickHandler(data.name) }} sx={{ cursor: 'pointer', '&:hover': { background: 'rgba(0, 0, 0, 0.1)' } }} >
                         {/* 이 밑은 지금은 icon으로 넣었지만 나중에 profile사진으로 넣을 수 있음 */}
                         <Grid item sx={{ marginLeft: '10px' }} xs={1}>
                             <AccountCircleIcon sx={{
@@ -21,7 +23,6 @@ export default function TalkPeople(props) {
                             {
                                 nows.map(now => { if (now === data.name) return <CircleRoundedIcon sx={{ marginTop: '10px', color: 'red' }} /> })
                             }
-
                         </Grid >
                     </Grid>
                 )
