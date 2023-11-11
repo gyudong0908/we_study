@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import ClassDashboard from '../ClassDashboard';
 import ClassNotice from '../ClassNotice';
+import ClassPeople from '../ClassPeople';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -57,7 +58,7 @@ export default function ClassTabs({ isTeacher, curriculums, notices }) {
     },
     {
       title: '참여자',
-      content: <div>참여자 내용</div>,
+      content: <ClassPeople/>,
     },
     {
       title: '성적',

@@ -4,6 +4,7 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Stack from '@mui/material/Stack';
+import Talk from './Talk';
 import * as React from 'react';
 
 const actions = [
@@ -13,28 +14,41 @@ const actions = [
 
 export default function ControlledOpenSpeedDial() {
   const [open, setOpen] = React.useState(false);
+  const [talkOpen, setTalkOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  function onClickTalkHandler(){
+      handleClose();
+      setTalkOpen(true);
+  }
+  function closeTalk(){
+    setTalkOpen(false);
+  }
 
   return (
-    <Stack sx={{ height: 320, transform: 'translateZ(0px)', flexGrow: 1 }}>
-      <SpeedDial
-        ariaLabel="SpeedDial controlled open example"
-        sx={{ position:'fixed', bottom: 50, right: 50, transform: 'translateZ(0px)' }}
-        icon={<SpeedDialIcon />}
-        onClose={handleClose}
-        onOpen={handleOpen}
-        open={open}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-            onClick={handleClose}
-          />
-        ))}
-      </SpeedDial>
+    <Stack>
+      <Stack sx={{ height: 200, transform: 'translateZ(0px)', flexGrow: 1, position:'fixed', bottom:50, right: 50, }}>
+        <SpeedDial
+          ariaLabel="SpeedDial controlled open example"
+          sx={{ transform: 'translateZ(0px)' }}
+          icon={<SpeedDialIcon />}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          open={open}
+        >
+          {actions.map((action) => (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+              onClick={onClickTalkHandler}
+            />
+          ))}
+        </SpeedDial>
+      </Stack>
+            {
+              talkOpen? <Talk closeTalk ={closeTalk}/>:null
+            }
     </Stack>
   );
 }
