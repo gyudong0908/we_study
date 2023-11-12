@@ -14,6 +14,7 @@ import '@fontsource/roboto/700.css';
 import Layout from './components/Layout';
 import ClassPage, { classPageLoader } from './pages/ClassPage.jsx';
 import MyPage from './pages/MyPage.jsx';
+import { initializeUserData } from './reducer/userdata.js';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+Store.dispatch(initializeUserData());
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
