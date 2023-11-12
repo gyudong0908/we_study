@@ -23,4 +23,11 @@ router.get( '/auth/google/callback',
         failureRedirect: process.env.frontAddress
 }),function(req,res){
 });
+
+router.get('/user',function(req,res){
+	const id = req.session.passport.user.id;
+	const nickName = req.session.passport.user.nickName;
+	res.send({id:id,nickName:nickName});
+})
+
 module.exports = router;

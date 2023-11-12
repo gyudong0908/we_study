@@ -35,7 +35,7 @@ module.exports = (httpServer) => {
           },
         }).then(value => {
           console.log(value)
-          io.to(chatName).emit('broadcast', { data: data.data, nickName: value[0].get('user').get('nickName') });
+          io.to(chatName).emit('broadcast', { content: data.data, name: value[0].get('user').get('nickName') });
 
         })
         processMessageQueue();

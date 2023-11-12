@@ -1,9 +1,25 @@
 import io from "socket.io-client";
-import { TextField, Grid, Button } from '@mui/material';
+import { TextField, Grid, Button, Typography, Box } from '@mui/material';
 import { useRef, useEffect, useState } from "react";
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+
+function RightChat({content}){
+    return (
+        <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+        <Typography sx={{backgroundColor: 'yellow', margin: '3px'}} variant = 'body1'>{content}</Typography>
+        </Box>
+    )
+}
+
+function LeftChat({content}){
+    return (
+        <Box sx={{display: 'flex', justifyContent: 'flex-start'}}>
+         <Typography sx={{backgroundColor: 'yellow', margin: '3px'}} variant = 'body1'>{content}</Typography>
+        </Box>
+    )
+}
 export default function ChatDisplay({ name, rewind }) {
-    const [contents, setContents] = useState(['안녕', '그래']);
+    const [contents, setContents] = useState([{content:'안녕',name:'leeDonggyu'},{content:'그래',name:'홍길동'} ]);
     const [sendData, setSendData] = useState('');
     const socket = useRef();
     useEffect(() => {
@@ -13,13 +29,12 @@ export default function ChatDisplay({ name, rewind }) {
 
         _socket.on('broadcast', function (data) {
             console.log(data);
-            setContents(prevContents => [...prevContents, data.data]);
+            setContents(prevContents => [...prevContents, data]);
         });
     }, [])
 
     function send() {
         if (sendData !== '') {
-            console.log(contents)
             socket.current.emit('send', { chatUserId: 1, data: sendData });
         }
     }
@@ -30,7 +45,12 @@ export default function ChatDisplay({ name, rewind }) {
             <div>{name}</div>
             {
                 contents.map(data => {
-                    return <div>{data}</div>
+                    console.log(data.content)
+                return (
+                    <>
+                        {data.name === 'leeDonggyu' ? <RightChat content={data.content} /> : <LeftChat content={data.content} />}
+                    </>
+                );
                 })
             }
             <Grid container>
