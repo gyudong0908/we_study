@@ -6,7 +6,7 @@ function StudyProgress(){
 
     return(
         <>
-        <Typography variant="h4" component="span" sx={{mb:'2', fontWeight: 'bold', marginBottom:'15px', color:'#0091ea'}}>
+        <Typography variant="h4" component="span" sx={{mb:2, fontWeight: 'bold', color:'#0091ea'}}>
             학습 진행 상황
         </Typography>
         {StudentTable(students)}

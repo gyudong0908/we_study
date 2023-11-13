@@ -46,6 +46,7 @@ const router = createBrowserRouter([
         path: 'setting',
         element: <SettingPage />,
       },
+      {
         path: 'rank',
         element: <RankPage />,
       },

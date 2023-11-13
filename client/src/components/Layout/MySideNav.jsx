@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {Stack, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, CssBaseline} from '@mui/material';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
@@ -35,11 +36,12 @@ function MySideNav(){
             <List>
                 {['누적 학습 시간 랭킹', '캘린더', '나의 노트'].map((text, index) => (
                 <ListItem key={text} disablePadding>
-                    <ListItemButton>
-                    <ListItemIcon>
-                        {index === 0 ? <MilitaryTechRoundedIcon /> : index % 2 === 0 ? <EditNoteRoundedIcon /> : <CalendarMonthRoundedIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
+                    <ListItemButton component={Link} to={index === 0 ? '/mypage/rank' : index % 2 === 0 ? '/mypage' : '/mypage'}>
+                        <ListItemIcon>
+                            {index === 0 ? <MilitaryTechRoundedIcon /> : 
+                            index % 2 === 0 ? <EditNoteRoundedIcon /> : <CalendarMonthRoundedIcon />}
+                        </ListItemIcon>
+                        <ListItemText primary={text} />
                     </ListItemButton>
                 </ListItem>
                 ))}

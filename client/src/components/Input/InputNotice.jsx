@@ -19,7 +19,7 @@ export default function InputNotice({ isTeacher}) {
           </AccordionSummary>
           <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
             <TextField
-              id="outlined-basic"
+              id="inputNoticeTitle"
               label="제목을 입력하세요."
               variant="outlined"
               fullWidth
@@ -27,8 +27,8 @@ export default function InputNotice({ isTeacher}) {
               required
             />
             <TextField
-              id="outlined-basic"
-              label="내용을 입력하세요."
+              id="inputNoticeContent"
+              label="세부 내용을 입력하세요."
               variant="outlined"
               fullWidth
               multiline

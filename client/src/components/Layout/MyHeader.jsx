@@ -1,4 +1,5 @@
 import { useState, React } from 'react';
+import { Link } from 'react-router-dom';
 import {AppBar, Stack, Typography, Toolbar, IconButton, Menu, Avatar, Tooltip, Badge, MenuItem} from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
@@ -9,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useLocation } from 'react-router-dom';
 
-const userSettings = ['Calendar', '나의 노트', 'Setting', 'Logout'];
+const userSettings = ['누적 학습 시간 랭킹', 'Calendar', '나의 노트', 'Setting', 'Logout'];
 const classSettings = ['클래스 만들기', '클래스 참여하기'];
 const StyledBadge = styled(Badge)(({theme})=>({
     '& .MuiBadge-badge': {
@@ -159,8 +160,11 @@ const StyledBadge = styled(Badge)(({theme})=>({
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    {userSettings.map((setting) => (
-                      <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    {userSettings.map((setting, index) => (
+                      <MenuItem key={index} onClick={handleCloseUserMenu}
+                        component={Link} to={index === 0 ? '/mypage/rank' : 
+                          index === 3 ? 'http://localhost:8081/logout' : ''}
+                      >
                         <Typography textAlign="center">{setting}</Typography>
                       </MenuItem>
                     ))}

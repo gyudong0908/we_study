@@ -3,8 +3,7 @@ import * as React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import ChatPeople from './ChatPeople';
 import ChatDisplay from './ChatDisplay';
-import { Button, styled, Typography } from '@mui/material';
-
+import { Button, styled, Typography, Box } from '@mui/material';
 
 export default function Chat({ closeChat }) {
   const [value, setValue] = React.useState(0);
@@ -60,14 +59,14 @@ export default function Chat({ closeChat }) {
         {
           chatId !== '' ? <ChatDisplay rewind={rewind} name={chatId} /> : (
             <div>
-              <Stack sx={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
                 <TabButton onClick={() => { setValue(0) }} isActive={value === 0}>
                   <Typography variant='h5'>클래스</Typography>
                 </TabButton>
                 <TabButton onClick={() => { setValue(1) }} isActive={value === 1}>
                   <Typography variant='h5'>개인</Typography>
                 </TabButton>
-              </Stack>
+              </Box>
               {
                 value === 0 ? <ChatPeople data={classData} onClickHandler={onClickHandler} /> : <ChatPeople data={personalData} onClickHandler={onClickHandler} />
               }

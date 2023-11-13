@@ -73,15 +73,15 @@ export function classPageLoader({ params }) {
       `,
     },
   ];
+  const curriculumTopics = ['Node.js', 'React','MySQL'];
 
-  return { title, section, curriculums, notices, assignments };
+  return { title, section, curriculums, notices, assignments, curriculumTopics };
 }
 
 export default function ClassPage() {
   const [isTeacher, setIsTeacher] = useState(true);
-  const { title, section, curriculums, notices, assignments } = useLoaderData();
+  const { title, section, curriculums, notices, assignments, curriculumTopics } = useLoaderData();
 
-  console.log(userData);
   return (
     <Stack
       sx={{
@@ -98,6 +98,7 @@ export default function ClassPage() {
         curriculums={curriculums}
         notices={notices}
         assignments={assignments}
+        curriculumTopics={curriculumTopics}
       />
     </Stack>
   );

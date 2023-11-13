@@ -6,9 +6,9 @@ export default function ClassNotice({ isTeacher, notices }) {
   return (
     <>
       <InputNotice isTeacher={isTeacher}></InputNotice>
-      <Typography variant="h4" component="span" sx={{mb:'2', fontWeight: 'bold', marginBottom:'15px', color:'#0091ea'}}>
-        공지사항
-      </Typography>
+        <Typography variant="h4" component="span" sx={{mb:2, fontWeight: 'bold', color:'#0091ea'}}>
+          공지사항
+        </Typography>
       <NoticeAccordion notices={notices} />
     </>
   );

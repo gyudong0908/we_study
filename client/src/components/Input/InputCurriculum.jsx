@@ -1,5 +1,5 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Button, Stack, TextField } from '@mui/material';
+import { Button, Stack, TextField,} from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -35,8 +35,8 @@ export default function InputCurriculum({ isTeacher}) {
           </AccordionSummary>
           <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
             <TextField
-              id="outlined-basic"
-              label="제목을 입력하세요."
+              id="inputTopicTitle"
+              label="단원명을 하나 입력하세요."
               variant="outlined"
               fullWidth
               sx={{ mb: 2 }}
@@ -45,8 +45,8 @@ export default function InputCurriculum({ isTeacher}) {
               onChange={(e)=>{setTitle(e.target.value)}}
             />
             <TextField
-              id="outlined-basic"
-              label="내용을 입력하세요."
+              id="inputTopicSubTitle"
+              label="세부 목차를 하나씩 입력하세요."
               variant="outlined"
               fullWidth
               sx={{ mb: 2 }}
