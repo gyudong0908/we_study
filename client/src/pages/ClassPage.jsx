@@ -60,14 +60,26 @@ export function classPageLoader({ params }) {
       3팀 - 황영조(PM), 이성운, 김수빈, 김미소`,
     },
   ];
+  const assignments = [
+    {
+      title: '나의 프로필 페이지를 만들어보자.',
+      content: `1. 메뉴는 홈, 나의소개, 연락처, 포트폴리오 링크 총 4개로 한다.
+      2. 홈 페이지에서는 나를 나타낼 수 있는 대문사진 1개 배치한다.
+      3. 나의 소개에는 나에 관하여 자유롭게 기술 및 이미지 활용을 한다.
+      4. 연락처에는 나의 전화번호, 이메일, SNS 등의 내용을 배치한다.
+      5. 포트폴리오에는 github 페이지 링크를 하고, 가능하면 포트폴리오마다 캡쳐 이미지 등을 활용한다. 
+      
+      Tip :  UI는 부트스트랩과 같은 라이브러리 사용을 권장.
+      `,
+    },
+  ];
 
-  return { title, section, curriculums, notices };
+  return { title, section, curriculums, notices, assignments };
 }
 
 export default function ClassPage() {
   const [isTeacher, setIsTeacher] = useState(true);
-  const { title, section, curriculums, notices } = useLoaderData();
-  const userData = useSelector((state) => state.userData);
+  const { title, section, curriculums, notices, assignments } = useLoaderData();
 
   console.log(userData);
   return (
@@ -85,6 +97,7 @@ export default function ClassPage() {
         isTeacher={isTeacher}
         curriculums={curriculums}
         notices={notices}
+        assignments={assignments}
       />
     </Stack>
   );

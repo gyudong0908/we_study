@@ -1,6 +1,7 @@
-import { Stack, Box } from "@mui/material";
+import { Stack } from "@mui/material";
 import {Typography} from "@mui/material";
-import PeopleCompoent from "./ClassPeople";
+import PeopleComponent from "./ClassPeople";
+import StudyProgress from "../ClassDashboard/StudyProgress";
 
 export default function ClassPeople(){
     const students = ['이동규', '조정석', '최혜린'];
@@ -14,10 +15,10 @@ export default function ClassPeople(){
                 }}>
                     <Typography variant='h4'>교사</Typography>
                 </Stack>
-                <PeopleCompoent name = {"이창현"}></PeopleCompoent>
+                <PeopleComponent name = {"이창현"}></PeopleComponent>
             </Stack>
             <Stack>
-                <Box sx={{
+                <Stack sx={{
                     borderBottom : '1px solid black',
                     paddingBottom : '5px',
                     display: "flex",
@@ -25,10 +26,10 @@ export default function ClassPeople(){
                 }}>
                     <Typography variant='h4'>학생</Typography>
                     <Typography variant='h4'>총 학생수 | {students.length}명</Typography>
-                </Box>
+                </Stack>
                 {
                     students.map(name=>{
-                        return <PeopleCompoent name = {name}></PeopleCompoent>
+                        return <PeopleComponent name = {name}></PeopleComponent>
                     })
                 }
             </Stack>

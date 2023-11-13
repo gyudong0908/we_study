@@ -1,4 +1,4 @@
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import PropTypes from 'prop-types';
@@ -6,6 +6,7 @@ import * as React from 'react';
 import ClassDashboard from '../ClassDashboard';
 import ClassNotice from '../ClassNotice';
 import ClassPeople from '../ClassPeople';
+import ClassTodo from '../ClassTodo';
 import ClassSetting from '../ClassSetting';
 
 function CustomTabPanel(props) {
@@ -19,7 +20,7 @@ function CustomTabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Stack sx={{ p: 3 }}>{children}</Stack>}
     </div>
   );
 }
@@ -37,7 +38,7 @@ function a11yProps(index) {
   };
 }
 
-export default function ClassTabs({ isTeacher, curriculums, notices }) {
+export default function ClassTabs({ isTeacher, curriculums, notices, assignments }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -55,7 +56,7 @@ export default function ClassTabs({ isTeacher, curriculums, notices }) {
     },
     {
       title: '할일목록',
-      content: <div>할일목록 내용</div>,
+      content: <ClassTodo assignments={assignments} isTeacher={isTeacher}/>,
     },
     {
       title: '참여자',
@@ -72,8 +73,8 @@ export default function ClassTabs({ isTeacher, curriculums, notices }) {
   ];
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+    <Stack sx={{ width: '100%' }}>
+      <Stack sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -84,12 +85,12 @@ export default function ClassTabs({ isTeacher, curriculums, notices }) {
             <Tab key={index} label={tab.title} {...a11yProps(index)} />
           ))}
         </Tabs>
-      </Box>
+      </Stack>
       {tabs.map((tab, index) => (
         <CustomTabPanel key={index} value={value} index={index}>
           {tab.content}
         </CustomTabPanel>
       ))}
-    </Box>
+    </Stack>
   );
 }

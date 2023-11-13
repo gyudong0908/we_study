@@ -1,4 +1,4 @@
-import { Grid, Box, styled } from "@mui/material";
+import { Grid, styled, Stack } from "@mui/material";
 import { Typography } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
@@ -8,7 +8,7 @@ export default function ChatPeople(props) {
     const nows = ['이동규'];
 
     return (
-        <Box>
+        <Stack>
             {props.data.map(data => {
                 return (
                     <Grid container onClick={() => { props.onClickHandler(data.name) }} sx={{ cursor: 'pointer', '&:hover': { background: 'rgba(0, 0, 0, 0.1)' } }} >
@@ -27,6 +27,6 @@ export default function ChatPeople(props) {
                     </Grid>
                 )
             })}
-        </Box>
+        </Stack>
     )
 }

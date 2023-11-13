@@ -1,21 +1,21 @@
 import io from "socket.io-client";
-import { TextField, Grid, Button, Typography, Box } from '@mui/material';
+import { TextField, Grid, Button, Typography} from '@mui/material';
 import { useRef, useEffect, useState } from "react";
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
 function RightChat({content}){
     return (
-        <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+        <Stack sx={{display: 'flex', justifyContent: 'flex-end'}}>
         <Typography sx={{backgroundColor: 'yellow', margin: '3px', border: '1px solid black', borderRadius: '2px'}} variant = 'body1'>{content}</Typography>
-        </Box>
+        </Stack>
     )
 }
 
 function LeftChat({content}){
     return (
-        <Box sx={{display: 'flex', justifyContent: 'flex-start'}}>
+        <Stack sx={{display: 'flex', justifyContent: 'flex-start'}}>
          <Typography sx={{backgroundColor: 'yellow', margin: '3px', border: '1px solid black', borderRadius: '2px'}} variant = 'body1'>{content}</Typography>
-        </Box>
+        </Stack>
     )
 }
 export default function ChatDisplay({ name, rewind }) {

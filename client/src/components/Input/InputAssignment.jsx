@@ -4,7 +4,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 
-export default function InputNotice({ isTeacher}) {
+export default function InputAssignment({ isTeacher}) {
   const styles = {marginBottom:'40px'};
   return (
     <div style={styles}>
@@ -15,7 +15,7 @@ export default function InputNotice({ isTeacher}) {
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            ✍️ 공지사항을 입력하세요.
+            ✍️ 과제를 입력하세요.
           </AccordionSummary>
           <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
             <TextField
