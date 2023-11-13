@@ -1,18 +1,25 @@
 import axios from 'axios';
 
 export const initializeUserData = () => {
-  return async (dispatch) => {
-    axios.get('http://localhost:8081/user',{ withCredentials: true })
-    .then((response)=>{
-        dispatch({
-            type: 'INITIALIZE_DATA',
-            payload: response.data,
-          });
-    }).catch(error=>{
-        console.log(error);
-    })
+    return async (dispatch) => {
+      if(window.location.pathname !== "/"){
+      axios.get('http://localhost:8081/user',{ withCredentials: true })
+      .then((response)=>{
+          dispatch({
+              type: 'INITIALIZE_DATA',
+              payload: response.data,
+            });
+      }).catch(error=>{
+        window.location.href= '/';
+      })
+    }else{
+      dispatch({
+        type: 'INITIALIZE_DATA',
+        payload: null,
+      });
+    }
+    };
   };
-};
 
 const initialState = {
     // userData: null,
