@@ -6,7 +6,7 @@ import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 function RightChat({content}){
     return (
         <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-        <Typography sx={{backgroundColor: 'yellow', margin: '3px'}} variant = 'body1'>{content}</Typography>
+        <Typography sx={{backgroundColor: 'yellow', margin: '3px', border: '1px solid black', borderRadius: '2px'}} variant = 'body1'>{content}</Typography>
         </Box>
     )
 }
@@ -14,7 +14,7 @@ function RightChat({content}){
 function LeftChat({content}){
     return (
         <Box sx={{display: 'flex', justifyContent: 'flex-start'}}>
-         <Typography sx={{backgroundColor: 'yellow', margin: '3px'}} variant = 'body1'>{content}</Typography>
+         <Typography sx={{backgroundColor: 'yellow', margin: '3px', border: '1px solid black', borderRadius: '2px'}} variant = 'body1'>{content}</Typography>
         </Box>
     )
 }

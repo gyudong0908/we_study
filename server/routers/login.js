@@ -19,7 +19,7 @@ router.get("/logout", async (req, res, next) => {
 
 router.get( '/auth/google/callback',
     passport.authenticate( 'google', {
-        successRedirect: process.env.frontAddress,
+        successRedirect: process.env.frontAddress+'/mypage',
         failureRedirect: process.env.frontAddress
 }),function(req,res){
 });
