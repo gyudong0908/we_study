@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Store from './reducer/store.js';
-import {Provider} from 'react-redux'
+import { Provider } from 'react-redux'
 import './index.css';
 
 import '@fontsource/lobster/400.css';
@@ -14,6 +14,7 @@ import '@fontsource/roboto/700.css';
 import Layout from './components/Layout';
 import ClassPage, { classPageLoader } from './pages/ClassPage.jsx';
 import MyPage from './pages/MyPage.jsx';
+import { initializeUserData } from './reducer/userdata.js';
 
 const router = createBrowserRouter([
   {
@@ -32,11 +33,12 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+Store.dispatch(initializeUserData());
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={Store}>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>,
 );

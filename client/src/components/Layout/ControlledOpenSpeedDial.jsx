@@ -4,7 +4,7 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Stack from '@mui/material/Stack';
-import Talk from './Talk';
+import Chat from './Chat';
 import * as React from 'react';
 
 const actions = [
@@ -17,17 +17,19 @@ export default function ControlledOpenSpeedDial() {
   const [talkOpen, setTalkOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  function onClickTalkHandler(){
-      handleClose();
-      setTalkOpen(true);
+
+  function onClickTalkHandler() {
+    handleClose();
+    setTalkOpen(true);
   }
-  function closeTalk(){
+
+  function closeChat() {
     setTalkOpen(false);
   }
 
   return (
     <Stack>
-      <Stack sx={{ height: 200, transform: 'translateZ(0px)', flexGrow: 1, position:'fixed', bottom:50, right: 50, }}>
+      <Stack sx={{ height: 200, transform: 'translateZ(0px)', flexGrow: 1, position: 'fixed', bottom: 50, right: 50, }}>
         <SpeedDial
           ariaLabel="SpeedDial controlled open example"
           sx={{ transform: 'translateZ(0px)' }}
@@ -46,9 +48,9 @@ export default function ControlledOpenSpeedDial() {
           ))}
         </SpeedDial>
       </Stack>
-            {
-              talkOpen? <Talk closeTalk ={closeTalk}/>:null
-            }
+      {
+        talkOpen ? <Chat closeChat={closeChat} /> : null
+      }
     </Stack>
   );
 }
