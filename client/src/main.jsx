@@ -15,8 +15,14 @@ import LandingPage from './pages/LandingPage.jsx';
 import Layout from './components/Layout';
 import ClassPage, { classPageLoader } from './pages/ClassPage.jsx';
 import MyPage from './pages/MyPage.jsx';
+import RankPage from './pages/RankPage.jsx';
 import { initializeUserData } from './reducer/userdata.js';
 
+
+import MenuItem from '@mui/material/MenuItem';
+
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -34,6 +40,10 @@ const router = createBrowserRouter([
         path: 'classes/:classId',
         element: <ClassPage />,
         loader: classPageLoader,
+      },
+      {
+        path: 'rank',
+        element: <RankPage />,
       },
     ],
   },
