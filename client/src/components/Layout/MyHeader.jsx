@@ -66,11 +66,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
               }}>
               <Toolbar disableGutters width='100%'>
                 <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'black' }} />
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="a"
-                  href="#app-bar-with-responsive-menu"
+                <Typography variant="h6" noWrap component="a" href="/mypage"
                   sx={{
                       mr: 2,
                       display: { xs: 'none', md: 'flex' },
@@ -79,16 +75,10 @@ const StyledBadge = styled(Badge)(({theme})=>({
                       color: '#0091ea',
                       textDecoration: 'none',
                       justifyContent: 'center',
-                  }}>
-                  WeStudy
-                </Typography>
+                  }}>WeStudy</Typography>
                 
                 <AdbIcon sx={{ display: { xs: 'flex', md: 'none', color:'black' }, mr: 1 }} />
-                <Typography
-                  variant="h5"
-                  noWrap
-                  component="a"
-                  href="app-bar-with-responsive-menu"
+                <Typography variant="h5" noWrap component="a" href="/mypage"
                   sx={{
                       mr: 2,
                       display: { xs: 'flex', md: 'none' },
@@ -97,9 +87,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
                       fontWeight: 700,
                       color: '#0091ea',
                       textDecoration: 'none',
-                  }}>
-                  WeStudy
-                </Typography>
+                  }}>WeStudy</Typography>
 
                 <Stack 
                     sx={{

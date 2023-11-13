@@ -11,6 +11,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+import LandingPage from './pages/LandingPage.jsx';
 import Layout from './components/Layout';
 import ClassPage, { classPageLoader } from './pages/ClassPage.jsx';
 import MyPage from './pages/MyPage.jsx';
@@ -19,6 +20,10 @@ import { initializeUserData } from './reducer/userdata.js';
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <LandingPage />,
+  },
+  {
+    path: '/mypage',
     element: <Layout />,
     children: [
       {
