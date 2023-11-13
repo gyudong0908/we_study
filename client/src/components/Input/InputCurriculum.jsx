@@ -4,8 +4,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
-import BackspaceRoundedIcon from '@mui/icons-material/BackspaceRounded';
-import Box from '@mui/material/Box';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useState } from 'react';
 
 export default function InputCurriculum({ isTeacher}) {
@@ -20,8 +19,11 @@ export default function InputCurriculum({ isTeacher}) {
         }
 
     }
+
+    const styles = {marginBottom:'40px'};
+
   return (
-    <>
+    <div style={styles}>
     {isTeacher && (
         <Accordion sx={{ mb: 10 }}>
           <AccordionSummary
@@ -53,20 +55,20 @@ export default function InputCurriculum({ isTeacher}) {
               onChange={(e)=>{setCurriculum(e.target.value)}}
               onKeyUp={(e)=>{keyUpHandler(e);}}
             />
-            <Typography variant="h3">{title}</Typography>
-                        {
+            <Typography variant="h5" sx={{marginBottom:'15px', fontWeight:'bold'}}>{title}</Typography>
+              {
                 curriculumList.map((data,key)=>{
                     return(
-                        <Box direction="row" sx={{display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="body1" gutterBottom key={key} sx={{marginLeft:"10px", marginBottom:'10px'}}>🔹 {data} </Typography>
-                        <BackspaceRoundedIcon sx={{cursor:"pointer"}}></BackspaceRoundedIcon>
-                        </Box>
+                        <Stack direction="row" sx={{display: 'flex', justifyContent: 'space-between'}}>
+                          <Typography variant="body1" gutterBottom key={key} sx={{marginLeft:"10px", marginBottom:'5px'}}>🔹 {data} </Typography>
+                          <CloseRoundedIcon sx={{cursor:'pointer', fontSize:'medium'}}></CloseRoundedIcon>
+                        </Stack>
                     )
                 })  
-            }
+              }
             <Typography variant="h5" sx={{marginLeft:"10px"}}>{curriculum}</Typography>
 
-            <Stack direction="row" justifyContent="flex-end" gap={1}>
+            <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
               <Button variant="outlined" type="reset">
                 취소
               </Button>
@@ -75,6 +77,6 @@ export default function InputCurriculum({ isTeacher}) {
           </AccordionDetails>
         </Accordion>
       )}
-      </>
+      </div>
   );
 }

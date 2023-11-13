@@ -1,9 +1,9 @@
-import { Box, Grid, styled, Button } from "@mui/material";
+import { Stack, Grid, styled, Button } from "@mui/material";
 import {Typography} from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { purple } from '@mui/material/colors';
 
-export default function PeopleCompoent({name}){
+export default function PeopleComponent({name}){
     console.log(name)
     const ColorButton = styled(Button)(({ theme }) => ({
         margin : '10px',
@@ -24,10 +24,10 @@ export default function PeopleCompoent({name}){
             }}/>
             </Grid>
             <Grid item xs={23}> 
-            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+            <Stack sx={{display: 'flex', justifyContent: 'space-between'}}>
                 <Typography variant='h4' sx={{alignSelf : 'center', marginLeft : '20px'}}>{name}</Typography>
                 <ColorButton>1대1 채팅하기</ColorButton>
-            </Box>
+            </Stack>
             </Grid>
         </Grid>
     );

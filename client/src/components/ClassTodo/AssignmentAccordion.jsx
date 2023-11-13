@@ -3,20 +3,20 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 
-export default function NoticeAccordion({ notices }) {
+export default function AssignmentAccordion({ assignments }) {
   return (
     <>
-      {notices.map((notice, index) => (
+      {assignments.map((assignment, index) => (
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            {notice.title}
+            {assignment.title}
           </AccordionSummary>
           <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-            {notice.content}
+            {assignment.content}
           </AccordionDetails>
         </Accordion>
       ))}

@@ -1,15 +1,13 @@
-import * as React from 'react';
-import {useState} from 'react';
-import {Stack, Typography, Toolbar, IconButton, Menu, Avatar, Tooltip} from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
+import { useState, React } from 'react';
+import {AppBar, Stack, Typography, Toolbar, IconButton, Menu, Avatar, Tooltip, Badge, MenuItem} from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
-import Badge from '@mui/material/Badge';
-import { styled } from '@mui/material/styles';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import AppBar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import CreateClassModal from '../MyModal/CreateClassModal';
+import { styled } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { useLocation } from 'react-router-dom';
 
 const userSettings = ['Calendar', '나의 노트', 'Setting', 'Logout'];
 const classSettings = ['클래스 만들기', '클래스 참여하기'];
@@ -20,32 +18,60 @@ const StyledBadge = styled(Badge)(({theme})=>({
         border: 0,
     },
   }));
+
   
   function MyHeader() {
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [anchorElClass, setAnchorElClass] = React.useState(null);
-  
-    const handleOpenClassMenu = (event) => {
-      setAnchorElClass(event.currentTarget);
-    };
+    const location = useLocation();
+    const [anchorElUser, setAnchorElUser] = useState(null);
     const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseClassMenu = () => {
-      setAnchorElClass(null);
     };
     const handleCloseUserMenu = () => {
       setAnchorElUser(null);
     };
 
+    const [anchorElClass, setAnchorElClass] = useState(null);
+    const handleOpenClassMenu = (event) => {
+      setAnchorElClass(event.currentTarget);
+    };
+    const handleCloseClassMenu = () => {
+      setAnchorElClass(null);
+    };
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleOpenModal = () => {
-      setIsModalOpen(true);
-      handleCloseClassMenu();
+    setIsModalOpen(true);
+    handleCloseClassMenu();
     };
     const handleCloseModal = () => setIsModalOpen(false);
 
+    const mypageTool = (
+      <>
+        <Tooltip title="Open classes">
+          <IconButton aria-label='open class' onClick={handleOpenClassMenu}>
+            <StyledBadge>
+              <AddRoundedIcon fontSize='medium'/>
+            </StyledBadge>
+          </IconButton>
+        </Tooltip>
+        <Menu
+            sx={{ mt: '45px' }}
+            id="menu-appbar"
+            anchorEl={anchorElClass}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right', }}
+            keepMounted
+            transformOrigin={{ vertical: 'top', horizontal: 'right',}}
+            open={Boolean(anchorElClass)}
+            onClose={handleCloseClassMenu}
+          >
+            {classSettings.map((setting) => (
+              <MenuItem key={setting} onClick={handleOpenModal}>
+                <Typography textAlign="center">{setting}</Typography>
+              </MenuItem>
+              ))}
+        </Menu>
+        {isModalOpen && <CreateClassModal open={isModalOpen} handleClose={handleCloseModal} />}
+      </>
+    );
 
     return (
         <header>
@@ -103,36 +129,11 @@ const StyledBadge = styled(Badge)(({theme})=>({
                       </StyledBadge>
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Open classes">
-                    <IconButton aria-label='open class' onClick={handleOpenClassMenu}>
-                      <StyledBadge>
-                        <AddRoundedIcon fontSize='medium'/>
-                      </StyledBadge>
+                  {location.pathname.includes('/classes') ? (
+                    <IconButton aria-label='home' >
+                      <HomeRoundedIcon fontSize='medium'/>
                     </IconButton>
-                  </Tooltip>
-                  <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorElClass}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={Boolean(anchorElClass)}
-                    onClose={handleCloseClassMenu}
-                  >
-                    {classSettings.map((setting) => (
-                      <MenuItem key={setting} onClick={handleOpenModal}>
-                        <Typography textAlign="center">{setting}</Typography>
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                  {isModalOpen && <CreateClassModal open={isModalOpen} handleClose={handleCloseModal} />}
+                  ) : mypageTool}
                 </Stack>
                 
   
@@ -167,7 +168,6 @@ const StyledBadge = styled(Badge)(({theme})=>({
                 </Stack>
             </Toolbar>
           </AppBar>
-          
       </header>
     );
   }
