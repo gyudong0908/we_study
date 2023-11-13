@@ -15,6 +15,7 @@ import LandingPage from './pages/LandingPage.jsx';
 import Layout from './components/Layout';
 import ClassPage, { classPageLoader } from './pages/ClassPage.jsx';
 import MyPage from './pages/MyPage.jsx';
+import SettingPage from './pages/SettingPage.jsx';
 import { initializeUserData } from './reducer/userdata.js';
 
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
         path: 'classes/:classId',
         element: <ClassPage />,
         loader: classPageLoader,
+      },
+      {
+        path: 'setting',
+        element: <SettingPage />,
       },
     ],
   },
