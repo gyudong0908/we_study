@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import ClassCard from '../components/ClassCard';
 import ClassTabs from '../components/ClassTabs';
-
+import { useSelector } from 'react-redux';
 export function classPageLoader({ params }) {
   const { classId } = params;
 
@@ -67,7 +67,9 @@ export function classPageLoader({ params }) {
 export default function ClassPage() {
   const [isTeacher, setIsTeacher] = useState(true);
   const { title, section, curriculums, notices } = useLoaderData();
+  const userData = useSelector((state) => state.userData);
 
+  console.log(userData);
   return (
     <Stack
       sx={{

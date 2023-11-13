@@ -12,7 +12,10 @@ const cors = require('cors');
 app.use(session({
   secret: process.env.sessionSecret, // 세션 암호화에 사용될 키 (필요한 경우 변경)
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60
+  },
 }));
 
 app.use(passport.initialize());

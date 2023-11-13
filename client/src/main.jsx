@@ -15,6 +15,7 @@ import LandingPage from './pages/LandingPage.jsx';
 import Layout from './components/Layout';
 import ClassPage, { classPageLoader } from './pages/ClassPage.jsx';
 import MyPage from './pages/MyPage.jsx';
+import SettingPage from './pages/SettingPage.jsx';
 import RankPage from './pages/RankPage.jsx';
 import { initializeUserData } from './reducer/userdata.js';
 
@@ -42,6 +43,9 @@ const router = createBrowserRouter([
         loader: classPageLoader,
       },
       {
+        path: 'setting',
+        element: <SettingPage />,
+      },
         path: 'rank',
         element: <RankPage />,
       },

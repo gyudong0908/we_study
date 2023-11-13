@@ -6,6 +6,7 @@ import * as React from 'react';
 import ClassDashboard from '../ClassDashboard';
 import ClassNotice from '../ClassNotice';
 import ClassPeople from '../ClassPeople';
+import ClassSetting from '../ClassSetting';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,7 +67,7 @@ export default function ClassTabs({ isTeacher, curriculums, notices }) {
     },
     {
       title: '클래스 설정',
-      content: <div>클래스 설정 내용</div>,
+      content: <ClassSetting isTeacher={isTeacher}/>,
     },
   ];
 
@@ -79,6 +80,7 @@ export default function ClassTabs({ isTeacher, curriculums, notices }) {
           aria-label="basic tabs example"
         >
           {tabs.map((tab, index) => (
+            !isTeacher && tab.title === '클래스 설정'? null:
             <Tab key={index} label={tab.title} {...a11yProps(index)} />
           ))}
         </Tabs>
