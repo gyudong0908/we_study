@@ -17,6 +17,7 @@ import ClassPage, { classPageLoader } from './pages/ClassPage.jsx';
 import MyPage from './pages/MyPage.jsx';
 import SettingPage from './pages/SettingPage.jsx';
 import RankPage from './pages/RankPage.jsx';
+import CalenderPage from './pages/CalenderPage.jsx';
 import { initializeUserData } from './reducer/userdata.js';
 
 
@@ -50,9 +51,15 @@ const router = createBrowserRouter([
         path: 'rank',
         element: <RankPage />,
       },
+      {
+        path: 'calender',
+        element: <CalenderPage />,
+      },
     ],
   },
 ]);
+
+
 Store.dispatch(initializeUserData());
 
 ReactDOM.createRoot(document.getElementById('root')).render(
