@@ -5,7 +5,7 @@ import loginImg from '../../public/images/web_neutral_sq_SI@1x.png';
 
 function LandingPage(){
     const handleClick =()=>{
-        console.log('login success');
+        window.location.href = "http://localhost:8081/auth/google";
     };
 
     return(
