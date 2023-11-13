@@ -5,7 +5,6 @@ import ControlledOpenSpeedDial from './ControlledOpenSpeedDial.jsx';
 import MyHeader from './MyHeader.jsx';
 import MySideNav from './MySideNav.jsx';
 
-
 export default function Layout() {
   return (
     <Stack>

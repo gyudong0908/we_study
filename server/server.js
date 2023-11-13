@@ -5,7 +5,7 @@ const session = require('express-session');
 const socketModule = require('./websocket/websocket.js');
 const models = require("./models/index.js");
 const dotenv = require('dotenv').config();
-const cors  = require('cors');
+const cors = require('cors');
 
 
 // 세션 미들웨어 설정
@@ -24,29 +24,29 @@ app.use(cors({
 
 // 미들웨어: 모든 URL에 대한 액세스를 차단
 app.use((req, res, next) => {
-    // `/public` URL에 대한 액세스는 허용
-    if (req.url.match(/^\/auth\/google/) || req.url === '/') {
-      return next(); // 다음 미들웨어 또는 라우트로 진행
-    }
-    // Passport.js의 isAuthenticated 메서드를 사용하여 로그인 여부 확인
-    if (req.isAuthenticated()) {
-      return next(); // 사용자가 로그인한 경우 다음 미들웨어 또는 라우트로 진행
-    } else {
-      // 사용자가 로그인하지 않은 경우 로그인 페이지로 리디렉션
-      res.redirect(process.env.frontAddress);
-    }
-  });
+  // `/public` URL에 대한 액세스는 허용
+  if (req.url.match(/^\/auth\/google/) || req.url === '/') {
+    return next(); // 다음 미들웨어 또는 라우트로 진행
+  }
+  // Passport.js의 isAuthenticated 메서드를 사용하여 로그인 여부 확인
+  if (req.isAuthenticated()) {
+    return next(); // 사용자가 로그인한 경우 다음 미들웨어 또는 라우트로 진행
+  } else {
+    // 사용자가 로그인하지 않은 경우 로그인 페이지로 리디렉션
+    res.redirect(process.env.frontAddress);
+  }
+});
 
-app.use('/',require('./routers/login.js'));
-app.use('/',require('./routers/class.js'));
+app.use('/', require('./routers/login.js'));
+app.use('/', require('./routers/class.js'));
 
-const httpServer = app.listen(8081,()=>{
-    console.log('서버 동작 중');
+const httpServer = app.listen(8081, () => {
+  console.log('서버 동작 중');
 })
 
 socketModule(httpServer);
 
-models.sequelize.sync({ force:true }).then( () => {
+models.sequelize.sync({ force: false }).then(() => {
   console.log(" DB 연결 성공");
 }).catch(err => {
   console.log("연결 실패");

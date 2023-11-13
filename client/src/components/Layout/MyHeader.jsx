@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {Stack, Typography, Toolbar, IconButton, Menu, Avatar, Tooltip} from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
@@ -8,6 +9,7 @@ import { styled } from '@mui/material/styles';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import AppBar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
+import CreateClassModal from '../MyModal/CreateClassModal';
 
 const userSettings = ['Calendar', '나의 노트', 'Setting', 'Logout'];
 const classSettings = ['클래스 만들기', '클래스 참여하기'];
@@ -29,14 +31,21 @@ const StyledBadge = styled(Badge)(({theme})=>({
     const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
     };
-  
+
     const handleCloseClassMenu = () => {
       setAnchorElClass(null);
     };
     const handleCloseUserMenu = () => {
       setAnchorElUser(null);
     };
-    
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOpenModal = () => {
+      setIsModalOpen(true);
+      handleCloseClassMenu();
+    };
+    const handleCloseModal = () => setIsModalOpen(false);
+
 
     return (
         <header>
@@ -57,11 +66,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
               }}>
               <Toolbar disableGutters width='100%'>
                 <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'black' }} />
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="a"
-                  href="#app-bar-with-responsive-menu"
+                <Typography variant="h6" noWrap component="a" href="/mypage"
                   sx={{
                       mr: 2,
                       display: { xs: 'none', md: 'flex' },
@@ -70,16 +75,10 @@ const StyledBadge = styled(Badge)(({theme})=>({
                       color: '#0091ea',
                       textDecoration: 'none',
                       justifyContent: 'center',
-                  }}>
-                  WeStudy
-                </Typography>
+                  }}>WeStudy</Typography>
                 
                 <AdbIcon sx={{ display: { xs: 'flex', md: 'none', color:'black' }, mr: 1 }} />
-                <Typography
-                  variant="h5"
-                  noWrap
-                  component="a"
-                  href="app-bar-with-responsive-menu"
+                <Typography variant="h5" noWrap component="a" href="/mypage"
                   sx={{
                       mr: 2,
                       display: { xs: 'flex', md: 'none' },
@@ -88,9 +87,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
                       fontWeight: 700,
                       color: '#0091ea',
                       textDecoration: 'none',
-                  }}>
-                  WeStudy
-                </Typography>
+                  }}>WeStudy</Typography>
 
                 <Stack 
                     sx={{
@@ -130,12 +127,14 @@ const StyledBadge = styled(Badge)(({theme})=>({
                     onClose={handleCloseClassMenu}
                   >
                     {classSettings.map((setting) => (
-                      <MenuItem key={setting} onClick={handleCloseClassMenu}>
+                      <MenuItem key={setting} onClick={handleOpenModal}>
                         <Typography textAlign="center">{setting}</Typography>
                       </MenuItem>
                     ))}
                   </Menu>
+                  {isModalOpen && <CreateClassModal open={isModalOpen} handleClose={handleCloseModal} />}
                 </Stack>
+                
   
                 <Stack sx={{ flexGrow: 0 }}>
                   <Tooltip title="Open settings">
@@ -168,6 +167,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
                 </Stack>
             </Toolbar>
           </AppBar>
+          
       </header>
     );
   }

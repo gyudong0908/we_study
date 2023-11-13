@@ -31,13 +31,13 @@ function MySideNav(){
                 </ListItem>
             </List>
             <Divider />
-            <Stack spacing={50}>
+            <Stack spacing={45}>
             <List>
                 {['누적 학습 시간 랭킹', '캘린더', '나의 노트'].map((text, index) => (
                 <ListItem key={text} disablePadding>
                     <ListItemButton>
                     <ListItemIcon>
-                        {index === 0 ? <MilitaryTechRoundedIcon /> : index % 2 === 0 ? <CalendarMonthRoundedIcon /> : <EditNoteRoundedIcon />}
+                        {index === 0 ? <MilitaryTechRoundedIcon /> : index % 2 === 0 ? <EditNoteRoundedIcon /> : <CalendarMonthRoundedIcon />}
                     </ListItemIcon>
                     <ListItemText primary={text} />
                     </ListItemButton>

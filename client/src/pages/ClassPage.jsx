@@ -73,8 +73,9 @@ export default function ClassPage() {
       sx={{
         direction: 'column',
         spacing: '10px',
-        marginTop: '65px',
-        marginLeft: '65px',
+        marginTop: '100px',
+        marginLeft: '270px',
+        marginRight: '70px'
       }}
     >
       <ClassCard title={title} section={section} />
