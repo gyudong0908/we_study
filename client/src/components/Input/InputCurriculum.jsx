@@ -69,10 +69,8 @@ export default function InputCurriculum({ isTeacher}) {
             <Typography variant="h5" sx={{marginLeft:"10px"}}>{curriculum}</Typography>
 
             <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
-              <Button variant="outlined" type="reset">
-                취소
-              </Button>
-              <Button variant="outlined">저장</Button>
+              <Button variant="outlined" type="reset">취소</Button>
+              <Button variant="outlined" tyep='submit'>저장</Button>
             </Stack>
           </AccordionDetails>
         </Accordion>

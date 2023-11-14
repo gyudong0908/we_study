@@ -14,7 +14,7 @@ export default function ClassTodo({ isTeacher, assignments, curriculumTopics }) 
                 {topic}
               </Typography>
             </Stack>
-            <AssignmentAccordion assignments={assignments} />
+            <AssignmentAccordion isTeacher={isTeacher} assignments={assignments} />
           </Stack>
         ))} 
           <Stack sx={{mb:5}}>
@@ -23,7 +23,7 @@ export default function ClassTodo({ isTeacher, assignments, curriculumTopics }) 
                 기타
               </Typography>
             </Stack>
-            <AssignmentAccordion assignments={assignments} />
+            <AssignmentAccordion isTeacher={isTeacher} assignments={assignments} />
           </Stack>
       
     </>

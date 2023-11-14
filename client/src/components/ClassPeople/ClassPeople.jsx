@@ -17,12 +17,12 @@ export default function PeopleComponent({name}){
 
     return(
         <Grid container columns={24}>
-            <Grid item xs={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
-                {/* 이 밑은 지금은 icon으로 넣었지만 나중에 profile사진으로 넣을 수 있음 */}
-                <AccountCircleIcon sx={{ fontSize: '30px', marginY:'auto'}} />
+            <Grid item xs={8} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <AccountCircleIcon sx={{ fontSize: '40px', marginY: 'auto' }} />
+                <Typography variant='h6' sx={{ textAlign: 'left', marginLeft: '10px' }}>{name}</Typography>
             </Grid>
-            <Grid item xs={23} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography variant='h6'>{name}</Typography>
+
+            <Grid item xs={16} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <ColorButton sx={{ textShadow: '1px 1px 3px #6200ea', marginLeft: '10px' }}>1 : 1 💬</ColorButton>
             </Grid>
         </Grid>

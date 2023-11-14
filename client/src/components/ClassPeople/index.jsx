@@ -1,5 +1,4 @@
-import { Stack, Box } from "@mui/material";
-import {Typography} from "@mui/material";
+import { Stack, Box, Typography } from "@mui/material";
 import PeopleComponent from "./ClassPeople";
 
 export default function ClassPeople(){
@@ -13,7 +12,7 @@ export default function ClassPeople(){
                         교사
                     </Typography>
                 </Stack>
-                <PeopleComponent name = {"이창현"}></PeopleComponent>
+                <PeopleComponent name = {"이창현"} />
             </Stack>
             <Stack>
                 <Box sx={{borderBottom:'1.5px solid black', mb:2, 

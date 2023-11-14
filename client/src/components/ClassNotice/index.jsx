@@ -1,6 +1,6 @@
 import NoticeAccordion from './NoticeAccordion';
 import InputNotice from '../Input/InputNotice';
-import {Typography, Stack} from '@mui/material';
+import { Typography } from '@mui/material';
 
 export default function ClassNotice({ isTeacher, notices }) {
   return (
@@ -9,7 +9,7 @@ export default function ClassNotice({ isTeacher, notices }) {
         <Typography variant="h4" component="span" sx={{mb:2, fontWeight: 'bold', color:'#0091ea'}}>
           공지사항
         </Typography>
-      <NoticeAccordion notices={notices} />
+      <NoticeAccordion isTeacher={isTeacher} notices={notices} />
     </>
   );
 }

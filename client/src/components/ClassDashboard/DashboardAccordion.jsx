@@ -1,10 +1,9 @@
+import React from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import * as React from 'react';
+import { Accordion, AccordionDetails, AccordionSummary, Stack, Button }  from '@mui/material';
 
-export default function DashboardAccordion({ curriculums }) {
+
+export default function DashboardAccordion({ isTeacher, curriculums }) {
   return (
     <div>
       {curriculums.map((curriculum, index) => (
@@ -16,7 +15,15 @@ export default function DashboardAccordion({ curriculums }) {
           >
             {index + 1}. {curriculum.title}
           </AccordionSummary>
-          <AccordionDetails>{curriculum.content}</AccordionDetails>
+          <AccordionDetails>
+            {curriculum.content}
+            {isTeacher&& (
+              <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
+                <Button variant="outlined">수정</Button>
+              </Stack>
+            )}
+          </AccordionDetails>
+          
         </Accordion>
       ))}
     </div>
