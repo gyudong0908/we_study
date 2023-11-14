@@ -3,16 +3,20 @@ const passport = require('../config/passport.js');
 
 router.get('/auth/google',
   passport.authenticate('google', { scope:
-      [ 'email', 'profile','https://www.googleapis.com/auth/classroom.courses','https://www.googleapis.com/auth/classroom.rosters' ] }
+      [ 'email', 'profile','https://www.googleapis.com/auth/classroom.courses',
+	  'https://www.googleapis.com/auth/classroom.rosters',
+	  'https://www.googleapis.com/auth/classroom.coursework.students'
+	] }
 ));
 
 router.get("/logout", async (req, res, next) => {
 	req.logout((err) => {
 		req.session.destroy();
 		if (err) {
-			res.redirect(process.env.frontAddress);
+			// res.redirect(process.env.frontAddress);
+			res.status(500).send('error 발생');
 		} else {
-			res.status(200).send("server ok: 로그아웃 완료");
+			res.redirect(process.env.frontAddress);
 		}
 	});
 });
