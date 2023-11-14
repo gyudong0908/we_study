@@ -1,4 +1,4 @@
-import { Stack, Grid, styled, Button } from "@mui/material";
+import { Stack, Grid, styled, Button, Box } from "@mui/material";
 import {Typography} from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { purple } from '@mui/material/colors';
@@ -17,17 +17,13 @@ export default function PeopleComponent({name}){
 
     return(
         <Grid container columns={24}>
-            {/* 이 밑은 지금은 icon으로 넣었지만 나중에 profile사진으로 넣을 수 있음 */}
-            <Grid item xs={1}>
-            <AccountCircleIcon sx={{
-                fontSize : '40pt',
-            }}/>
+            <Grid item xs={8} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <AccountCircleIcon sx={{ fontSize: '40px', marginY: 'auto' }} />
+                <Typography variant='h6' sx={{ textAlign: 'left', marginLeft: '10px' }}>{name}</Typography>
             </Grid>
-            <Grid item xs={23}> 
-            <Stack sx={{display: 'flex', justifyContent: 'space-between'}}>
-                <Typography variant='h4' sx={{alignSelf : 'center', marginLeft : '20px'}}>{name}</Typography>
-                <ColorButton>1대1 채팅하기</ColorButton>
-            </Stack>
+
+            <Grid item xs={16} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                <ColorButton sx={{ textShadow: '1px 1px 3px #6200ea', marginLeft: '10px' }}>1 : 1 💬</ColorButton>
             </Grid>
         </Grid>
     );

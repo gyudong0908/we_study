@@ -1,11 +1,18 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { React, useState } from 'react';
+import { InputLabel, MenuItem, Select, FormControl} from '@mui/material';
 import { Button, Stack, TextField } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export default function InputAssignment({ isTeacher}) {
+export default function InputAssignment({ isTeacher, curriculumTopics}) {
   const styles = {marginBottom:'40px'};
+  const [curriculumTopic, setCurriculumTopic] = useState('');
+  const handleChange = (event) => {
+    setCurriculumTopic(event.target.value);
+  };
+
   return (
     <div style={styles}>
     {isTeacher && (
@@ -18,8 +25,24 @@ export default function InputAssignment({ isTeacher}) {
             ✍️ 과제를 입력하세요.
           </AccordionSummary>
           <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
+            <FormControl required sx={{ minWidth: 140, mb : 2 }}>
+              <InputLabel id="selectTopic">단원 선택</InputLabel>
+              <Select
+                labelId="curriculumTopic"
+                id="curriculumTopicRequired"
+                label="단원 선택 필수 *"
+                value={curriculumTopic}
+                onChange={handleChange}
+              >
+                {curriculumTopics.map((topic, index)=>(
+                  <MenuItem key={index}>{topic}</MenuItem>
+                ))}
+                <MenuItem key='etc'>기타</MenuItem>
+              </Select>
+            </FormControl>
+
             <TextField
-              id="outlined-basic"
+              id="inputAssignmentTitle"
               label="제목을 입력하세요."
               variant="outlined"
               fullWidth
@@ -27,8 +50,8 @@ export default function InputAssignment({ isTeacher}) {
               required
             />
             <TextField
-              id="outlined-basic"
-              label="내용을 입력하세요."
+              id="inputAssignmentContent"
+              label="세부 내용을 입력하세요."
               variant="outlined"
               fullWidth
               multiline

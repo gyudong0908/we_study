@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {AppBar, Toolbar, Typography, Stack, Button} from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import loginImg from '../../public/images/web_neutral_sq_SI@1x.png';
@@ -25,7 +26,7 @@ function LandingPage(){
         }}>
             <Toolbar disableGutters width='100%'>
                 <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'black' }} />
-                <Typography variant='h6' noWrap component='a' href='/mypage' sx={{
+                <Typography variant='h6' noWrap component={Link} to='/mypage' sx={{
                     mr: 2,
                     display: { xs: 'none', md: 'flex' },
                     fontFamily: 'lobster',
@@ -36,7 +37,7 @@ function LandingPage(){
                 }}>WeStudy</Typography>
 
                 <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: 'black' }} />
-                <Typography variant='h5' noWrap component='a' href='/mypage' sx={{
+                <Typography variant='h5' noWrap component={Link} to='/mypage' sx={{
                     mr: 2,
                     display: { xs: 'flex', md: 'none' },
                     flexGrow: 1,

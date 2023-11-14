@@ -7,10 +7,10 @@ export default function ClassDashboard({ curriculums, isTeacher }) {
     <Stack>
       <InputCurriculum isTeacher={isTeacher} marginBottom={20}></InputCurriculum>
       <StudyProgress />
-      <Typography variant="h4" component="span" sx={{mb:'2', fontWeight: 'bold', marginBottom:'15px', color:'#0091ea'}}>
+      <Typography variant="h4" component="span" sx={{mb:2, fontWeight: 'bold', color:'#0091ea'}}>
         커리큘럼
       </Typography>
-      <BasicAccordion curriculums={curriculums} />
+      <BasicAccordion isTeacher={isTeacher} curriculums={curriculums} />
     </Stack>
   );
 }
