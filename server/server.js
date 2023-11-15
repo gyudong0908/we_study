@@ -44,6 +44,7 @@ app.use('/', require('./routers/login.js'));
 app.use('/', require('./routers/class.js'));
 app.use('/', require('./routers/memo.js'));
 app.use('/', require('./routers/work.js'));
+app.use('/', require('./routers/attendance.js'));
 
 const httpServer = app.listen(8081, () => {
   console.log('서버 동작 중');

@@ -21,7 +21,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     classId: {
       type: DataTypes.STRING,
-    }
+    },
+    category: {
+      type: DataTypes.STRING,
+    },
+
   }, {
     sequelize,
     modelName: 'work', // 모델 이름 바꿔줘야함
