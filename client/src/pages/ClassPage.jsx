@@ -81,8 +81,8 @@ import { useSelector } from 'react-redux';
 export default function ClassPage() {
   const [isTeacher, setIsTeacher] = useState(true);
   // const { title, section, curriculums, notices, assignments, curriculumTopics } = useLoaderData();
-
   return (
+    
     <Stack
       sx={{
         direction: 'column',

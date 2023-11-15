@@ -69,7 +69,7 @@ export default function ClassTabs({ isTeacher }) {
     },
     {
       title: '클래스 설정',
-      content: <ClassSetting isTeacher={isTeacher}/>,
+      content: <ClassSetting isTeacher={isTeacher} />,
     },
   ];
 
