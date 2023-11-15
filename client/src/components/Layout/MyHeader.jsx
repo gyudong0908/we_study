@@ -10,18 +10,18 @@ import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useLocation } from 'react-router-dom';
 
-const userSettings = ['누적 학습 시간 랭킹', 'Calendar', '나의 노트', 'Setting', 'Logout'];
-const classSettings = ['클래스 만들기', '클래스 참여하기'];
-const StyledBadge = styled(Badge)(({theme})=>({
-    '& .MuiBadge-badge': {
-        right: -3,
-        top: 5,
-        border: 0,
-    },
-  }));
-
   
   function MyHeader() {
+    const userSettings = ['누적 학습 시간 랭킹', 'Calendar','Setting', 'Logout'];
+    const classSettings = ['클래스 만들기', '클래스 참여하기'];
+    const StyledBadge = styled(Badge)(({theme})=>({
+        '& .MuiBadge-badge': {
+            right: -3,
+            top: 5,
+            border: 0,
+        },
+      }));
+
     const location = useLocation();
     const [anchorElUser, setAnchorElUser] = useState(null);
     const handleOpenUserMenu = (event) => {
@@ -93,7 +93,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
               }}>
               <Toolbar disableGutters width='100%'>
                 <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'black' }} />
-                <Typography variant="h6" noWrap component="a" href="/mypage"
+                <Typography variant="h6" noWrap component={Link} to='/mypage'
                   sx={{
                       mr: 2,
                       display: { xs: 'none', md: 'flex' },
@@ -105,7 +105,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
                   }}>WeStudy</Typography>
                 
                 <AdbIcon sx={{ display: { xs: 'flex', md: 'none', color:'black' }, mr: 1 }} />
-                <Typography variant="h5" noWrap component="a" href="/mypage"
+                <Typography variant="h5" noWrap component={Link} to='/mypage'
                   sx={{
                       mr: 2,
                       display: { xs: 'flex', md: 'none' },
@@ -163,7 +163,8 @@ const StyledBadge = styled(Badge)(({theme})=>({
                     {userSettings.map((setting, index) => (
                       <MenuItem key={index} onClick={handleCloseUserMenu}
                         component={Link} to={index === 0 ? '/mypage/rank' : 
-                          index === 3 ? 'http://localhost:8081/logout' : ''}
+                          index === 1 ? '/mypage/calender' : 
+                          index ===2 ? '/mypage/setting' : 'http://localhost:8081/logout'}
                       >
                         <Typography textAlign="center">{setting}</Typography>
                       </MenuItem>

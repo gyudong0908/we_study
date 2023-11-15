@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {Stack, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, CssBaseline} from '@mui/material';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import MilitaryTechRoundedIcon from '@mui/icons-material/MilitaryTechRounded';
+import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 
 
 function MySideNav(){
@@ -34,12 +34,12 @@ function MySideNav(){
             <Divider />
             <Stack spacing={45}>
             <List>
-                {['누적 학습 시간 랭킹', '캘린더', '나의 노트'].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                    <ListItemButton component={Link} to={index === 0 ? '/mypage/rank' : index % 2 === 0 ? '/mypage' : '/mypage'}>
+                {['누적 학습 시간 랭킹', '캘린더', '강의1', '강의2'].map((text, index) => (
+                <ListItem key={index} disablePadding>
+                    <ListItemButton component={Link} to={index === 0 ? '/mypage/rank' : index === 1 ? '/mypage/calender' : '/mypage'}>
                         <ListItemIcon>
                             {index === 0 ? <MilitaryTechRoundedIcon /> : 
-                            index % 2 === 0 ? <EditNoteRoundedIcon /> : <CalendarMonthRoundedIcon />}
+                            index === 1 ? <CalendarMonthRoundedIcon /> : <SchoolRoundedIcon />}
                         </ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItemButton>
@@ -48,8 +48,8 @@ function MySideNav(){
             </List>
             <List>
                 {['Setting'].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                    <ListItemButton>
+                <ListItem key={index} disablePadding>
+                    <ListItemButton component={Link} to='/mypage/setting'>
                         <ListItemIcon>
                             <SettingsRoundedIcon />
                         </ListItemIcon>
