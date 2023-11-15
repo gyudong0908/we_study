@@ -81,8 +81,9 @@ export function classPageLoader({ params }) {
 export default function ClassPage() {
   const [isTeacher, setIsTeacher] = useState(true);
   const { title, section, curriculums, notices, assignments, curriculumTopics } = useLoaderData();
-
+  console.log(data);
   return (
+    
     <Stack
       sx={{
         direction: 'column',
