@@ -5,19 +5,40 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import axios from 'axios';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-export default function InputCurriculum({ isTeacher}) {
+export default function InputCurriculum({ isTeacher, setCurriculums}) {
     const [curriculumList,setCurriculumList] = useState([]);
     const [title,setTitle] = useState('');
     const [curriculum,setCurriculum] = useState('');
+    const {classId} = useParams();
+
     function keyUpHandler(e){
         e.preventDefault();
         if(e.key === 'Enter'){
             setCurriculumList([...curriculumList,curriculum]);
             setCurriculum('');
         }
+    }
 
+    function onClickSave(){
+      const resultString = curriculumList.join('\n');
+      console.log(resultString);
+      axios.post(`http://localhost:8081/work?classId=${classId}&category=커리큘럼`,{
+        title: title,
+        description: resultString,
+        state: "PUBLISHED",
+        workType: "ASSIGNMENT",
+      },{ withCredentials: true }).catch(err=>{
+        alert('오류 발생:', err);
+      });   
+      axios.post(`http://localhost:8081/topic?classId=${classId}&category=커리큘럼`,{
+        name: title
+      },{ withCredentials: true }).catch(err=>{
+        alert('오류 발생:', err);
+      })
     }
 
     const styles = {marginBottom:'40px'};
@@ -70,7 +91,7 @@ export default function InputCurriculum({ isTeacher}) {
 
             <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
               <Button variant="outlined" type="reset">취소</Button>
-              <Button variant="outlined" tyep='submit'>저장</Button>
+              <Button variant="outlined" tyep='submit' onClick={onClickSave}>저장</Button>
             </Stack>
           </AccordionDetails>
         </Accordion>

@@ -5,7 +5,8 @@ router.get('/auth/google',
   passport.authenticate('google', { scope:
       [ 'email', 'profile','https://www.googleapis.com/auth/classroom.courses',
 	  'https://www.googleapis.com/auth/classroom.rosters',
-	  'https://www.googleapis.com/auth/classroom.coursework.students'
+	  'https://www.googleapis.com/auth/classroom.coursework.students',
+	  'https://www.googleapis.com/auth/classroom.topics'
 	] }
 ));
 
