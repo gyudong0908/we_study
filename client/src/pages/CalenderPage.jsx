@@ -1,10 +1,34 @@
-import { Stack } from "@mui/material"
+import { Stack, Button, styled,Typography, Box } from "@mui/material"
 import Calendar from '@toast-ui/react-calendar';
 import '@toast-ui/calendar/dist/toastui-calendar.min.css';
-import { createRef, useEffect } from "react";
+import { createRef, useEffect, useState } from "react";
 export default function CalenderPage() {
-    const calendarRef = createRef();
+    const [calendarDate, setCalendarDate] = useState(new Date());
 
+    const template = {
+            monthGridHeader(model) {
+                const date = parseInt(model.date.split('-')[2], 10);                  
+                return <span style={{margin: "15px"}}>{date}</span>;
+              },
+              monthDayName(model) {
+                return <div style={{fontSize: "20pt", fontWeight: 'bold'}}>{model.label}</div>;
+              },       
+              monthMoreTitleDate(moreTitle) {
+                const { date } = moreTitle;          
+                return `<span>${date}</span>`;
+              },              
+                           
+    }
+
+    const MoveButton = styled(Button)(({ theme }) => ({
+        margin : '10px',
+        borderRadius : '20px',
+        background: 'none',
+        color : 'black',
+        fontSize: '30pt'
+      }));
+
+    const calendarRef = createRef();
     let items = [];
     const myEvent = [
         {
@@ -231,6 +255,7 @@ export default function CalenderPage() {
             "eventType": "default"
         }
     ]
+
     function changeEvent() {
         myEvent.map((data, idx) => {
             items.push({
@@ -243,53 +268,71 @@ export default function CalenderPage() {
                 category: 'allday',
                 isReadOnly: true,
                 color: 'white',
-                backgroundColor: 'red',
+                backgroundColor: 'none',
+                borderColor: 'none',
+                customStyle:{
+                    color: 'white',
+                    backgroundColor: '#0B8043',
+                    borderRadius: '5px',
+                    marginTop: '10px'
+                }
             })
         })
-        console.log(items);
     }
     changeEvent();
+
+    function movePrev(){
+        calendarRef.current.getInstance().prev();
+        setCalendarDate((prevDate)=>{
+            const newDate = new Date(prevDate);
+            newDate.setMonth(prevDate.getMonth()-1);
+            return newDate;})
+    }
+    function moveNext(){
+        calendarRef.current.getInstance().next();
+        setCalendarDate((prevDate)=>{
+            const newDate = new Date(prevDate);
+            newDate.setMonth(prevDate.getMonth()+1);
+            return newDate;})
+    }
+    function moveNow(){
+        calendarRef.current.getInstance().today();
+        setCalendarDate(new Date());
+    }
+
     return (
-        <Stack sx={{
-            direction: 'column',
-            spacing: '10px',
-            marginTop: '100px',
+        <Box sx={{
+            marginTop: '70px',
             marginLeft: '270px',
-            marginRight: '70px'
+            marginRight: '70px',
         }}
         >
+            <Stack direction='row' alignItems='center' justifyContent='space-between'>
+                <MoveButton onClick={movePrev}>&lt;</MoveButton>
+                <Typography sx={{ fontSize: '30pt'}}>{calendarDate.getMonth()+1}月  {calendarDate.getFullYear()}</Typography>
+                <MoveButton onClick={moveNext}>&gt;</MoveButton>
+            </Stack>
+            <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                <Button onClick={moveNow}>현재날짜로 돌아가기</Button>
+            </Box>
 
-            <button onClick={() => {
-                calendarRef.current.getInstance().prev();
-            }}>뒤로</button>
-
-            <button onClick={() => {
-                calendarRef.current.getInstance().next();
-            }}>앞으로</button>
-
-            <button onClick={() => {
-                calendarRef.current.getInstance().today();
-                console.log(calendarRef.current.getInstance())
-            }}>나우</button>
             <Calendar
-                onLoad={() => { console.log('러드') }}
                 ref={calendarRef}
-                height="900px"
+                height="730px"
                 calendars={[
                     {
                         id: '0',
                         name: 'dsadsadsa',
-                        color: 'blue',
-                        backgroundColor: 'blue',
-                        dragBackgroundColor: 'blue',
-                        borderColor: 'blue',
+                        // color: 'blue',
+                        // backgroundColor: 'blue',
+                        // dragBackgroundColor: 'blue',
+                        // borderColor: 'blue',
                     },
                 ]}
                 disableDblClick={true}
                 disableClick={true}
-                isReadOnly={true}
+                isReadOnly={false}
                 events={items}
-                theme='' // 어두운 테마 사용가능
                 timezones={[
                     {
                         timezoneOffset: 540,
@@ -297,6 +340,15 @@ export default function CalenderPage() {
                         tooltip: 'Seoul'
                     }
                 ]}
+                theme={{
+                    common: {
+                        dayName: {
+                          fontSize: '30pt',
+                        },
+                      },
+                }}
+                template= {template}
+                useFormPopup
                 useDetailPopup
                 useCreationPopup
                 view='month' // You can also set the `defaultView` option.
@@ -310,6 +362,6 @@ export default function CalenderPage() {
                     visibleEventCount: 2, // 보고 싶은 이벤수 정하기
                 }}
             />
-        </Stack>
+        </Box>
     )
 }
