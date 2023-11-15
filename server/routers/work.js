@@ -7,7 +7,7 @@ router.use(express.json());
 
 router.get('/works',function(req,res){    
     const Authorization = "Bearer " + req.session.passport.user.accessToken;
-    const courseId = req.query.courseId;
+    const courseId = req.query.classId;
     const category = req.query.category;
     axios.get(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork`,{
         headers:{
@@ -34,7 +34,7 @@ router.get('/works',function(req,res){
 
 router.post('/work',function(req,res){    
     const Authorization = "Bearer " + req.session.passport.user.accessToken;
-    const courseId = req.query.courseId;
+    const courseId = req.query.classId;
     const category = req.query.category;
     axios.post(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork`,req.body,{
         headers:{
@@ -57,9 +57,9 @@ router.post('/work',function(req,res){
 
 router.put('/work',function(req,res){    
     const Authorization = "Bearer " + req.session.passport.user.accessToken;
-    const courseId = req.query.courseId;
+    const courseId = req.query.classId;
     const id = req.query.id;
-    const updateMask = req.query.updateMask;
+    const updateMask = req.query.mask;
     axios.post(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}?updateMask=${updateMask}`,req.body,{
         headers:{
             'Authorization':Authorization,
