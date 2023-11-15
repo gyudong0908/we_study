@@ -18,7 +18,7 @@ export default function ClassDashboard({isTeacher }) {
       const sortData = data.data.sort((a,b)=> new Date(a.creationTime) - new Date(b.creationTime));
       setCurriculums(sortData);
       setIsLoading(true);
-    }catch{
+    }catch(err){
       alert('에러 발생');
       console.log(err);
     }
