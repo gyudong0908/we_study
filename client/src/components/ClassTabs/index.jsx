@@ -39,9 +39,9 @@ function a11yProps(index) {
   };
 }
 
-export default function ClassTabs({ isTeacher, curriculums, notices, assignments, curriculumTopics }) {
+export default function ClassTabs({ isTeacher }) {
   const [value, setValue] = React.useState(0);
-
+  
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -49,15 +49,15 @@ export default function ClassTabs({ isTeacher, curriculums, notices, assignments
   const tabs = [
     {
       title: '대시보드',
-      content: <ClassDashboard curriculums={curriculums} isTeacher={isTeacher} />,
+      content: <ClassDashboard isTeacher={isTeacher} />,
     },
     {
       title: '공지사항',
-      content: <ClassNotice notices={notices} isTeacher={isTeacher} />,
+      content: <ClassNotice isTeacher={isTeacher} />,
     },
     {
       title: '할일목록',
-      content: <ClassTodo assignments={assignments} curriculumTopics={curriculumTopics} isTeacher={isTeacher}/>,
+      content: <ClassTodo  isTeacher={isTeacher}/>,
     },
     {
       title: '참여자',

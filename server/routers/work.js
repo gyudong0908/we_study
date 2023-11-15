@@ -9,12 +9,14 @@ router.get('/works',function(req,res){
     const Authorization = "Bearer " + req.session.passport.user.accessToken;
     const courseId = req.query.classId;
     const category = req.query.category;
+    console.log(new Date().getTime());
     axios.get(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork`,{
         headers:{
             'Authorization':Authorization,
             'Accept' : 'application/json',
         }
     }).then((works)=>{       
+        console.log(new Date().getTime());
         models.work.findAll({
             attributes:['id'],
             raw:true,
@@ -25,10 +27,12 @@ router.get('/works',function(req,res){
         }).then(data=>{
             // 우리 DB의 정보를 확인하여 맞는 정보만 가져오는 코드
             const filterWorks = works.data.courseWork.filter(work=>{return data.some(userWork=>userWork.id === work.id)});
+            console.log(new Date().getTime());
             res.send(filterWorks);
         })
     }).catch((err)=>{
         res.status(500).send(err);
+        console.log(err);
     })
 });
 
@@ -41,16 +45,19 @@ router.post('/work',function(req,res){
             'Authorization':Authorization,
             'Accept' : 'application/json',
         }
-    }).then(()=>{       
+    }).then((data)=>{       
         models.work.create({
-            classId: classId,
+            id: data.data.id,
+            classId: courseId,
             category: category,
             }).then(()=>{
                 res.status(200).send('잘 되었습니다.');
             }).catch(err=>{
+                console.log(err);
                 res.status(500).send('DB 저장 오류'+err);
             })
     }).catch(err=>{
+        console.log(err);
         res.status(500).send('api 요청 오류'+err);
     })
 });
@@ -68,6 +75,7 @@ router.put('/work',function(req,res){
     }).then(()=>{       
         res.status(200).send('잘 됨');
     }).catch(err=>{
+        console.log(err);
         res.status(500).send('api 요청 오류'+err);
     })
 });

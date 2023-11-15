@@ -13,7 +13,7 @@ import '@fontsource/roboto/700.css';
 
 import LandingPage from './pages/LandingPage.jsx';
 import Layout from './components/Layout';
-import ClassPage, { classPageLoader } from './pages/ClassPage.jsx';
+import ClassPage from './pages/ClassPage.jsx';
 import MyPage from './pages/MyPage.jsx';
 import SettingPage from './pages/SettingPage.jsx';
 import RankPage from './pages/RankPage.jsx';
@@ -36,7 +36,6 @@ const router = createBrowserRouter([
       {
         path: 'classes/:classId',
         element: <ClassPage />,
-        loader: classPageLoader,
       },
       {
         path: 'setting',
@@ -58,9 +57,9 @@ const router = createBrowserRouter([
 Store.dispatch(initializeUserData());
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={Store}>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 );
