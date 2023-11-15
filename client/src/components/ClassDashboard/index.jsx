@@ -14,9 +14,11 @@ export default function ClassDashboard({isTeacher }) {
 
   async function getCurriculums(){
     try{
-      const data =  await axios.get(`http://localhost:8081/works?classId=${classId}&category=커리큘럼`,{ withCredentials: true });
-      const sortData = data.data.sort((a,b)=> new Date(a.creationTime) - new Date(b.creationTime));
-      setCurriculums(sortData);
+      let data =  await axios.get(`http://localhost:8081/works?classId=${classId}&category=커리큘럼`,{ withCredentials: true });
+      if(data.data){
+        const sortData = data.data.sort((a,b)=> new Date(a.creationTime) - new Date(b.creationTime));
+        setCurriculums(sortData);
+      }
       setIsLoading(true);
     }catch(err){
       alert('에러 발생');

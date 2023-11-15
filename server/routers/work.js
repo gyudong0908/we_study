@@ -26,9 +26,13 @@ router.get('/works',function(req,res){
             }
         }).then(data=>{
             // 우리 DB의 정보를 확인하여 맞는 정보만 가져오는 코드
-            const filterWorks = works.data.courseWork.filter(work=>{return data.some(userWork=>userWork.id === work.id)});
-            console.log(new Date().getTime());
-            res.send(filterWorks);
+            if(works.data.courseWork !== undefined){
+                const filterWorks = works.data.courseWork.filter(work=>{return data.some(userWork=>userWork.id === work.id)});
+                console.log(new Date().getTime());
+                res.send(filterWorks);    
+            }else{
+                res.send();
+            }
         })
     }).catch((err)=>{
         res.status(500).send(err);
