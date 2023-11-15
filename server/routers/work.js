@@ -8,6 +8,7 @@ router.use(express.json());
 router.get('/works',function(req,res){    
     const Authorization = "Bearer " + req.session.passport.user.accessToken;
     const courseId = req.query.courseId;
+    const category = req.query.category;
     axios.get(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork`,{
         headers:{
             'Authorization':Authorization,
@@ -18,7 +19,8 @@ router.get('/works',function(req,res){
             attributes:['id'],
             raw:true,
             where:{
-                classId: courseId
+                classId: courseId,        
+                category: category,        
             }
         }).then(data=>{
             // 우리 DB의 정보를 확인하여 맞는 정보만 가져오는 코드
@@ -26,7 +28,47 @@ router.get('/works',function(req,res){
             res.send(filterWorks);
         })
     }).catch((err)=>{
-        console.log(err.message);
+        res.status(500).send(err);
+    })
+});
+
+router.post('/work',function(req,res){    
+    const Authorization = "Bearer " + req.session.passport.user.accessToken;
+    const courseId = req.query.courseId;
+    const category = req.query.category;
+    axios.post(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork`,req.body,{
+        headers:{
+            'Authorization':Authorization,
+            'Accept' : 'application/json',
+        }
+    }).then(()=>{       
+        models.work.create({
+            classId: classId,
+            category: category,
+            }).then(()=>{
+                res.status(200).send('잘 되었습니다.');
+            }).catch(err=>{
+                res.status(500).send('DB 저장 오류'+err);
+            })
+    }).catch(err=>{
+        res.status(500).send('api 요청 오류'+err);
+    })
+});
+
+router.put('/work',function(req,res){    
+    const Authorization = "Bearer " + req.session.passport.user.accessToken;
+    const courseId = req.query.courseId;
+    const id = req.query.id;
+    const updateMask = req.query.updateMask;
+    axios.post(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}?updateMask=${updateMask}`,req.body,{
+        headers:{
+            'Authorization':Authorization,
+            'Accept' : 'application/json',
+        }
+    }).then(()=>{       
+        res.status(200).send('잘 됨');
+    }).catch(err=>{
+        res.status(500).send('api 요청 오류'+err);
     })
 });
 

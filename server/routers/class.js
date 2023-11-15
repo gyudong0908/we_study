@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const dotenv = require('dotenv').config();
 const axios = require('axios');
 const models = require('../models');
 router.use(express.json());
@@ -13,8 +12,9 @@ router.get('/classes',function(req,res){
             'Accept' : 'application/json',
         }
     }).then((data)=>{       
-        req.session.passport.user.id
-        res.send(data.data.courses);
+        const filterData = data.data.courses.filter(course=>course.descriptionHeading === 'we-study');
+        console.log(filterData);
+        res.send(filterData);
     }).catch((err)=>{
         console.log(err.message);
     })
