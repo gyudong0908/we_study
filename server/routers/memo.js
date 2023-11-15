@@ -4,7 +4,7 @@ const models = require('../models');
 router.use(express.json());
 
 router.get('/memos',function(req,res){    
-    const userId = req.query.userId;
+    const userId = req.session.passport.user.id;
     models.memo.findAll({
         attributes: ['id','title'],
         where:{
