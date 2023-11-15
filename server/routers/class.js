@@ -22,6 +22,8 @@ router.get('/classes',function(req,res){
 
 router.post('/class',function(req,res){    
     const Authorization = "Bearer " + req.session.passport.user.accessToken;
+    console.log(req.body)
+    res.send(req.body)
     axios.post(`https://classroom.googleapis.com/v1/courses`,req.body,{
         headers:{
             'Authorization': Authorization,
@@ -30,7 +32,11 @@ router.post('/class',function(req,res){
     }).then((data)=>{
         axios.put(`https://classroom.googleapis.com/v1/courses/${data.data.id}`,{ 
             courseState : "ACTIVE",
-            name: data.data.name            
+            name: data.data.name,
+            section: data.data.section,
+            description: data.data.description,
+            ownerId: "me",
+            descriptionHeading: data.data.descriptionHeading,
         },{
             headers:{
                 'Authorization': Authorization,

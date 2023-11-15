@@ -26,13 +26,15 @@ function CreateClassModal({open, handleClose}) {
         name : name,
         section	: teacher,
         description : description,
-        ownerId : "me"
+        ownerId : "me",
+        descriptionHeading: "we-study"
       }
-    //   axios.post('http://localhost:8081/class',data,{ withCredentials: true }).then(()=>{
-    //     alert('생성이 완료 되었습니다.');
-    //   }).catch(err=>{
-    //     alert('오류발생',err);
-    //   })
+      console.log(data)
+      axios.post('http://localhost:8081/class',data,{ withCredentials: true }).then(()=>{
+        alert('생성이 완료 되었습니다.');
+      }).catch(err=>{
+        alert('오류발생',err);
+      })
     }
   }
 
