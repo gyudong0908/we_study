@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Attendance.belongsTo(models.class, { foreignKey: 'classId' });
-            Attendance.belongsTo(models.user, { foreignKey: 'userId' });
+            Attendance.belongsTo(models.Class, { foreignKey: 'classId' });
+            Attendance.belongsTo(models.User, { foreignKey: 'userId' });
         }
     }
     Attendance.init({
@@ -22,14 +22,14 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
         },
         classId: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
         },
         userId: {
-            type: DataTypes.STRING,
-        },        
+            type: DataTypes.INTEGER,
+        },
     }, {
         sequelize,
-        modelName: 'attendance', // 모델 이름 바꿔줘야함
+        modelName: 'Attendance', // 모델 이름 바꿔줘야함
         timestamps: true,
         underscored: true,
         tableName: 'attendances', // 테이블 이름 바꿔줘야함

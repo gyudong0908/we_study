@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Memo.belongsTo(models.user, { foreignKey: 'userId' });
+            Memo.belongsTo(models.User, { foreignKey: 'userId' });
         }
     }
     Memo.init({
@@ -21,17 +21,17 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true
         },
         userId: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
         },
         title: {
             type: DataTypes.STRING,
         },
         content: {
-            type: DataTypes.TEXT,            
+            type: DataTypes.TEXT,
         }
     }, {
         sequelize,
-        modelName: 'memo', // 모델 이름 바꿔줘야함
+        modelName: 'Memo', // 모델 이름 바꿔줘야함
         timestamps: true,
         underscored: true,
         tableName: 'memos', // 테이블 이름 바꿔줘야함

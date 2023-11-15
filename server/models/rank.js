@@ -15,27 +15,27 @@ module.exports = (sequelize, DataTypes) => {
   }
   Rank.init({
     id: {
-        type :DataTypes.INTEGER,
-        primaryKey : true,
-        autoIncrement : true
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
-    classId : {
-        type :DataTypes.STRING,
-        allowNull : false
+    classId: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
-    userId : {
-        type :DataTypes.STRING,
-        allowNull : false
+    userId: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
-    studyTime : {
-        type :DataTypes.DATE,
+    studyTime: {
+      type: DataTypes.DATE,
     }
   }, {
     sequelize,
-    modelName: 'rank', // 모델 이름 바꿔줘야함
+    modelName: 'Rank', // 모델 이름 바꿔줘야함
     timestamps: true,
     underscored: true,
     tableName: 'ranks', // 테이블 이름 바꿔줘야함
-  });   
+  });
   return Rank; // return 할때 모델 이름으로 바꿔줘야함
 };

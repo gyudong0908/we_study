@@ -3,49 +3,55 @@ const router = express.Router();
 const models = require('../models');
 router.use(express.json());
 
-router.get('/memos',function(req,res){    
-    const userId = req.session.passport.user.id;
+router.get('/memos', function (req, res) {
+    const userId = req.session.passport.user;
     models.memo.findAll({
-        attributes: ['id','title'],
-        where:{
+        attributes: ['id', 'title'],
+        where: {
             userId: userId,
         },
-    }).then((data)=>{
-        res.send(data); 
-    }).catch(err=>{
+    }).then((data) => {
+        res.send(data);
+    }).catch(err => {
         console.log(err);
+        res.status(500).send('메모 조회 오류 발생');
     })
 });
 
-router.get('/memo',function(req,res){    
+router.get('/memo', function (req, res) {
     const id = req.query.id;
     models.memo.findAll({
-        where:{
+        where: {
             id: id,
         },
-    }).then((data)=>{
-        res.send(data); 
-    }).catch(err=>{
-        console.log(err)
+    }).then((data) => {
+        res.send(data);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send('메모 조회 오류 발생');
     })
 });
 
-router.post('/memo',function(req,res){    
-    const  memo = req.body;
-    models.memo.create(memo).then(()=>{
+router.post('/memo', function (req, res) {
+    const userId = req.session.passport.user;
+    models.memo.create({
+        userId: userId,
+        title: req.body.title,
+        content: req.body.title,
+    }).then(() => {
         res.status(200).send('잘됨');
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
     })
 });
 
-router.put('/memo',function(req,res){    
-    const memo = req.body;
-    models.memo.update(memo,{
-        where:{id: req.body.id}
-    }).then(()=>{
+router.put('/memo', function (req, res) {
+    const id = req.query.id;
+    models.memo.update(req.body, {
+        where: { id: id }
+    }).then(() => {
         res.status(200).send('잘됨');
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
     })
 });

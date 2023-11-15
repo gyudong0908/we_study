@@ -11,24 +11,30 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Work.belongsTo(models.class, { foreignKey: 'classId' });
+      Work.belongsTo(models.Topic, { foreignKey: 'topicId' });
     }
   }
   Work.init({
     id: {
-        type: DataTypes.STRING,
-        primaryKey: true,
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
-    classId: {
+    topicId: {
+      type: DataTypes.INTEGER,
+    },
+    title: {
       type: DataTypes.STRING,
     },
     category: {
       type: DataTypes.STRING,
     },
-
+    description: {
+      type: DataTypes.STRING,
+    },
   }, {
     sequelize,
-    modelName: 'work', // 모델 이름 바꿔줘야함
+    modelName: 'Work', // 모델 이름 바꿔줘야함
     timestamps: true,
     underscored: true,
     tableName: 'works', // 테이블 이름 바꿔줘야함

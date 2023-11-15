@@ -7,44 +7,44 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-export default function ClassDashboard({isTeacher }) {
-  const [curriculums,setCurriculums] = useState([]);
+export default function ClassDashboard({ isTeacher }) {
+  const [curriculums, setCurriculums] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { classId } = useParams();
 
-  async function getCurriculums(){
-    try{
-      let data =  await axios.get(`http://localhost:8081/works?classId=${classId}&category=커리큘럼`,{ withCredentials: true });
-      if(data.data){
-        const sortData = data.data.sort((a,b)=> new Date(a.creationTime) - new Date(b.creationTime));
+  async function getCurriculums() {
+    try {
+      let data = await axios.get(`http://localhost:8081/works?classId=${classId}&category=커리큘럼`, { withCredentials: true });
+      if (data.data) {
+        const sortData = data.data.sort((a, b) => new Date(a.creationTime) - new Date(b.creationTime));
         setCurriculums(sortData);
       }
       setIsLoading(true);
-    }catch(err){
+    } catch (err) {
       alert('에러 발생');
       console.log(err);
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getCurriculums()
     return setIsLoading(false);
-  },[])
+  }, [])
 
   return (
     <>
-    {isLoading?
-      <Stack>
-        <InputCurriculum isTeacher={isTeacher} marginBottom={20} setCurriculums={setCurriculums}></InputCurriculum>
-        <PrivateProgress />
-        <StudyProgress />
-        <Typography variant="h4" component="span" sx={{mb:2, fontWeight: 'bold', color:'#0091ea'}}>
-          커리큘럼
-        </Typography>
-        <BasicAccordion isTeacher={isTeacher} curriculums={curriculums} setCurriculums={setCurriculums} />
-      </Stack>:
-      null
-   }
+      {isLoading ?
+        <Stack>
+          <InputCurriculum isTeacher={isTeacher} marginBottom={20} setCurriculums={setCurriculums}></InputCurriculum>
+          <PrivateProgress />
+          <StudyProgress />
+          <Typography variant="h4" component="span" sx={{ mb: 2, fontWeight: 'bold', color: '#0091ea' }}>
+            커리큘럼
+          </Typography>
+          <BasicAccordion isTeacher={isTeacher} curriculums={curriculums} setCurriculums={setCurriculums} />
+        </Stack> :
+        null
+      }
     </>
   );
 }

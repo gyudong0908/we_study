@@ -1,87 +1,44 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
-const axios = require('axios');
 
 router.use(express.json());
 
-router.get('/works',function(req,res){    
-    const Authorization = "Bearer " + req.session.passport.user.accessToken;
-    const courseId = req.query.classId;
-    const category = req.query.category;
-    console.log(new Date().getTime());
-    axios.get(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork`,{
-        headers:{
-            'Authorization':Authorization,
-            'Accept' : 'application/json',
-        }
-    }).then((works)=>{       
-        console.log(new Date().getTime());
-        models.work.findAll({
-            attributes:['id'],
-            raw:true,
-            where:{
-                classId: courseId,        
-                category: category,        
-            }
-        }).then(data=>{
-            // 우리 DB의 정보를 확인하여 맞는 정보만 가져오는 코드
-            if(works.data.courseWork !== undefined){
-                const filterWorks = works.data.courseWork.filter(work=>{return data.some(userWork=>userWork.id === work.id)});
-                console.log(new Date().getTime());
-                res.send(filterWorks);    
-            }else{
-                res.send();
-            }
-        })
-    }).catch((err)=>{
-        res.status(500).send(err);
+router.post('/work', function (req, res) {
+    const topicId = req.query.topicId;
+    models.Work.create({ ...req.body, topicId: topicId }).then(() => {
+        res.sendStatus(200);
+    }).catch(err => {
         console.log(err);
+        res.status(500).send("Work 생성 에러 발생");
     })
-});
+})
 
-router.post('/work',function(req,res){    
-    const Authorization = "Bearer " + req.session.passport.user.accessToken;
-    const courseId = req.query.classId;
+router.get('/works', function (req, res) {
+    const topicId = req.query.topicId;
     const category = req.query.category;
-    axios.post(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork`,req.body,{
-        headers:{
-            'Authorization':Authorization,
-            'Accept' : 'application/json',
+    models.Work.findAll({
+        raw: true,
+        where: {
+            topicId: topicId,
+            category: category
         }
-    }).then((data)=>{       
-        models.work.create({
-            id: data.data.id,
-            classId: courseId,
-            category: category,
-            }).then(()=>{
-                res.status(200).send('잘 되었습니다.');
-            }).catch(err=>{
-                console.log(err);
-                res.status(500).send('DB 저장 오류'+err);
-            })
-    }).catch(err=>{
+    }).then(works => {
+        res.status(200).send(works);
+    }).catch(err => {
         console.log(err);
-        res.status(500).send('api 요청 오류'+err);
+        res.status(500).send("Work 조회 오류 발생");
     })
-});
+})
 
-router.put('/work',function(req,res){    
-    const Authorization = "Bearer " + req.session.passport.user.accessToken;
-    const courseId = req.query.classId;
-    const id = req.query.id;
-    const updateMask = req.query.mask;
-    axios.post(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}?updateMask=${updateMask}`,req.body,{
-        headers:{
-            'Authorization':Authorization,
-            'Accept' : 'application/json',
-        }
-    }).then(()=>{       
-        res.status(200).send('잘 됨');
-    }).catch(err=>{
+router.put('/work', function (req, res) {
+    const workId = req.query.workId;
+    models.Work.update(req.body, { where: { id: workId } }).then(() => {
+        res.sendStatus(200);
+    }).catch(err => {
         console.log(err);
-        res.status(500).send('api 요청 오류'+err);
+        res.status(500).send('Work 변경 오류 발생');
     })
-});
+})
 
 module.exports = router;

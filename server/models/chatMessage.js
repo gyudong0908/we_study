@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            ChatMessage.belongsTo(models.chatUser, { foreignKey: 'chatUserId' })
+            ChatMessage.belongsTo(models.ChatUser, { foreignKey: 'chatUserId' })
         }
     }
     ChatMessage.init({
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         sequelize,
-        modelName: 'chatMessage', // 모델 이름 바꿔줘야함
+        modelName: 'ChatMessage', // 모델 이름 바꿔줘야함
         timestamps: true,
         underscored: true,
         tableName: 'chatMessages', // 테이블 이름 바꿔줘야함
