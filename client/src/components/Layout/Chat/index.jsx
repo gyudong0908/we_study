@@ -1,9 +1,8 @@
-import Stack from '@mui/material/Stack';
 import * as React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import ChatPeople from './ChatPeople';
 import ChatDisplay from './ChatDisplay';
-import { Button, styled, Typography, Box } from '@mui/material';
+import { Button, styled, Typography, Box, Stack } from '@mui/material';
 
 export default function Chat({ closeChat }) {
   const [value, setValue] = React.useState(0);
@@ -54,7 +53,12 @@ export default function Chat({ closeChat }) {
     }}>
       <Stack>
         <Stack sx={{ textAlign: 'right', display: 'inline-block' }}>
-          <CloseIcon onClick={closeChat} sx={{ cursor: 'pointer', '&:hover': { border: '2px solid skyblue' } }} />
+          <CloseIcon onClick={closeChat} sx={{
+            cursor:'pointer',
+            margin:'10px',
+            color:'black',
+            '&:hover':{transform:'scale(1.1)'},
+            }} />
         </Stack>
         {
           chatId !== '' ? <ChatDisplay rewind={rewind} name={chatId} /> : (

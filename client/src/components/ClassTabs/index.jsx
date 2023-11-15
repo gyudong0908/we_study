@@ -8,6 +8,7 @@ import ClassNotice from '../ClassNotice';
 import ClassPeople from '../ClassPeople';
 import ClassTodo from '../ClassTodo';
 import ClassSetting from '../ClassSetting';
+import ClassGrade from '../ClassGrade';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,7 +65,7 @@ export default function ClassTabs({ isTeacher, curriculums, notices, assignments
     },
     {
       title: '성적',
-      content: <div>성적 내용</div>,
+      content: <ClassGrade isTeacher={isTeacher} />,
     },
     {
       title: '클래스 설정',

@@ -5,7 +5,7 @@ export default function ClassPeople(){
     const students = ['이동규', '조정석', '최혜린'];
 
     return(
-        <Stack sx={{ marginRight: '100px'}}>
+        <Stack>
             <Stack sx={{ mb:5 }}>
                 <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
                     <Typography variant="h4" component="span" sx={{ mb:1, fontWeight: 'bold', color:'#0091ea'}}>

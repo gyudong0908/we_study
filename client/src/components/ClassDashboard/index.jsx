@@ -1,8 +1,9 @@
 import BasicAccordion from './DashboardAccordion';
 import StudyProgress from './StudyProgress';
-import { Stack, Typography, Accordion, AccordionSummary, AccordionDetails, TextField, Button } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import InputCurriculum from '../Input/InputCurriculum.jsx';
 import PrivateProgress from './PrivateProgress.jsx';
+
 export default function ClassDashboard({ curriculums, isTeacher }) {
   return (
     <Stack>
