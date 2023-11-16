@@ -5,8 +5,10 @@ router.use(express.json());
 
 router.get('/memos', function (req, res) {
     const userId = req.session.passport.user;
-    models.memo.findAll({
-        attributes: ['id', 'title'],
+    models.Memo.findAll({
+        order:[
+            ['createdAt', 'DESC']
+        ],
         where: {
             userId: userId,
         },
@@ -20,7 +22,7 @@ router.get('/memos', function (req, res) {
 
 router.get('/memo', function (req, res) {
     const id = req.query.id;
-    models.memo.findAll({
+    models.Memo.findAll({
         where: {
             id: id,
         },
@@ -34,10 +36,10 @@ router.get('/memo', function (req, res) {
 
 router.post('/memo', function (req, res) {
     const userId = req.session.passport.user;
-    models.memo.create({
+    models.Memo.create({
         userId: userId,
         title: req.body.title,
-        content: req.body.title,
+        content: req.body.content,
     }).then(() => {
         res.status(200).send('잘됨');
     }).catch(err => {
@@ -47,7 +49,7 @@ router.post('/memo', function (req, res) {
 
 router.put('/memo', function (req, res) {
     const id = req.query.id;
-    models.memo.update(req.body, {
+    models.Memo.update(req.body, {
         where: { id: id }
     }).then(() => {
         res.status(200).send('잘됨');
