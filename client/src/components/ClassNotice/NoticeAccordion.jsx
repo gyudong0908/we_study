@@ -1,5 +1,5 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Stack, Button, Typography } from '@mui/material';
+import { Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button, Typography } from '@mui/material';
 
 export default function NoticeAccordion({ isTeacher, notices }) {
   return (
@@ -11,7 +11,14 @@ export default function NoticeAccordion({ isTeacher, notices }) {
             aria-controls="panel1a-content"
             id="notice-header"
           >
-            <Typography sx={{}}>{notice.title}</Typography>
+            <Grid container spacing={0} sx={{ alignItems:'center'}}>
+              <Grid item xs={6}>
+                <Typography variant='h6'>{notice.title}</Typography>
+              </Grid>
+              <Grid item xs={6} sx={{paddingRight:'5px'}}>
+                <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>2023년 11월 16일</Typography>
+              </Grid>
+            </Grid>
           </AccordionSummary>
           <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
             {notice.content}
