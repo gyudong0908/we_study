@@ -31,8 +31,8 @@ function CreateClassModal({ open, handleClose }) {
         description: description,
       }
       console.log(data)
-      axios.post('http://localhost:8081/class', data, { withCredentials: true }).then(() => {
-        dispatch(setClassCards([data]));
+      axios.post('http://localhost:8081/class', data, { withCredentials: true }).then((response) => {
+        dispatch(setClassCards([response.data]));
       }).catch(err => {
         alert('오류발생', err);
       })

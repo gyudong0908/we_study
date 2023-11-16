@@ -39,7 +39,7 @@ function a11yProps(index) {
   };
 }
 
-export default function ClassTabs({ isTeacher }) {
+export default function ClassTabs({ isTeacher}) {
   const [value, setValue] = React.useState(0);
   
   const handleChange = (event, newValue) => {
@@ -61,7 +61,7 @@ export default function ClassTabs({ isTeacher }) {
     },
     {
       title: '참여자',
-      content: <ClassPeople/>,
+      content: <ClassPeople />,
     },
     {
       title: '성적',

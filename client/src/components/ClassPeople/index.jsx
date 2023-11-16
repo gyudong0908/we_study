@@ -1,8 +1,31 @@
 import { Stack, Box, Typography } from "@mui/material";
 import PeopleComponent from "./ClassPeople";
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect, useState } from "react";
 
 export default function ClassPeople(){
-    const students = ['이동규', '조정석', '최혜린'];
+    const [students, setStudent] = useState([])
+    const [teacher, setTeacher] = useState({});
+    // const students = ['이동규', '조정석', '최혜린'];
+    const {classId} = useParams();
+    function getUser(){
+        axios.get(`http://localhost:8081/class/user?classId=${classId}`, { withCredentials: true }).then(response=>{
+            let newData = [];
+            for(const user of response.data.userData){
+                console.log(user);
+                if(user.id === response.data.teacherId){
+                    setTeacher(user);
+                }else{
+                    newData.push(user);
+                }
+            }
+            setStudent(newData);
+        })
+    }
+    useEffect(()=>{
+        getUser();
+    },[])
 
     return(
         <Stack>
@@ -12,7 +35,7 @@ export default function ClassPeople(){
                         교사
                     </Typography>
                 </Stack>
-                <PeopleComponent name = {"이창현"} />
+                <PeopleComponent name = {teacher.nickName} />
             </Stack>
             <Stack>
                 <Box sx={{borderBottom:'1.5px solid black', mb:2, 
@@ -23,8 +46,8 @@ export default function ClassPeople(){
                     <Typography variant='body1'>총 학생수 | {students.length}명</Typography>
                 </Box>
                 {
-                    students.map(name=>{
-                        return <PeopleComponent name = {name}></PeopleComponent>
+                    students.map(student=>{
+                        return <PeopleComponent name = {student.nickName}></PeopleComponent>
                     })
                 }
             </Stack>
