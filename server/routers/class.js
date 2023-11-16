@@ -68,5 +68,18 @@ router.put('/class', function (req, res) {
         res.status(500).send("클래스 변경 오류");
     })
 })
+router.delete('class',function(req,res){
+    const classId = req.query.classId;
+    models.Class.destory({
+        where: {
+            id: classId
+        }
+    }).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('Class 삭제 오류 발생');
+    })
+})
 
 module.exports = router;

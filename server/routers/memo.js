@@ -21,10 +21,10 @@ router.get('/memos', function (req, res) {
 });
 
 router.get('/memo', function (req, res) {
-    const id = req.query.id;
+    const memoId = req.query.memoId;
     models.Memo.findAll({
         where: {
-            id: id,
+            id: memoId,
         },
     }).then((data) => {
         res.send(data);
@@ -44,18 +44,34 @@ router.post('/memo', function (req, res) {
         res.status(200).send('잘됨');
     }).catch(err => {
         console.log(err);
+        res.status(500).send('메모 생성 오류 발생');
     })
 });
 
 router.put('/memo', function (req, res) {
-    const id = req.query.id;
+    const memoId = req.query.memoId;
     models.Memo.update(req.body, {
-        where: { id: id }
+        where: { id: memoId }
     }).then(() => {
         res.status(200).send('잘됨');
     }).catch(err => {
         console.log(err);
+        res.status(500).send('메모 변경 오류 발생');
     })
 });
+
+router.delete('/memo',function(req,res){
+    const memoId = req.query.memoId;
+    models.Memo.destory({
+        where:{
+            id: memoId
+        }
+    }).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('메모 삭제 오류 발생');
+    })
+})
 
 module.exports = router;

@@ -40,4 +40,18 @@ router.put('/submit',function(req,res){
     })
 })
 
+router.delete('/submit',function(req,res){
+    const submitId = req.query.submitId;
+    models.Submit.destroy({
+        where:{
+            id: submitId
+        }
+    }).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('제출물 삭제 오류');
+    })
+})
+
 module.exports = router;

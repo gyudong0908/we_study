@@ -40,4 +40,17 @@ router.put('/work', function (req, res) {
     })
 })
 
+router.delete('/work',function(req,res){
+    const workId = req.query.workId;
+    models.Work.destroy({
+        where:{
+            id: workId
+        }
+    }).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send(err);
+    })
+})
 module.exports = router;
