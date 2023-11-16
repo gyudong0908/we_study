@@ -5,7 +5,10 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import dayjs from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 export default function InputWork({ isTeacher, curriculumTopics}) {
   const styles = {marginBottom:'40px'};
@@ -26,22 +29,25 @@ export default function InputWork({ isTeacher, curriculumTopics}) {
             ✍️ 과제를 입력하세요.
           </AccordionSummary>
           <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-            <FormControl required sx={{ minWidth: 140, mb : 2 }}>
-              <InputLabel id="selectTopic">단원 선택</InputLabel>
-              <Select
-                labelId="curriculumTopic"
-                id="curriculumTopicRequired"
-                label="단원 선택 필수 *"
-                value={curriculumTopic}
-                onChange={handleChange}
-              >
-                {curriculumTopics.map((topic, index)=>(
-                  <MenuItem key={index}>{topic}</MenuItem>
-                ))}
-                <MenuItem key='etc'>기타</MenuItem>
-              </Select>
-            </FormControl>
-
+            <Stack sx={{flexDirection:'row', mb:2}}>
+              <FormControl required sx={{ mr:2, minWidth:140 }}>
+                <InputLabel id="selectTopic">단원 선택</InputLabel>
+                <Select
+                  labelId="curriculumTopic"
+                  id="curriculumTopicRequired"
+                  label="단원 선택 필수 *"
+                  value={curriculumTopic}
+                  onChange={handleChange}
+                >
+                  {curriculumTopics.map((topic, index)=>(
+                    <MenuItem key={index}>{topic}</MenuItem>
+                  ))}
+                  <MenuItem key='etc'>기타</MenuItem>
+                </Select>
+              </FormControl>
+              <Picker />
+            </Stack>
+            
             <TextField
               id="inputAssignmentTitle"
               label="제목을 입력하세요."
@@ -73,5 +79,14 @@ export default function InputWork({ isTeacher, curriculumTopics}) {
   );
 }
 
+function Picker(){
+  return(
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Stack components='DateTimePicker'>
+        <DateTimePicker />
+      </Stack>
+    </LocalizationProvider>
+  );
+}
 
 

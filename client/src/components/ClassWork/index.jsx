@@ -4,7 +4,7 @@ import {Typography, Stack} from '@mui/material';
 
 export default function ClassWork({ isTeacher }) {
   const curriculumTopics = ['Node.js', 'React']
-  const assignments = [{title:'1', content:'22'}, {title:'2', content:'33'}]
+  const assignments = [{title:'과제1', content:'과제 내용입니다.'}, {title:'과제2', content:'과제 내용입니다.'}]
   return (
     <>
       <InputWork isTeacher={isTeacher} curriculumTopics={curriculumTopics}></InputWork>
