@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Work extends Model { // 클래스 이름 모델 이름으로 바꿔 줘야함
+  class Submit extends Model { // 클래스 이름 모델 이름으로 바꿔 줘야함
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,31 +11,41 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Work.belongsTo(models.Topic, { foreignKey: 'topicId' });
-      Work.hasMany(models.Submit, { foreignKey: 'workId' });
+      Submit.belongsTo(models.Work, { foreignKey: 'workId' });
+      Submit.belongsTo(models.User, { foreignKey: 'userId' });
     }
   }
-  Work.init({
+  Submit.init({
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    topicId: {
+    workId: {
+      type: DataTypes.INTEGER,
+    },
+    userId: {
       type: DataTypes.INTEGER,
     },
     title: {
       type: DataTypes.STRING,
     },
-    description: {
+    content: {
       type: DataTypes.STRING,
     },
+    private:{
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
+    filePath:{
+      type: DataTypes.STRING,
+    }
   }, {
     sequelize,
-    modelName: 'Work', // 모델 이름 바꿔줘야함
+    modelName: 'Submit', // 모델 이름 바꿔줘야함
     timestamps: true,
     underscored: true,
-    tableName: 'works', // 테이블 이름 바꿔줘야함
+    tableName: 'submits', // 테이블 이름 바꿔줘야함
   });
-  return Work; // return 할때 모델 이름으로 바꿔줘야함
+  return Submit; // return 할때 모델 이름으로 바꿔줘야함
 };

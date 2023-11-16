@@ -6,8 +6,7 @@ router.use(express.json());
 
 router.post('/work', function (req, res) {
     const topicId = req.query.topicId;
-    const userId = req.session.passport.user;
-    models.Work.create({ ...req.body, topicId: topicId, userId:userId }).then(() => {
+    models.Work.create({ ...req.body, topicId: topicId }).then(() => {
         res.sendStatus(200);
     }).catch(err => {
         console.log(err);
