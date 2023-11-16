@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Work.belongsTo(models.Topic, { foreignKey: 'topicId' });
+      Work.belongsTo(models.User, { foreignKey: 'userId' });
+
     }
   }
   Work.init({
@@ -23,10 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     topicId: {
       type: DataTypes.INTEGER,
     },
-    title: {
-      type: DataTypes.STRING,
+    userId: {
+      type: DataTypes.INTEGER,
     },
-    category: {
+    title: {
       type: DataTypes.STRING,
     },
     description: {

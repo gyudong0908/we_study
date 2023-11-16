@@ -26,19 +26,19 @@ export default function InputCurriculum({ isTeacher, setCurriculums}) {
     function onClickSave(){
       const resultString = curriculumList.join('\n');
       console.log(resultString);
-      axios.post(`http://localhost:8081/work?classId=${classId}&category=커리큘럼`,{
+      axios.post(`http://localhost:8081/curriculum?classId=${classId}`,{
         title: title,
-        description: resultString,
-        state: "PUBLISHED",
-        workType: "ASSIGNMENT",
+        content: resultString,
       },{ withCredentials: true }).catch(err=>{
         alert('오류 발생:', err);
       });   
-      axios.post(`http://localhost:8081/topic?classId=${classId}&category=커리큘럼`,{
+      axios.post(`http://localhost:8081/topic?classId=${classId}`,{
         name: title
       },{ withCredentials: true }).catch(err=>{
         alert('오류 발생:', err);
       })
+      setTitle('');
+      setCurriculumList([]);
     }
 
     const styles = {marginBottom:'40px'};

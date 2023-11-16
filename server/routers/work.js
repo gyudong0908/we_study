@@ -6,7 +6,8 @@ router.use(express.json());
 
 router.post('/work', function (req, res) {
     const topicId = req.query.topicId;
-    models.Work.create({ ...req.body, topicId: topicId }).then(() => {
+    const userId = req.session.passport.user;
+    models.Work.create({ ...req.body, topicId: topicId, userId:userId }).then(() => {
         res.sendStatus(200);
     }).catch(err => {
         console.log(err);
@@ -14,14 +15,13 @@ router.post('/work', function (req, res) {
     })
 })
 
+
 router.get('/works', function (req, res) {
     const topicId = req.query.topicId;
-    const category = req.query.category;
     models.Work.findAll({
         raw: true,
         where: {
             topicId: topicId,
-            category: category
         }
     }).then(works => {
         res.status(200).send(works);
