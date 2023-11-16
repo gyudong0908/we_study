@@ -57,7 +57,7 @@ export default function ClassTabs({ isTeacher }) {
     },
     {
       title: '할일목록',
-      content: <ClassWork  isTeacher={isTeacher}/>,
+      content: <ClassWork  isTeacher={isTeacher} />,
     },
     {
       title: '참여자',

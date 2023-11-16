@@ -9,36 +9,46 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-export default function InputCurriculum({ isTeacher, setCurriculums}) {
+export default function InputCurriculum({ isTeacher, setCurriculums, curriculums}) {
     const [curriculumList,setCurriculumList] = useState([]);
     const [title,setTitle] = useState('');
-    const [curriculum,setCurriculum] = useState('');
+    const [content,setContent] = useState('');
     const {classId} = useParams();
 
     function keyUpHandler(e){
         e.preventDefault();
         if(e.key === 'Enter'){
-            setCurriculumList([...curriculumList,curriculum]);
-            setCurriculum('');
+            setCurriculumList([...curriculumList,content]);
+            setContent('');
         }
+    }
+    function onClickDelete(key){
+      const copyCurriculumList = [...curriculumList];
+      copyCurriculumList.splice(key,1);
+      setCurriculumList(copyCurriculumList);
     }
 
     function onClickSave(){
       const resultString = curriculumList.join('\n');
-      console.log(resultString);
-      axios.post(`http://localhost:8081/curriculum?classId=${classId}`,{
+      const data = {
         title: title,
         content: resultString,
-      },{ withCredentials: true }).catch(err=>{
+      };
+
+      axios.post(`http://localhost:8081/curriculum?classId=${classId}`,data,{ withCredentials: true })
+      .catch(err=>{
         alert('오류 발생:', err);
       });   
+
       axios.post(`http://localhost:8081/topic?classId=${classId}`,{
         name: title
       },{ withCredentials: true }).catch(err=>{
         alert('오류 발생:', err);
-      })
+      });
+
       setTitle('');
       setCurriculumList([]);
+      setCurriculums([...curriculums,data])
     }
 
     const styles = {marginBottom:'40px'};
@@ -72,8 +82,8 @@ export default function InputCurriculum({ isTeacher, setCurriculums}) {
               fullWidth
               sx={{ mb: 2 }}
               required
-              value={curriculum}
-              onChange={(e)=>{setCurriculum(e.target.value)}}
+              value={content}
+              onChange={(e)=>{setContent(e.target.value)}}
               onKeyUp={(e)=>{keyUpHandler(e);}}
             />
             <Typography variant="h5" sx={{marginBottom:'15px', fontWeight:'bold'}}>{title}</Typography>
@@ -81,13 +91,13 @@ export default function InputCurriculum({ isTeacher, setCurriculums}) {
                 curriculumList.map((data,key)=>{
                     return(
                         <Stack direction="row" sx={{display: 'flex', justifyContent: 'space-between'}}>
-                          <Typography variant="body1" gutterBottom key={key} sx={{marginLeft:"10px", marginBottom:'5px'}}>🔹 {data} </Typography>
-                          <CloseRoundedIcon sx={{cursor:'pointer', fontSize:'medium'}}></CloseRoundedIcon>
+                          <Typography  variant="body1" gutterBottom key={key} sx={{marginLeft:"10px", marginBottom:'5px'}}>🔹 {data} </Typography>
+                          <CloseRoundedIcon key={key} onClick={()=>{onClickDelete(key)}} sx={{cursor:'pointer', fontSize:'medium'}}></CloseRoundedIcon>
                         </Stack>
                     )
                 })  
               }
-            <Typography variant="h5" sx={{marginLeft:"10px"}}>{curriculum}</Typography>
+            <Typography variant="h5" sx={{marginLeft:"10px"}}>{content}</Typography>
 
             <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
               <Button variant="outlined" type="reset">취소</Button>

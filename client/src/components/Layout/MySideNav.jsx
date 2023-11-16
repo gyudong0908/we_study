@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {Stack, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, CssBaseline} from '@mui/material';
+import axios from 'axios';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import MilitaryTechRoundedIcon from '@mui/icons-material/MilitaryTechRounded';
@@ -8,7 +9,21 @@ import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 
 
 function MySideNav(){
+    const [classDatas, setClassDatas] = useState([]);
     const welcomeText = <div>✍️ 시작해볼까요?<br />최혜린님</div>
+
+    function getClassData() {
+        axios.get('http://localhost:8081/classes',{ withCredentials: true }).then((data)=>{
+            setClassDatas(data.data);
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
+
+    useEffect(()=>{
+        getClassData();
+    },[])
+
     const drawer = (
         <div>
           <Toolbar />
@@ -34,7 +49,7 @@ function MySideNav(){
             <Divider />
             <Stack spacing={45}>
             <List>
-                {['누적 학습 시간 랭킹', '캘린더', '강의1', '강의2'].map((text, index) => (
+                {['누적 학습 시간 랭킹', '캘린더'].map((text, index) => (
                 <ListItem key={index} disablePadding>
                     <ListItemButton component={Link} to={index === 0 ? '/mypage/rank' : index === 1 ? '/mypage/calender' : '/mypage'}>
                         <ListItemIcon>
@@ -42,6 +57,16 @@ function MySideNav(){
                             index === 1 ? <CalendarMonthRoundedIcon /> : <SchoolRoundedIcon />}
                         </ListItemIcon>
                         <ListItemText primary={text} />
+                    </ListItemButton>
+                </ListItem>
+                ))}
+                {classDatas.map((classData, index) => (
+                <ListItem key={index} disablePadding>
+                    <ListItemButton href= {`http://localhost:5173/mypage/classes/${classData.id}`}>
+                        <ListItemIcon>
+                            <SchoolRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={classData.title}/>
                     </ListItemButton>
                 </ListItem>
                 ))}

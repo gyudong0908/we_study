@@ -1,22 +1,27 @@
 import { React, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Card, CardContent, Stack, Typography, Grid } from '@mui/material';
 import axios from 'axios';
+import {setClassCards, deleteClassCards} from '../reducer/classCardsSlice';
 
 
 
 export default function MyPage() {
   // const [classCards, setClassCards] = React.useState([]);
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
+  const data = useSelector((state)=>state.classCards);
   const userData = useSelector((state) => state.userData);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const fetchCardData = async () => {
+    dispatch(deleteClassCards());
     try {
       const response = await axios.get('http://localhost:8081/classes', { withCredentials: true });
       const createdClassData = response.data;
-      setData(createdClassData);
+      console.log(createdClassData);
+      dispatch(setClassCards(createdClassData))
     } catch (error) {
       console.error('get 요청 실패:', error);
     }

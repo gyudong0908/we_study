@@ -1,6 +1,8 @@
 import React from 'react';
 import { Stack, Typography, Modal, Button, TextField } from '@mui/material';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setClassCards } from '../../reducer/classCardsSlice'; 
 import axios from 'axios';
 
 const style = {
@@ -19,6 +21,7 @@ function CreateClassModal({ open, handleClose }) {
   const [title, setTitle] = useState('');
   const [teacher, setTeacher] = useState('');
   const [description, setDescription] = useState('');
+  const dispatch = useDispatch();
 
   function createClass() {
     if (title !== '' && teacher !== '') {
@@ -29,7 +32,7 @@ function CreateClassModal({ open, handleClose }) {
       }
       console.log(data)
       axios.post('http://localhost:8081/class', data, { withCredentials: true }).then(() => {
-        alert('생성이 완료 되었습니다.');
+        dispatch(setClassCards([data]));
       }).catch(err => {
         alert('오류발생', err);
       })

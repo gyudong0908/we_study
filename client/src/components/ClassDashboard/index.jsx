@@ -35,7 +35,7 @@ export default function ClassDashboard({ isTeacher }) {
     <>
       {isLoading ?
         <Stack>
-          <InputCurriculum isTeacher={isTeacher} marginBottom={20} setCurriculums={setCurriculums}></InputCurriculum>
+          <InputCurriculum isTeacher={isTeacher} marginBottom={20} setCurriculums={setCurriculums} curriculums={curriculums}></InputCurriculum>
           <PrivateProgress />
           <StudyProgress />
           <Typography variant="h4" component="span" sx={{ mb: 2, fontWeight: 'bold', color: '#0091ea' }}>
