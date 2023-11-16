@@ -6,7 +6,7 @@ import * as React from 'react';
 import ClassDashboard from '../ClassDashboard';
 import ClassNotice from '../ClassNotice';
 import ClassPeople from '../ClassPeople';
-import ClassTodo from '../ClassTodo';
+import ClassWork from '../ClassWork';
 import ClassSetting from '../ClassSetting';
 import ClassGrade from '../ClassGrade';
 
@@ -57,7 +57,7 @@ export default function ClassTabs({ isTeacher }) {
     },
     {
       title: '할일목록',
-      content: <ClassTodo  isTeacher={isTeacher}/>,
+      content: <ClassWork  isTeacher={isTeacher}/>,
     },
     {
       title: '참여자',

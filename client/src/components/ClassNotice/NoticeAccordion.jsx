@@ -1,5 +1,5 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Stack, Button } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Stack, Button, Typography } from '@mui/material';
 
 export default function NoticeAccordion({ isTeacher, notices }) {
   return (
@@ -9,14 +9,15 @@ export default function NoticeAccordion({ isTeacher, notices }) {
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
-            id="panel1a-header"
+            id="notice-header"
           >
-            {notice.title}
+            <Typography sx={{}}>{notice.title}</Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
             {notice.content}
             {isTeacher&& (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
+                <Button variant="outlined">삭제</Button>
                 <Button variant="outlined">수정</Button>
               </Stack>
             )}

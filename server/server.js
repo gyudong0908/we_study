@@ -54,7 +54,7 @@ const httpServer = app.listen(8081, () => {
 socketModule(httpServer);
 
 //orm
-models.sequelize.sync({ force: false }).then(() => {
+models.sequelize.sync({ force: true }).then(() => {
   console.log(" DB 연결 성공");
 }).catch(err => {
   console.log("연결 실패");

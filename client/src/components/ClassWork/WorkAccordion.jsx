@@ -1,7 +1,7 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionDetails, AccordionSummary, Stack, Button } from '@mui/material';
 
-export default function AssignmentAccordion({ isTeacher, assignments }) {
+export default function WorkAccordion({ isTeacher, assignments }) {
   return (
     <>
       {assignments.map((assignment, index) => (

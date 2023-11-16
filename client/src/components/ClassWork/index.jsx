@@ -1,12 +1,13 @@
-import InputAssignment from '../Input/InputAssignment';
-import AssignmentAccordion from './AssignmentAccordion';
+import InputWork from '../Input/InputWork';
+import WorkAccordion from './WorkAccordion';
 import {Typography, Stack} from '@mui/material';
 
-export default function ClassTodo({ isTeacher, assignments, curriculumTopics }) {
-
+export default function ClassWork({ isTeacher }) {
+  const curriculumTopics = ['Node.js', 'React']
+  const assignments = [{title:'1', content:'22'}, {title:'2', content:'33'}]
   return (
     <>
-      <InputAssignment isTeacher={isTeacher} curriculumTopics={curriculumTopics}></InputAssignment>
+      <InputWork isTeacher={isTeacher} curriculumTopics={curriculumTopics}></InputWork>
         {curriculumTopics.map((topic, index)=>(
           <Stack sx={{mb:5}}>
             <Stack key={index} sx={{borderBottom:'1.5px solid black', mb:2}}>
@@ -14,7 +15,7 @@ export default function ClassTodo({ isTeacher, assignments, curriculumTopics }) 
                 {topic}
               </Typography>
             </Stack>
-            <AssignmentAccordion isTeacher={isTeacher} assignments={assignments} />
+            <WorkAccordion isTeacher={isTeacher} assignments={assignments} />
           </Stack>
         ))} 
           <Stack sx={{mb:5}}>
@@ -23,7 +24,7 @@ export default function ClassTodo({ isTeacher, assignments, curriculumTopics }) 
                 기타
               </Typography>
             </Stack>
-            <AssignmentAccordion isTeacher={isTeacher} assignments={assignments} />
+            <WorkAccordion isTeacher={isTeacher} assignments={assignments} />
           </Stack>
       
     </>
