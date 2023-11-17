@@ -1,4 +1,6 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import { InputLabel, MenuItem, Select, FormControl} from '@mui/material';
 import { Button, Stack, TextField } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
@@ -10,17 +12,63 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-export default function InputWork({ isTeacher, curriculumTopics}) {
+export default function InputWork({ isTeacher, curriculumTopics, works, setWorks}) {
   const styles = {marginBottom:'40px'};
   const [curriculumTopic, setCurriculumTopic] = useState('');
-  const handleChange = (event) => {
-    setCurriculumTopic(event.target.value);
+  const [inputTitle, setInputTitle] = useState('');
+  const [inputDescription, setInputDescription] = useState('');
+  const [inputTopicId, setInputTopicId] = useState('');
+  const [inputDueDateTime, setInputDueDateTime] = useState('');
+  //const {topicId} = useParams();
+
+  const [expanded, setExpanded] = useState(false);
+  const inputToggleChange=()=>{
+    setExpanded((prevExpanded)=>!prevExpanded);
   };
+
+  const handleChange = (event) => {
+    const selectedTopicId = event.target.value;
+    setCurriculumTopic(selectedTopicId);
+    setInputTopicId(selectedTopicId);
+  };
+
+  function onClickSave(){
+    const data = {
+      title: inputTitle,
+      description: inputDescription,
+      topicId: inputTopicId,
+      dueDateTime: inputDueDateTime.toISOString(),
+    }
+
+    axios.post('http://localhost:8081/work?topicId=1', data, { withCredentials:true }).then((response)=>{
+      setWorks([response.data, ...works]);
+      setInputTitle('');
+      setCurriculumTopic('');
+      setInputDescription('');
+      setInputTopicId('');
+      setInputDueDateTime('');
+      setExpanded(false);
+    }).catch(err=>{
+      console.log(err);
+    })
+  };
+
+  // useEffect(() => {
+  //   console.log("curriculumTopic:", curriculumTopic);
+  //   console.log("inputTitle:", inputTitle);
+  //   console.log("inputDescription:", inputDescription);
+  //   console.log("inputTopicId:", inputTopicId);
+  //   console.log("inputDueDateTime:", inputDueDateTime);
+  //   console.log("expanded:", expanded);
+  // }, [curriculumTopic, inputTitle, inputDescription, inputTopicId, inputDueDateTime, expanded]);
 
   return (
     <div style={styles}>
     {isTeacher && (
-        <Accordion sx={{ mb: 10 }}>
+        <Accordion 
+          expanded={expanded}
+          onChange={inputToggleChange}
+          sx={{ mb: 10 }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -40,24 +88,26 @@ export default function InputWork({ isTeacher, curriculumTopics}) {
                   onChange={handleChange}
                 >
                   {curriculumTopics.map((topic, index)=>(
-                    <MenuItem key={index}>{topic}</MenuItem>
+                    <MenuItem key={index} value={topic}>{topic}</MenuItem>
                   ))}
                   <MenuItem key='etc'>기타</MenuItem>
                 </Select>
               </FormControl>
-              <Picker />
+              <Picker inputDueDateTime={inputDueDateTime} setInputDueDateTime={setInputDueDateTime}/>
             </Stack>
             
             <TextField
-              id="inputAssignmentTitle"
+              id="inputWorkTitle"
               label="제목을 입력하세요."
               variant="outlined"
               fullWidth
               sx={{ mb: 2 }}
               required
+              onChange={(e)=>{setInputTitle(e.target.value)}}
+              value={inputTitle}
             />
             <TextField
-              id="inputAssignmentContent"
+              id="inputWorkDescription"
               label="세부 내용을 입력하세요."
               variant="outlined"
               fullWidth
@@ -65,12 +115,14 @@ export default function InputWork({ isTeacher, curriculumTopics}) {
               rows={8}
               sx={{ mb: 2 }}
               required
+              onChange={(e)=>{setInputDescription(e.target.value)}}
+              value={inputDescription}
             />
             <Stack direction="row" justifyContent="flex-end" gap={1}>
               <Button variant="outlined" type="reset">
                 취소
               </Button>
-              <Button variant="outlined">저장</Button>
+              <Button variant="outlined" onClick={onClickSave}>저장</Button>
             </Stack>
           </AccordionDetails>
         </Accordion>
@@ -79,11 +131,11 @@ export default function InputWork({ isTeacher, curriculumTopics}) {
   );
 }
 
-function Picker(){
+function Picker({inputDueDateTime, setInputDueDateTime}){
   return(
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Stack components='DateTimePicker'>
-        <DateTimePicker />
+        <DateTimePicker onChange={(value)=>{setInputDueDateTime(value)}} value={inputDueDateTime}/>
       </Stack>
     </LocalizationProvider>
   );
