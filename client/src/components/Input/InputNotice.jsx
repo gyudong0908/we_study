@@ -12,6 +12,11 @@ export default function InputNotice({ isTeacher, notices, setNotices}) {
   const [inputTitle, setInputTitle] = useState('');
   const [inputContent,setInputcontent] = useState('');
   const {classId} = useParams();
+  const [expanded, setExpanded] = useState(false);
+
+  const inputToggleChange=()=>{
+    setExpanded((prevExpanded)=>!prevExpanded);
+  };
 
   function onClickSave(){
     const data = {
@@ -23,6 +28,7 @@ export default function InputNotice({ isTeacher, notices, setNotices}) {
       setNotices([response.data, ...notices ]);
       setInputTitle('');
       setInputcontent('');
+      setExpanded(false);
     }).catch(err=>{
       console.log(err);
     })
@@ -31,7 +37,10 @@ export default function InputNotice({ isTeacher, notices, setNotices}) {
   return (
     <div style={styles}>
     {isTeacher && (
-        <Accordion sx={{ mb: 10 }}>
+        <Accordion 
+          expanded={expanded}
+          onChange={inputToggleChange}
+          sx={{ mb: 10 }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
