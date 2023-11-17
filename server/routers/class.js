@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const models = require('../models');
+const submit = require('../models/submit');
 router.use(express.json());
 
 router.post('/class', function (req, res) {
@@ -38,6 +39,26 @@ router.get('/classes', function (req, res) {
 router.get('/class', function (req, res) {
     const classId = req.query.classId;
     models.Class.findByPk(classId, { raw: true }).then(data => {
+        res.status(200).send(data);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send("클래스 조회 에러 발생");
+    })
+})
+
+router.get('/class/submits', function (req, res) {
+    const classId = req.query.classId;
+    models.Class.findByPk(classId, {  
+        include:[{
+            model: models.Topic,
+            include:[{
+                model: models.Work,
+                include:[{
+                    model: models.Submit,
+                }]
+            }]
+        }] 
+    }).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         console.log(err);

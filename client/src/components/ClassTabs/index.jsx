@@ -9,9 +9,11 @@ import ClassPeople from '../ClassPeople';
 import ClassWork from '../ClassWork';
 import ClassSetting from '../ClassSetting';
 import ClassGrade from '../ClassGrade';
+import { useParams } from 'react-router-dom';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
+ 
 
   return (
     <div

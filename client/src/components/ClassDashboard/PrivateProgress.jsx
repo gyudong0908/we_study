@@ -5,7 +5,10 @@ import { LocalizationProvider, PickersDay  } from '@mui/x-date-pickers';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { Stack, CircularProgress, Typography, Box, Badge  } from '@mui/material';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+
 
 const ServerDay = (props) => {
     const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
@@ -49,7 +52,21 @@ function CircularProgressWithLabel(props) {
 
 
 export default function PrivateProgress(){
-    const [highlightedDays, setHighlightedDays] = useState(['2023-11-01', '2023-11-02', '2023-11-03']);
+    const [highlightedDays, setHighlightedDays] = useState([]);
+    const {classId} = useParams();
+    
+    function getAttendance(){
+      axios.get(`http://localhost:8081/attendances?classId=${classId}`,{ withCredentials: true }).then((response)=>{
+        setHighlightedDays(response.data.map((attendance)=>new Date(attendance).toISOString().slice(0,10)));
+      }).catch(err=>{
+        console.log(err);
+      })
+  
+    }
+
+    useEffect(()=>{
+      getAttendance();
+    },[])
 
     return(
         <Stack spacing={4} justifyContent='center'>
