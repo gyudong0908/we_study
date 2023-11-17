@@ -18,6 +18,10 @@ import MyPage from './pages/MyPage.jsx';
 import SettingPage from './pages/SettingPage.jsx';
 import RankPage from './pages/RankPage.jsx';
 import CalenderPage from './pages/CalenderPage.jsx';
+import WorksForTeacher from './pages/Works/WorksForTeacher.jsx';
+import WorksForStudent from './pages/Works/WorksForStudent.jsx';
+import WorkDetail from './pages/Works/WorkDetail.jsx';
+
 import { initializeUserData } from './reducer/userdata.js';
 
 const router = createBrowserRouter([
@@ -37,6 +41,18 @@ const router = createBrowserRouter([
         path: 'classes/:classId',
         element: <ClassPage />,
       },
+          {
+            path: 'classes/:classId/worksforteacher',
+            element: <WorksForTeacher />,
+          },
+          {
+            path: 'classes/:classId/worksforstudent',
+            element: <WorksForStudent />,
+          },
+          {
+            path: 'classes/:classId/workdetail',
+            element: <WorkDetail />,
+          },
       {
         path: 'setting',
         element: <SettingPage />,

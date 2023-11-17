@@ -37,8 +37,7 @@ export default function MyPage() {
         marginTop: '100px',
         marginLeft: '270px',
         marginRight: '70px',
-      }}
-    >
+      }}>
       <Stack direction='column' spacing={10}>
         <Stack direction="column" spacing={1}>
           <Grid container spacing={2} sx={{ width: '100%' }}>
