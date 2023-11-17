@@ -9,6 +9,7 @@ import CreateClassModal from '../MyModal/CreateClassModal';
 import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useLocation } from 'react-router-dom';
+import InvoteClassModal from '../MyModal/InvoteClassModal';
 
   
   function MyHeader() {
@@ -43,7 +44,15 @@ import { useLocation } from 'react-router-dom';
     setIsModalOpen(true);
     handleCloseClassMenu();
     };
-    const handleCloseModal = () => setIsModalOpen(false);
+    const [isInvoteModalOpen, setIsInvoteModalOpen] = useState(false);
+    const handleOpenInvoteModal = () => {
+      setIsInvoteModalOpen(true);
+      handleCloseClassMenu();
+      };
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+      setIsInvoteModalOpen(false);
+    }
 
     const mypageTool = (
       <>
@@ -64,13 +73,15 @@ import { useLocation } from 'react-router-dom';
             open={Boolean(anchorElClass)}
             onClose={handleCloseClassMenu}
           >
-            {classSettings.map((setting) => (
-              <MenuItem key={setting} onClick={handleOpenModal}>
-                <Typography textAlign="center">{setting}</Typography>
+              <MenuItem key={classSettings[0]} onClick={handleOpenModal}>
+                <Typography textAlign="center">{classSettings[0]}</Typography>
               </MenuItem>
-              ))}
+              <MenuItem key={classSettings[1]} onClick={handleOpenInvoteModal}>
+                <Typography textAlign="center">{classSettings[1]}</Typography>
+              </MenuItem>
         </Menu>
         {isModalOpen && <CreateClassModal open={isModalOpen} handleClose={handleCloseModal} />}
+        {isInvoteModalOpen && <InvoteClassModal open={isInvoteModalOpen} handleClose={handleCloseModal} />}
       </>
     );
 
