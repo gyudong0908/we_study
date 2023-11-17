@@ -19,10 +19,10 @@ export default function InputNotice({ isTeacher, notices, setNotices}) {
       content: inputContent,
     }
 
-    axios.post(`http://localhost:8081/notice?classId=${classId}`,data,{ withCredentials: true }).then(()=>{
-      setNotices([data, ...notices ]);
-      setInputTitle('')
-      setInputcontent('')
+    axios.post(`http://localhost:8081/notice?classId=${classId}`,data,{ withCredentials: true }).then((response)=>{
+      setNotices([response.data, ...notices ]);
+      setInputTitle('');
+      setInputcontent('');
     }).catch(err=>{
       console.log(err);
     })

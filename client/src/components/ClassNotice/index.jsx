@@ -29,7 +29,7 @@ export default function ClassNotice({ isTeacher }) {
             공지사항
           </Typography>
         </Stack>
-      <NoticeAccordion isTeacher={isTeacher} notices={notices} />
+      <NoticeAccordion isTeacher={isTeacher} notices={notices} setNotices={setNotices} />
     </>
   );
 }

@@ -9,8 +9,8 @@ router.post('/topic', function (req, res) {
     models.Topic.create({
         classId: classId,
         name: req.body.name,
-    }).then(() => {
-        res.sendStatus(200);
+    }).then((data) => {
+        res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
         res.status(500).send("Topic 생성 에러 발생");

@@ -29,7 +29,7 @@ export default function MyPage() {
 
   useEffect(() => {
     //페이지 로드 시 GET 요청 전송
-    fetchCardData();
+    // fetchCardData();
   }, []);
 
 

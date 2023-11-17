@@ -29,8 +29,8 @@ function CreateClassModal({ open, handleClose }) {
         title: title,
         section: teacher,
         description: description,
-      }
-      console.log(data)
+      }      
+      
       axios.post('http://localhost:8081/class', data, { withCredentials: true }).then((response) => {
         dispatch(setClassCards([response.data]));
       }).catch(err => {

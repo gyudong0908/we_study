@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {Stack, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, CssBaseline} from '@mui/material';
 import axios from 'axios';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import MilitaryTechRoundedIcon from '@mui/icons-material/MilitaryTechRounded';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
+import { useSelector, useDispatch } from 'react-redux';
+import {setClassCards, deleteClassCards} from '../../reducer/classCardsSlice';
 
 
 function MySideNav(){
-    const [classDatas, setClassDatas] = useState([]);
-    const welcomeText = <div>✍️ 시작해볼까요?<br />최혜린님</div>
+    const classDatas = useSelector((state)=>state.classCards);
+    const user = useSelector((state)=>state.userData);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const welcomeText = <div>✍️ 시작해볼까요?<br />{user.userData=== undefined? '': user.userData.nickName+'님'}</div>
 
     function getClassData() {
         axios.get('http://localhost:8081/classes',{ withCredentials: true }).then((data)=>{
-            setClassDatas(data.data);
+            dispatch(setClassCards(data.data));
         }).catch(err=>{
             console.log(err);
         })
@@ -62,7 +68,7 @@ function MySideNav(){
                 ))}
                 {classDatas.map((classData, index) => (
                 <ListItem key={index} disablePadding>
-                    <ListItemButton href= {`http://localhost:5173/mypage/classes/${classData.id}`}>
+                    <ListItemButton onClick={()=>{navigate(`/mypage/classes/${classData.id}`)}}>
                         <ListItemIcon>
                             <SchoolRoundedIcon />
                         </ListItemIcon>

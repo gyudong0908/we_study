@@ -18,7 +18,7 @@ export default function ClassPage() {
   }
   useEffect(() => {
     getClassData()
-  }, [])
+  }, [classId])
   return (
 
     <Stack

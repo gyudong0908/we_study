@@ -7,8 +7,8 @@ router.use(express.json());
 router.post('/submit', function (req, res) {
     const workId = req.query.workId;
     const userId = req.session.passport.user;
-    models.Submit.create({...req.body, workId:workId, userId:userId }).then(() => {
-        res.sendStatus(200);
+    models.Submit.create({...req.body, workId:workId, userId:userId }).then((data) => {
+        res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
         res.status(500).send("submit 생성 에러 발생");

@@ -22,6 +22,7 @@ export const initializeUserData = () => {
   };
 
 const initialState = {
+    nickName:''
     // userData: null,
     // 다른 상태들...
   };

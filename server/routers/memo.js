@@ -40,8 +40,8 @@ router.post('/memo', function (req, res) {
         userId: userId,
         title: req.body.title,
         content: req.body.content,
-    }).then(() => {
-        res.status(200).send('잘됨');
+    }).then((data) => {
+        res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
         res.status(500).send('메모 생성 오류 발생');

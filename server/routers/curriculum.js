@@ -6,8 +6,8 @@ router.use(express.json());
 
 router.post('/curriculum', function (req, res) {
     const classId = req.query.classId;
-    models.Curriculum.create({...req.body,classId:classId}).then(() => {
-        res.sendStatus(200);
+    models.Curriculum.create({...req.body,classId:classId}).then((data) => {
+        res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
         res.status(500).send("curriculum 생성 에러 발생");

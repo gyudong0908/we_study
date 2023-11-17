@@ -35,7 +35,9 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
         content: resultString,
       };
 
-      axios.post(`http://localhost:8081/curriculum?classId=${classId}`,data,{ withCredentials: true })
+      axios.post(`http://localhost:8081/curriculum?classId=${classId}`,data,{ withCredentials: true }).then(response=>{
+        setCurriculums([...curriculums,response.data])
+      })
       .catch(err=>{
         alert('오류 발생:', err);
       });   
@@ -48,7 +50,6 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
 
       setTitle('');
       setCurriculumList([]);
-      setCurriculums([...curriculums,data])
     }
 
     const styles = {marginBottom:'40px'};
