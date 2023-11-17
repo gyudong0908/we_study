@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Typography, Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button } from '@mui/material';
 
-export default function WorkAccordion({ isTeacher, assignments }) {
+export default function WorkAccordion({ isTeacher, works, setWorks, assignments}) {
   console.log('isTeacher:', isTeacher);
   return (
     <>
