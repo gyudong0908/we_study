@@ -30,6 +30,9 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING,
     },
+    dueDateTime:{
+      type: DataTypes.DATE,
+    }
   }, {
     sequelize,
     modelName: 'Work', // 모델 이름 바꿔줘야함
