@@ -3,7 +3,7 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, PickersDay  } from '@mui/x-date-pickers';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { Stack, CircularProgress, Typography, Box, Badge  } from '@mui/material';
+import { Stack, CircularProgress, Typography, Box, Badge, Button  } from '@mui/material';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -63,6 +63,16 @@ export default function PrivateProgress(){
       })
   
     }
+    function attendance(){
+      axios.post(`http://localhost:8081/attendance?classId=${classId}`,null,{ withCredentials: true }).then(()=>{
+        setHighlightedDays([...highlightedDays, new Date().toISOString().slice(0,10)]);
+        alert('출석이 완료 되었습니다.');
+      })
+      .catch(err=>{
+        console.log(err);
+        alert('출석에 실패하였습니다.');
+      })
+    }
 
     useEffect(()=>{
       getAttendance();
@@ -73,6 +83,7 @@ export default function PrivateProgress(){
             <Typography variant='h4' fontWeight='bold' sx={{color:'#0091ea'}} >나의 학습 진행 상황</Typography>
             <Stack direction='row' spacing={30}>
                 <Stack textAlign='center'>
+                <Typography variant='h4' fontWeight='bold'>출석</Typography>
                 <LocalizationProvider dateAdapter={AdapterDayjs} sx={{marginBottom:'10px'}}>
                 <DemoContainer components={['DateCalendar', 'DateCalendar']}>
                     <DateCalendar value={dayjs()} readOnly
@@ -87,15 +98,15 @@ export default function PrivateProgress(){
                         />
                 </DemoContainer>
                 </LocalizationProvider>
-                <Typography variant='h4' fontWeight='bold'>15/30</Typography>
-                </Stack >
+                <Button onClick={attendance}>출석</Button>
+              </Stack >
                 <Stack textAlign='center'>
-                <CircularProgressWithLabel value = {30} />
-                    <Typography variant='h4' fontWeight='bold'>과제</Typography>
+                  <Typography variant='h4' fontWeight='bold'>과제</Typography>
+                  <CircularProgressWithLabel value = {30} />
                 </Stack>
                 <Stack textAlign='center'>
-                <CircularProgressWithLabel value = {50}/>
-                    <Typography variant='h4' fontWeight='bold'>퀴즈</Typography>
+                  <Typography variant='h4' fontWeight='bold'>퀴즈</Typography>
+                  <CircularProgressWithLabel value = {50}/>
                 </Stack>
         </Stack>
       </Stack>
