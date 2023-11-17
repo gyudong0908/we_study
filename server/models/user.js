@@ -34,23 +34,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     birthDay: {
       type: DataTypes.DATE,
-      allowNull: false
     },
     gender: {
       type: DataTypes.STRING,
-      allowNull: false
     },
     job: {
       type: DataTypes.STRING,
-      allowNull: false
     },
     goal: {
       type: DataTypes.STRING,
-      allowNull: false
     },
     profilePath: {
       type: DataTypes.STRING,
-      allowNull: false
     },
   }, {
     sequelize,
