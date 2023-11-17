@@ -9,13 +9,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { Typography, Stack, Box } from '@mui/material';
 
 const columns = [
-    { id: "name", label: '이름', minWidth: 100 },
-    { id: "topic", label: '단원명', minWidth: 100 },
-    { id: "workTitle", label: '과제명', minWidth: 100 },
-    { id: "dueDateTime",label: '제출시간', minWidth: 100 },
-    { id: "grade", label: '성적', minWidth: 100 },
+    { id: "name", label: '이름', width: 150 },
+    { id: "topic", label: '단원명', width: 150 },
+    { id: "workTitle", label: '과제명', width: 700 },
+    { id: "dueDateTime",label: '제출시간', width: 100 },
+    { id: "grade", label: '성적', width: 100 },
   ];
   
   function createData(name, topic, workTitle, dueDateTime, grade) {
@@ -23,7 +24,7 @@ const columns = [
   }
   
   const rows = [
-    createData('India', 'IN', 1324171354, 3287263),
+    createData('India', 'IN', '73604839737360483973736048397736048397373604839737360483977360483973736048397373604839773604839737360483973736048397', 3287263),
     createData('China', 'CN', 1403500365, 9596961),
     createData('Italy', 'IT', 60483973, 301340),
     createData('United States', 'US', 327167434, 9833520),
@@ -41,31 +42,16 @@ const columns = [
   ];
   
   export default function GradeTable() {
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  
-    const handleChangePage = (event, newPage) => {
-      setPage(newPage);
-    };
-  
-    const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
-    };
-  
+    
     return (
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
+      <Paper sx={{ width: '90%', overflow: 'hidden' }}>
+        <TableContainer sx={{ maxHeight: 440}}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
+                {columns.map((column) => (                  
+                  <TableCell>
+                    <Typography sx={{width: column.width}}>{column.label}</Typography>                    
                   </TableCell>
                 ))}
               </TableRow>
@@ -79,9 +65,7 @@ const columns = [
                         const value = row[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
-                            {column.format && typeof value === 'number'
-                              ? column.format(value)
-                              : value}
+                            <Typography sx={{width: column.width, overflow: 'hidden', textOverflow: 'ellipsis'}}>{value}</Typography>
                           </TableCell>
                         );
                       })}
@@ -91,6 +75,12 @@ const columns = [
             </TableBody>
           </Table>
         </TableContainer>
+        <Stack direction='row' justifyContent='space-between' sx={{marginLeft: '10px', marginTop: '10px'}}>
+        <Typography variant='h5'>평균</Typography>
+        <Typography sx={{ float: 'right', marginRight: '30px'}}>{rows.reduce((accumulator, ctrrentValue)=>{
+              return accumulator + ctrrentValue.dueDateTime;
+            },0)/ rows.length}</Typography>
+            </Stack>
       </Paper>
     );
   }

@@ -12,8 +12,9 @@ const config = {
   "username": "root",
   "password": process.env.dbPassword,
   "database": "we_study",
-  "host": "127.0.0.1",
-  "dialect": "mysql"
+  "host": process.env.host,
+  "dialect": "mariadb",
+  "port": process.env.port
 };
 const db = {};
 
