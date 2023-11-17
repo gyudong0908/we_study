@@ -31,7 +31,27 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    birthDay: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    gender: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    job: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    goal: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    profilePath: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
   }, {
     sequelize,
     modelName: 'User', // 모델 이름 바꿔줘야함
