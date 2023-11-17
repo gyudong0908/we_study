@@ -5,8 +5,10 @@ router.use(express.json());
 
 router.get('/memos', function (req, res) {
     const userId = req.session.passport.user;
-    models.memo.findAll({
-        attributes: ['id', 'title'],
+    models.Memo.findAll({
+        order:[
+            ['createdAt', 'DESC']
+        ],
         where: {
             userId: userId,
         },
@@ -19,10 +21,10 @@ router.get('/memos', function (req, res) {
 });
 
 router.get('/memo', function (req, res) {
-    const id = req.query.id;
-    models.memo.findAll({
+    const memoId = req.query.memoId;
+    models.Memo.findAll({
         where: {
-            id: id,
+            id: memoId,
         },
     }).then((data) => {
         res.send(data);
@@ -34,26 +36,42 @@ router.get('/memo', function (req, res) {
 
 router.post('/memo', function (req, res) {
     const userId = req.session.passport.user;
-    models.memo.create({
+    models.Memo.create({
         userId: userId,
         title: req.body.title,
-        content: req.body.title,
-    }).then(() => {
-        res.status(200).send('잘됨');
+        content: req.body.content,
+    }).then((data) => {
+        res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
+        res.status(500).send('메모 생성 오류 발생');
     })
 });
 
 router.put('/memo', function (req, res) {
-    const id = req.query.id;
-    models.memo.update(req.body, {
-        where: { id: id }
+    const memoId = req.query.memoId;
+    models.Memo.update(req.body, {
+        where: { id: memoId }
     }).then(() => {
         res.status(200).send('잘됨');
     }).catch(err => {
         console.log(err);
+        res.status(500).send('메모 변경 오류 발생');
     })
 });
+
+router.delete('/memo',function(req,res){
+    const memoId = req.query.memoId;
+    models.Memo.destory({
+        where:{
+            id: memoId
+        }
+    }).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('메모 삭제 오류 발생');
+    })
+})
 
 module.exports = router;

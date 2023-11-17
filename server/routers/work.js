@@ -6,8 +6,8 @@ router.use(express.json());
 
 router.post('/work', function (req, res) {
     const topicId = req.query.topicId;
-    models.Work.create({ ...req.body, topicId: topicId }).then(() => {
-        res.sendStatus(200);
+    models.Work.create({ ...req.body, topicId: topicId }).then((data) => {
+        res.status(200).send(data.Values);
     }).catch(err => {
         console.log(err);
         res.status(500).send("Work 생성 에러 발생");
@@ -40,4 +40,17 @@ router.put('/work', function (req, res) {
     })
 })
 
+router.delete('/work',function(req,res){
+    const workId = req.query.workId;
+    models.Work.destroy({
+        where:{
+            id: workId
+        }
+    }).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send(err);
+    })
+})
 module.exports = router;

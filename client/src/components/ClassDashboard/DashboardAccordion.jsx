@@ -18,7 +18,7 @@ export default function DashboardAccordion({ isTeacher, curriculums }) {
           <AccordionDetails>
           {curriculum.content.split('\n').map((line, index) => (
             <React.Fragment key={index}>
-            {line}
+            🔹 {line}
             <br />
             </React.Fragment>
           ))}

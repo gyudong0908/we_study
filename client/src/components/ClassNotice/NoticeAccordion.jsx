@@ -1,7 +1,16 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button, Typography } from '@mui/material';
+import axios from 'axios';
 
-export default function NoticeAccordion({ isTeacher, notices }) {
+export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
+  function onClickDelete(target){
+    axios.delete(`http://localhost:8081/notice?noticeId=${target.id}`,{ withCredentials: true }).then(()=>{
+      const newNotices = notices.filter(notice=>notice.id !==  target.id);
+      setNotices(newNotices);  
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
   return (
     <>
       {notices.map((notice, index) => (
@@ -24,7 +33,7 @@ export default function NoticeAccordion({ isTeacher, notices }) {
             {notice.content}
             {isTeacher&& (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
-                <Button variant="outlined">삭제</Button>
+                <Button variant="outlined" onClick={()=>{onClickDelete(notice)}}>삭제</Button>
                 <Button variant="outlined">수정</Button>
               </Stack>
             )}

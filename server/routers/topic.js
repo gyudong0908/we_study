@@ -9,8 +9,8 @@ router.post('/topic', function (req, res) {
     models.Topic.create({
         classId: classId,
         name: req.body.name,
-    }).then(() => {
-        res.sendStatus(200);
+    }).then((data) => {
+        res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
         res.status(500).send("Topic 생성 에러 발생");
@@ -42,13 +42,26 @@ router.get('/topics', function (req, res) {
     })
 })
 
-router.put('topic', function (req, res) {
+router.put('/topic', function (req, res) {
     const topicId = req.query.topicId;
     models.update(req.body, { where: { id: topicId } }).then(() => {
         res.sendStatus(200);
     }).catch(err => {
         console.log(err);
         res.status(500).send('Topic 변경 에러 발생');
+    })
+})
+router.delete('/topic',function(req,res){
+    const topicId = req.query.topicId;
+    models.Topic.destroy({
+        where:{
+            id: topicId
+        }
+    }).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('Topic 삭제 오류 발생');
     })
 })
 

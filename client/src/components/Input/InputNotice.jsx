@@ -3,9 +3,31 @@ import { Button, Stack, TextField } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
+import axios from 'axios';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-export default function InputNotice({ isTeacher}) {
+export default function InputNotice({ isTeacher, notices, setNotices}) {
   const styles = {marginBottom:'40px'};
+  const [inputTitle, setInputTitle] = useState('');
+  const [inputContent,setInputcontent] = useState('');
+  const {classId} = useParams();
+
+  function onClickSave(){
+    const data = {
+      title: inputTitle,
+      content: inputContent,
+    }
+
+    axios.post(`http://localhost:8081/notice?classId=${classId}`,data,{ withCredentials: true }).then((response)=>{
+      setNotices([response.data, ...notices ]);
+      setInputTitle('');
+      setInputcontent('');
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+
   return (
     <div style={styles}>
     {isTeacher && (
@@ -25,6 +47,8 @@ export default function InputNotice({ isTeacher}) {
               fullWidth
               sx={{ mb: 2 }}
               required
+              value={inputTitle}
+              onChange={(e)=>{setInputTitle(e.target.value)}}
             />
             <TextField
               id="inputNoticeContent"
@@ -34,13 +58,15 @@ export default function InputNotice({ isTeacher}) {
               multiline
               rows={8}
               sx={{ mb: 2 }}
+              value={inputContent}
+              onChange={(e)=>{setInputcontent(e.target.value)}}
               required
             />
             <Stack direction="row" justifyContent="flex-end" gap={1}>
               <Button variant="outlined" type="reset">
                 취소
               </Button>
-              <Button variant="outlined">저장</Button>
+              <Button variant="outlined" onClick={onClickSave}>저장</Button>
             </Stack>
           </AccordionDetails>
         </Accordion>

@@ -9,7 +9,7 @@ router.post('/class', function (req, res) {
 
     models.Class.create({ ...req.body, teacher: userId }).then((data) => {
         data.addUser(userId);
-        res.sendStatus(200);
+        res.status(200).send(data.dataValues)
     }).catch(err => {
         console.log(err);
         res.status(500).send("Class 생성 오류");
@@ -45,6 +45,24 @@ router.get('/class', function (req, res) {
     })
 })
 
+router.get('/class/user',function(req,res){
+    const classId = req.query.classId;
+    models.Class.findByPk(classId,{
+        include: [
+            { 
+                model: models.User,
+                through: 'classUser',
+            }
+        ]
+    }).then((classData)=>{
+        const userData = classData.Users.map(data => data.dataValues);
+        res.status(200).send({userData, teacherId:classData.dataValues.teacher});
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('Class 유저 조회 에러 발생');
+    })
+})
+
 router.post('/class/join', function (req, res) {
     const code = req.query.code;
     const userId = req.session.passport.user;
@@ -66,6 +84,19 @@ router.put('/class', function (req, res) {
     }).catch(err => {
         console.log(err);
         res.status(500).send("클래스 변경 오류");
+    })
+})
+router.delete('class',function(req,res){
+    const classId = req.query.classId;
+    models.Class.destory({
+        where: {
+            id: classId
+        }
+    }).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('Class 삭제 오류 발생');
     })
 })
 
