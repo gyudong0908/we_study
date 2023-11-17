@@ -29,7 +29,7 @@ export default function ClassDashboard({ isTeacher }) {
   useEffect(() => {
     getCurriculums()
     return setIsLoading(false);
-  }, [])
+  }, [classId])
 
   return (
     <>
