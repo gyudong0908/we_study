@@ -42,6 +42,23 @@ router.get('/topics', function (req, res) {
     })
 })
 
+router.get('/topic/work',function(req,res){
+    const classId = req.query.classId;
+    models.Topic.findAll({
+        where:{
+            classId: classId
+        },
+        include: [{
+            model: models.Work,
+          }]
+    }).then((data)=>{
+        res.status(200).send(data);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('공지사항 삭제 에러 발생');
+    })
+})
+
 router.put('/topic', function (req, res) {
     const topicId = req.query.topicId;
     models.update(req.body, { where: { id: topicId } }).then(() => {
