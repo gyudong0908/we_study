@@ -12,24 +12,17 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-export default function InputWork({ isTeacher, curriculumTopics, works, setWorks}) {
+export default function InputWork({ isTeacher, works, setWorks}) {
   const styles = {marginBottom:'40px'};
-  const [curriculumTopic, setCurriculumTopic] = useState('');
   const [inputTitle, setInputTitle] = useState('');
   const [inputDescription, setInputDescription] = useState('');
   const [inputTopicId, setInputTopicId] = useState('');
   const [inputDueDateTime, setInputDueDateTime] = useState('');
-  //const {topicId} = useParams();
+  const [topicId, setTopicId] = useState('');
 
   const [expanded, setExpanded] = useState(false);
   const inputToggleChange=()=>{
     setExpanded((prevExpanded)=>!prevExpanded);
-  };
-
-  const handleChange = (event) => {
-    const selectedTopicId = event.target.value;
-    setCurriculumTopic(selectedTopicId);
-    setInputTopicId(selectedTopicId);
   };
 
   function onClickSave(){
@@ -40,10 +33,9 @@ export default function InputWork({ isTeacher, curriculumTopics, works, setWorks
       dueDateTime: inputDueDateTime.toISOString(),
     }
 
-    axios.post('http://localhost:8081/work?topicId=1', data, { withCredentials:true }).then((response)=>{
+    axios.post(`http://localhost:8081/work?topicId=${topicId}`, data, { withCredentials:true }).then((response)=>{
       setWorks([response.data, ...works]);
       setInputTitle('');
-      setCurriculumTopic('');
       setInputDescription('');
       setInputTopicId('');
       setInputDueDateTime('');
@@ -53,14 +45,11 @@ export default function InputWork({ isTeacher, curriculumTopics, works, setWorks
     })
   };
 
-  // useEffect(() => {
-  //   console.log("curriculumTopic:", curriculumTopic);
-  //   console.log("inputTitle:", inputTitle);
-  //   console.log("inputDescription:", inputDescription);
-  //   console.log("inputTopicId:", inputTopicId);
-  //   console.log("inputDueDateTime:", inputDueDateTime);
-  //   console.log("expanded:", expanded);
-  // }, [curriculumTopic, inputTitle, inputDescription, inputTopicId, inputDueDateTime, expanded]);
+  
+
+  useEffect(() => {
+    console.log(works.id);
+  }, []);
 
   return (
     <div style={styles}>
@@ -84,11 +73,11 @@ export default function InputWork({ isTeacher, curriculumTopics, works, setWorks
                   labelId="curriculumTopic"
                   id="curriculumTopicRequired"
                   label="단원 선택 필수 *"
-                  value={curriculumTopic}
-                  onChange={handleChange}
+                  onChange={(e)=>{setInputTopicId(e.target.value);} }
+                  value={inputTopicId}
                 >
-                  {curriculumTopics.map((topic, index)=>(
-                    <MenuItem key={index} value={topic}>{topic}</MenuItem>
+                  {works.map((topic)=>(
+                    <MenuItem key={topic.id} value={topic.name} onClick={(e)=>{setTopicId(topic.id); }} >{topic.name}</MenuItem>
                   ))}
                   <MenuItem key='etc'>기타</MenuItem>
                 </Select>
