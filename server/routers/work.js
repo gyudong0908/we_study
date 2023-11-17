@@ -7,7 +7,7 @@ router.use(express.json());
 router.post('/work', function (req, res) {
     const topicId = req.query.topicId;
     models.Work.create({ ...req.body, topicId: topicId }).then((data) => {
-        res.status(200).send(data.Values);
+        res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
         res.status(500).send("Work 생성 에러 발생");
