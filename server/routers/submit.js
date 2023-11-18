@@ -7,7 +7,7 @@ router.use(express.json());
 router.post('/submit', function (req, res) {
     const workId = req.query.workId;
     const userId = req.session.passport.user;
-    models.Submit.create({...req.body, workId:workId, userId:userId }).then((data) => {
+    models.Submit.create({ ...req.body, workId: workId, userId: userId }).then((data) => {
         res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
@@ -15,40 +15,40 @@ router.post('/submit', function (req, res) {
     })
 })
 
-router.get('/submits',function(req,res){
+router.get('/submits', function (req, res) {
     const workId = req.query.workId;
     models.Submit.findAll({
         raw: true,
-        where:{
+        where: {
             workId: workId,
         }
-    }).then((submits=>{
+    }).then((submits => {
         res.status(200).send(submits);
-    })).catch(err=>{
+    })).catch(err => {
         console.log(err);
         res.status(500).send('submit 조회 에러 발생');
     })
 })
 
-router.put('/submit',function(req,res){
+router.put('/submit', function (req, res) {
     const submitId = req.query.submitId;
-    models.update(req.body,{where:{id:submitId}}).then(()=>{
-        res.sendStatus(200);
-    }).catch(err=>{
+    models.update(req.body, { where: { id: submitId } }).then((data) => {
+        res.status(200).send(data.dataValues);
+    }).catch(err => {
         console.log(err);
         res.status(500).send('submit 변경 에러 발생');
     })
 })
 
-router.delete('/submit',function(req,res){
+router.delete('/submit', function (req, res) {
     const submitId = req.query.submitId;
     models.Submit.destroy({
-        where:{
+        where: {
             id: submitId
         }
-    }).then(()=>{
+    }).then(() => {
         res.sendStatus(200);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send('제출물 삭제 오류');
     })

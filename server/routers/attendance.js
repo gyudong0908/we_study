@@ -34,16 +34,16 @@ router.post('/attendance', async function (req, res) {
     }
 })
 
-router.get('/attendances',function(req,res){
+router.get('/attendances', function (req, res) {
     const classId = req.query.classId;
     models.Attendance.findAll({
-        raw:true,
-        where:{
+        raw: true,
+        where: {
             classId: classId
         }
-    }).then(attendances=>{
-        res.status(200).send(attendances.map(attendance=>attendance.createdAt))
-    }).catch(err=>{
+    }).then(attendances => {
+        res.status(200).send(attendances.map(attendance => attendance.createdAt))
+    }).catch(err => {
         console.log(err);
         res.status(500).send('출석 정보 읽기 에러 발생');
     })

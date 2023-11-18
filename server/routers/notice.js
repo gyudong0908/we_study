@@ -6,7 +6,7 @@ router.use(express.json());
 
 router.post('/notice', function (req, res) {
     const classId = req.query.classId;
-    models.Notice.create({...req.body,classId:classId}).then((data) => {
+    models.Notice.create({ ...req.body, classId: classId }).then((data) => {
         res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
@@ -14,39 +14,39 @@ router.post('/notice', function (req, res) {
     })
 })
 
-router.get('/notices',function(req,res){
+router.get('/notices', function (req, res) {
     const classId = req.query.classId;
     models.Notice.findAll({
         raw: true,
-        where:{
+        where: {
             classId: classId,
         }
-    }).then((notices=>{
+    }).then((notices => {
         res.status(200).send(notices);
-    })).catch(err=>{
+    })).catch(err => {
         console.log(err);
         res.status(500).send('notice 조회 에러 발생');
     })
 })
 
-router.put('/notice',function(req,res){
+router.put('/notice', function (req, res) {
     const noticeId = req.query.noticeId;
-    models.update(req.body,{where:{id:noticeId}}).then(()=>{
-        res.sendStatus(200);
-    }).catch(err=>{
+    models.update(req.body, { where: { id: noticeId } }).then((data) => {
+        res.status(200).send(data.dataValues);
+    }).catch(err => {
         console.log(err);
         res.status(500).send('notice 변경 에러 발생');
     })
 })
-router.delete('/notice',function(req,res){
+router.delete('/notice', function (req, res) {
     const noticeId = req.query.noticeId;
     models.Notice.destroy({
-        where:{
+        where: {
             id: noticeId
         }
-    }).then(()=>{
+    }).then(() => {
         res.sendStatus(200);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send('공지사항 삭제 에러 발생');
     })
