@@ -32,8 +32,8 @@ router.get('/submits', function (req, res) {
 
 router.put('/submit', function (req, res) {
     const submitId = req.query.submitId;
-    models.update(req.body, { where: { id: submitId } }).then((data) => {
-        res.status(200).send(data.dataValues);
+    models.update(req.body, { where: { id: submitId } }).then(() => {
+        res.sendStatus(200);
     }).catch(err => {
         console.log(err);
         res.status(500).send('submit 변경 에러 발생');

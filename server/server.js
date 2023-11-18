@@ -7,7 +7,6 @@ const models = require("./models/index.js");
 const dotenv = require('dotenv').config();
 const cors = require('cors');
 
-
 // 세션 미들웨어 설정
 app.use(session({
   secret: process.env.sessionSecret, // 세션 암호화에 사용될 키 (필요한 경우 변경)
@@ -50,6 +49,7 @@ app.use('/', require('./routers/curriculum.js'));
 app.use('/', require('./routers/notice.js'));
 app.use('/', require('./routers/submit.js'));
 app.use('/', require('./routers/user.js'));
+app.use('/', require('./routers/file.js'));
 
 const httpServer = app.listen(8081, () => {
   console.log('서버 동작 중');

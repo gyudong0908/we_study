@@ -52,8 +52,8 @@ router.put('/memo', function (req, res) {
     const memoId = req.query.memoId;
     models.Memo.update(req.body, {
         where: { id: memoId }
-    }).then((data) => {
-        res.status(200).send(data.dataValues);
+    }).then(() => {
+        res.sendStatus(200);
     }).catch(err => {
         console.log(err);
         res.status(500).send('메모 변경 오류 발생');

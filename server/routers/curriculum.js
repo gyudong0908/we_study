@@ -31,8 +31,8 @@ router.get('/curriculums', function (req, res) {
 
 router.put('/curriculum', function (req, res) {
     const curriculumId = req.query.curriculumId;
-    models.update(req.body, { where: { id: curriculumId } }).then((data) => {
-        res.status(200).send(data.dataValues);
+    models.update(req.body, { where: { id: curriculumId } }).then(() => {
+        res.sendStatus(200);
     }).catch(err => {
         console.log(err);
         res.status(500).send('curriculum 변경 에러 발생');

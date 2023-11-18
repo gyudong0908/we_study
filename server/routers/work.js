@@ -40,15 +40,15 @@ router.put('/work', function (req, res) {
     })
 })
 
-router.delete('/work',function(req,res){
+router.delete('/work', function (req, res) {
     const workId = req.query.workId;
     models.Work.destroy({
-        where:{
+        where: {
             id: workId
         }
-    }).then(()=>{
+    }).then(() => {
         res.sendStatus(200);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send(err);
     })

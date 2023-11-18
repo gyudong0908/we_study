@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
+const upload = require('../config/multerConfig.js');
 router.use(express.json());
 
 router.get('/user', function (req, res) {
@@ -18,12 +19,16 @@ router.get('/user', function (req, res) {
     })
 })
 
-router.put('/user', function (req, res) {
+router.put('/user', upload.single('file'), function (req, res) {
     const userId = req.session.passport.user;
-    models.User.update(req.body, {
-        raw: true
-    }).then(data => {
-        res.status(200).send(data);
+    const fileName = req.file.filename;
+    const downloadPath = `${req.protocol}://${req.hostname}:${8081}/download/profile/${fileName}`;
+    models.User.update({ ...req.body, profilePath: downloadPath }, {
+        where: {
+            id: userId
+        }
+    }).then(() => {
+        res.sendStatus(200);
     }).catch(err => {
         console.log(err);
         res.status(500).send('유정 정보 변경 에러');

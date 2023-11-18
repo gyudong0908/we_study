@@ -61,8 +61,8 @@ router.get('/topic/work', function (req, res) {
 
 router.put('/topic', function (req, res) {
     const topicId = req.query.topicId;
-    models.update(req.body, { where: { id: topicId } }).then((data) => {
-        res.status(200).send(data.dataValues);
+    models.update(req.body, { where: { id: topicId } }).then(() => {
+        res.sendStatus(200);
     }).catch(err => {
         console.log(err);
         res.status(500).send('Topic 변경 에러 발생');

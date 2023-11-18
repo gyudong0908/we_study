@@ -109,8 +109,8 @@ router.post('/class/join', function (req, res) {
 router.put('/class', function (req, res) {
     const classId = req.query.classId;
 
-    models.Class.update(req.body, { where: { id: classId } }).then((data) => {
-        res.status(200).send(data.dataValues);
+    models.Class.update(req.body, { where: { id: classId } }).then(() => {
+        res.sendStatus(200);
     }).catch(err => {
         console.log(err);
         res.status(500).send("클래스 변경 오류");
