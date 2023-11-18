@@ -10,7 +10,15 @@ router.post('/class', function (req, res) {
 
     models.Class.create({ ...req.body, teacher: userId }).then((data) => {
         data.addUser(userId);
-        res.status(200).send(data.dataValues)
+        models.Topic.create({
+            classId: data.dataValues.id,
+            name: '기타'
+        }).then(() => {
+            res.status(200).send(data.dataValues)
+        }).catch(err => {
+            console.log(err);
+            res.status(500).send('기타 Topic 생성 오류');
+        })
     }).catch(err => {
         console.log(err);
         res.status(500).send("Class 생성 오류");
@@ -48,16 +56,17 @@ router.get('/class', function (req, res) {
 
 router.get('/class/submits', function (req, res) {
     const classId = req.query.classId;
-    models.Class.findByPk(classId, { raw: true, 
-        include:[{
+    models.Class.findByPk(classId, {
+        raw: true,
+        include: [{
             model: models.Topic,
-            include:[{
+            include: [{
                 model: models.Work,
-                include:[{
+                include: [{
                     model: models.Submit,
                 }]
             }]
-        }] 
+        }]
     }).then(data => {
         res.status(200).send(data);
     }).catch(err => {
@@ -66,19 +75,19 @@ router.get('/class/submits', function (req, res) {
     })
 })
 
-router.get('/class/user',function(req,res){
+router.get('/class/user', function (req, res) {
     const classId = req.query.classId;
-    models.Class.findByPk(classId,{
+    models.Class.findByPk(classId, {
         include: [
-            { 
+            {
                 model: models.User,
                 through: 'classUser',
             }
         ]
-    }).then((classData)=>{
+    }).then((classData) => {
         const userData = classData.Users.map(data => data.dataValues);
-        res.status(200).send({userData, teacherId:classData.dataValues.teacher});
-    }).catch(err=>{
+        res.status(200).send({ userData, teacherId: classData.dataValues.teacher });
+    }).catch(err => {
         console.log(err);
         res.status(500).send('Class 유저 조회 에러 발생');
     })
@@ -107,15 +116,15 @@ router.put('/class', function (req, res) {
         res.status(500).send("클래스 변경 오류");
     })
 })
-router.delete('class',function(req,res){
+router.delete('class', function (req, res) {
     const classId = req.query.classId;
     models.Class.destory({
         where: {
             id: classId
         }
-    }).then(()=>{
+    }).then(() => {
         res.sendStatus(200);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send('Class 삭제 오류 발생');
     })
