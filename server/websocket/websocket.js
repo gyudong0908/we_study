@@ -25,13 +25,13 @@ module.exports = (httpServer) => {
 
         const { socket, data } = messageQueue.shift();
 
-        models.chatMessage.create({
+        models.ChatMessage.create({
           chatUserId: data.chatUserId,
           message: data.data,
         })
 
-        models.chatUser.findAll({
-          include: [models.user],
+        models.ChatUser.findOne({
+          include: [models.User],
           where: {
             id: data.chatUserId,
           },
@@ -39,7 +39,7 @@ module.exports = (httpServer) => {
           console.log(value)
           io.to(chatName).emit('broadcast', { content: data.data, name: value[0].get('user').get('nickName') });
         })
-        
+
         processMessageQueue();
       }
     }
