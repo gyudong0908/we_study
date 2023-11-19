@@ -28,8 +28,14 @@ module.exports = (httpServer) => {
           chatUserId: data.chatUserId,
           chatId: data.chatId,
           message: data.data,
-        }).then(() => {
-          io.to(data.chatCode).emit('broadcast', { content: data.data, nickName: data.nickName });
+        }).then((chatMessage) => {
+          models.User.findOne({
+            where: {
+              id: data.userId
+            }
+          }).then((user) => {
+            io.to(data.chatCode).emit('broadcast', { createdAt: chatMessage.dataValues.createdAt, content: data.data, user: user.dataValues });
+          })
         }).catch(err => {
           console.log(err);
         })
