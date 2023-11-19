@@ -42,6 +42,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     downloadPath: {
       type: DataTypes.STRING,
+    },
+    grade: {
+      type: DataTypes.INTEGER,
     }
 
   }, {

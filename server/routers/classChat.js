@@ -24,7 +24,6 @@ router.get('/classchats', function (req, res) {
 router.get('/chatMessages', function (req, res) {
     const chatId = req.query.chatId;
     models.ChatMessage.findAll({
-        raw: true,
         where: {
             chatId: chatId
         },
@@ -32,11 +31,10 @@ router.get('/chatMessages', function (req, res) {
             model: models.ChatUser,
             include: [{
                 model: models.User,
-                attributes: ['nickName']
             }]
         }]
     }).then(data => {
-        const responseData = data.map(chat => ({ content: chat.message, nickName: chat['ChatUser.User.nickName'] }))
+        const responseData = data.map(chat => ({ content: chat.message, user: chat.ChatUser.User, createdAt: chat.createdAt }))
         res.status(200).send(responseData);
     }).catch(err => {
         console.log(err);
