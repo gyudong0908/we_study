@@ -93,8 +93,8 @@ export default function ChatDisplay({ rewind, value, classChatId, chatTitle, cha
                                 })
                             }
                         </Stack>
-                        <Grid container>
-                            <Grid item xs={4}>
+                        <Box display='flex' alignItems='center'>
+                            <Box flex={1}>
                                 <TextField
                                     hiddenLabel
                                     id="filled-hidden-label-small"
@@ -103,12 +103,14 @@ export default function ChatDisplay({ rewind, value, classChatId, chatTitle, cha
                                     size="small"
                                     onChange={(e) => { setSendData(e.target.value) }}
                                     value={sendData}
+                                    sx={{ width: '100%' }}
+                                    onKeyUp={(e) => { if (e.key === 'Enter') { send() } }}
                                 />
-                            </Grid>
-                            <Grid item xs={4}>
+                            </Box>
+                            <Box>
                                 <Button variant="contained" color="success" onClick={send}>보내기</Button>
-                            </Grid>
-                        </Grid >
+                            </Box>
+                        </Box >
                     </> : null
             }
         </>
