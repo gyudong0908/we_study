@@ -10,7 +10,6 @@ module.exports = (httpServer) => {
       methods: ["GET", "POST"]
     }
   });
-  let chatName = '';
 
   io.on('connection', function (socket) {
 
@@ -27,17 +26,12 @@ module.exports = (httpServer) => {
 
         models.ChatMessage.create({
           chatUserId: data.chatUserId,
+          chatId: data.chatId,
           message: data.data,
-        })
-
-        models.ChatUser.findOne({
-          include: [models.User],
-          where: {
-            id: data.chatUserId,
-          },
-        }).then(value => {
-          console.log(value)
-          io.to(chatName).emit('broadcast', { content: data.data, name: value[0].get('user').get('nickName') });
+        }).then(() => {
+          io.to(data.chatCode).emit('broadcast', { content: data.data, nickName: data.nickName });
+        }).catch(err => {
+          console.log(err);
         })
 
         processMessageQueue();
@@ -46,8 +40,6 @@ module.exports = (httpServer) => {
 
     socket.on('joinroom', function (data) {
       socket.join(data);
-      chatName = data;
-      console.log(data)
     })
 
     socket.on('user-send', function (data) {

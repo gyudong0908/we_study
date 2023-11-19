@@ -1,56 +1,68 @@
 import io from "socket.io-client";
-import { TextField, Grid, Button, Typography} from '@mui/material';
+import { TextField, Grid, Button, Typography, Box } from '@mui/material';
 import { useRef, useEffect, useState } from "react";
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
-function RightChat({content}){
+function RightChat({ content }) {
     return (
-        <Stack sx={{display: 'flex', justifyContent: 'flex-end'}}>
-        <Typography sx={{backgroundColor: 'yellow', margin: '3px', border: '1px solid black', borderRadius: '2px'}} variant = 'body1'>{content}</Typography>
-        </Stack>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Typography sx={{ backgroundColor: 'yellow', margin: '3px', border: '1px solid black', borderRadius: '2px' }} variant='body1'>{content}</Typography>
+        </Box>
     )
 }
 
-function LeftChat({content}){
+function LeftChat({ content }) {
     return (
-        <Stack sx={{display: 'flex', justifyContent: 'flex-start'}}>
-         <Typography sx={{backgroundColor: 'yellow', margin: '3px', border: '1px solid black', borderRadius: '2px'}} variant = 'body1'>{content}</Typography>
-        </Stack>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <Typography sx={{ backgroundColor: 'yellow', margin: '3px', border: '1px solid black', borderRadius: '2px' }} variant='body1'>{content}</Typography>
+        </Box>
     )
 }
-export default function ChatDisplay({ name, rewind }) {
-    const [contents, setContents] = useState([{content:'안녕',name:'leeDonggyu'},{content:'그래',name:'홍길동'} ]);
+export default function ChatDisplay({ rewind, value, classChatId, chatTitle, chatUserId, socket }) {
+    const [contents, setContents] = useState([]);
     const [sendData, setSendData] = useState('');
-    const socket = useRef();
-    useEffect(() => {
-        const _socket = io.connect("http://localhost:8081");
-        _socket.emit('joinroom', 1);
-        socket.current = _socket;
+    const user = useSelector(state => state.userData);
+    const state = value === 0 ? 'classChat' : 'individualChat';
 
-        _socket.on('broadcast', function (data) {
+    function getMessage() {
+        axios.get(`http://localhost:8081/chatMessages?chatId=${classChatId}`, { withCredentials: true }).then((response) => {
+            console.log(response);
+            setContents(response.data);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    useEffect(() => {
+        socket.emit('joinroom', state + classChatId);
+
+        socket.on('broadcast', function (data) {
             console.log(data);
-            setContents(prevContents => [...prevContents, data]);
+            setContents(prevContents => [...prevContents, { content: data.content, nickName: data.nickName }]);
         });
+        getMessage();
     }, [])
 
     function send() {
         if (sendData !== '') {
-            socket.current.emit('send', { chatUserId: 1, data: sendData });
+            socket.emit('send', { chatUserId: chatUserId, data: sendData, chatId: classChatId, chatCode: state + classChatId, nickName: user.userData.nickName });
         }
     }
 
     return (
         <>
-            <ArrowBackRoundedIcon sx={{ cursor: 'pointer' }} onClick={rewind} />
-            <div>{name}</div>
+            <ArrowBackRoundedIcon sx={{ cursor: 'pointer' }} onClick={() => { rewind(); }} />
+            <div>{chatTitle}</div>
             {
                 contents.map(data => {
                     console.log(data.content)
-                return (
-                    <>
-                        {data.name === 'leeDonggyu' ? <RightChat content={data.content} /> : <LeftChat content={data.content} />}
-                    </>
-                );
+                    return (
+                        <>
+                            {data.nickName === user.userData.nickName ? <RightChat content={data.content} /> : <LeftChat content={data.content} />}
+                        </>
+                    );
                 })
             }
             <Grid container>

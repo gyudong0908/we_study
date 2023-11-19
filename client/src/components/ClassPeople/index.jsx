@@ -4,50 +4,51 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from "react";
 
-export default function ClassPeople(){
+export default function ClassPeople() {
     const [students, setStudent] = useState([])
     const [teacher, setTeacher] = useState({});
-    // const students = ['이동규', '조정석', '최혜린'];
-    const {classId} = useParams();
-    function getUser(){
-        axios.get(`http://localhost:8081/class/user?classId=${classId}`, { withCredentials: true }).then(response=>{
+    const { classId } = useParams();
+    function getUser() {
+        axios.get(`http://localhost:8081/class/user?classId=${classId}`, { withCredentials: true }).then(response => {
             let newData = [];
-            for(const user of response.data.userData){
-                console.log(user);
-                if(user.id === response.data.teacherId){
+            for (const user of response.data.userData) {
+                if (user.id === response.data.teacherId) {
                     setTeacher(user);
-                }else{
+                } else {
                     newData.push(user);
                 }
             }
             setStudent(newData);
         })
     }
-    useEffect(()=>{
+    useEffect(() => {
         getUser();
-    },[])
+    }, [])
 
-    return(
+    return (
         <Stack>
-            <Stack sx={{ mb:5 }}>
-                <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
-                    <Typography variant="h4" component="span" sx={{ mb:1, fontWeight: 'bold', color:'#0091ea'}}>
+            <Stack sx={{ mb: 5 }}>
+                <Stack sx={{ borderBottom: '1.5px solid black', mb: 2 }}>
+                    <Typography variant="h4" component="span" sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea' }}>
                         교사
                     </Typography>
                 </Stack>
-                <PeopleComponent name = {teacher.nickName} />
+                <PeopleComponent people={teacher} />
             </Stack>
             <Stack>
-                <Box sx={{borderBottom:'1.5px solid black', mb:2, 
-                    alignItems:'center', justifyContent:'space-between', display:'flex'}}>
-                    <Typography variant="h4" component="span" sx={{ mb:1, fontWeight: 'bold', color:'#0091ea'}}>
+                <Box sx={{
+                    borderBottom: '1.5px solid black', mb: 2,
+                    alignItems: 'center', justifyContent: 'space-between', display: 'flex'
+                }}>
+                    <Typography variant="h4" component="span" sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea' }}>
                         학생
                     </Typography>
                     <Typography variant='body1'>총 학생수 | {students.length}명</Typography>
                 </Box>
                 {
-                    students.map(student=>{
-                        return <PeopleComponent name = {student.nickName}></PeopleComponent>
+                    students.map(student => {
+                        console.log(student)
+                        return <PeopleComponent people={student}></PeopleComponent>
                     })
                 }
             </Stack>

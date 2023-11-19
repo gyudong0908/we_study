@@ -27,15 +27,14 @@ export default function ProfileCard({ userData, newUserData, setNewUserData }) {
     };
     reader.readAsDataURL(profile);
   }
-
-  console.log(userData.profilePath)
+  console.log(userData.downloadPath)
   return (
     <Card sx={{ maxWidth: '600px' }}>
       <CardContent>
         <Stack spacing={2}>
           <Stack direction='row' justifyContent='space-between'>
             <Stack direction='row' alignItems='center'>
-              <Avatar alt="Remy Sharp" sx={{ width: 60, height: 60, marginLeft: '10px', marginRight: '10px' }} src={profile ? profile : userData.profilePath} />
+              <Avatar alt="Remy Sharp" sx={{ width: 60, height: 60, marginLeft: '10px', marginRight: '10px' }} src={profile ? profile : userData.downloadPath} />
               <InputLabel htmlFor="file-input" sx={{ cursor: 'pointer' }}>프로필 사진 변경</InputLabel>
               <Input
                 id="file-input"

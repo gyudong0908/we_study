@@ -33,13 +33,17 @@ module.exports = (sequelize, DataTypes) => {
     content: {
       type: DataTypes.STRING,
     },
-    private:{
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+    private: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
-    filePath:{
+    filePath: {
+      type: DataTypes.STRING,
+    },
+    downloadPath: {
       type: DataTypes.STRING,
     }
+
   }, {
     sequelize,
     modelName: 'Submit', // 모델 이름 바꿔줘야함

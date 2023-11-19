@@ -50,6 +50,7 @@ app.use('/', require('./routers/notice.js'));
 app.use('/', require('./routers/submit.js'));
 app.use('/', require('./routers/user.js'));
 app.use('/', require('./routers/file.js'));
+app.use('/', require('./routers/classChat.js'));
 
 const httpServer = app.listen(8081, () => {
   console.log('서버 동작 중');
@@ -58,9 +59,10 @@ const httpServer = app.listen(8081, () => {
 socketModule(httpServer);
 
 //orm
-models.sequelize.sync({ force: false }).then(() => {
+models.sequelize.sync({ force: true }).then(() => {
   console.log(" DB 연결 성공");
 }).catch(err => {
   console.log("연결 실패");
   console.log(err);
 });
+

@@ -44,9 +44,13 @@ module.exports = (sequelize, DataTypes) => {
     goal: {
       type: DataTypes.STRING,
     },
-    profilePath: {
+    filePath: {
       type: DataTypes.STRING,
     },
+    downloadPath: {
+      type: DataTypes.STRING,
+    },
+
   }, {
     sequelize,
     modelName: 'User', // 모델 이름 바꿔줘야함

@@ -13,7 +13,7 @@ const config = {
   "password": process.env.dbPassword,
   "database": "we_study",
   "host": process.env.host,
-  "dialect": "mariadb",
+  "dialect": "mysql",
   "port": process.env.port
 };
 const db = {};

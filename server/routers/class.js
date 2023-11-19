@@ -14,7 +14,23 @@ router.post('/class', function (req, res) {
             classId: data.dataValues.id,
             name: '기타'
         }).then(() => {
-            res.status(200).send(data.dataValues)
+            models.ClassChat.create({
+                title: data.dataValues.title,
+                classId: data.dataValues.id
+            }).then((classChat) => {
+                models.ChatUser.create({
+                    chatId: classChat.dataValues.id,
+                    userId: userId
+                }).then(() => {
+                    res.status(200).send(data.dataValues)
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).send('클래스 채팅방 참가 오류');
+                })
+            }).catch(err => {
+                console.log(err);
+                res.status(500).send('클래스 채팅방 생성 오류');
+            })
         }).catch(err => {
             console.log(err);
             res.status(500).send('기타 Topic 생성 오류');

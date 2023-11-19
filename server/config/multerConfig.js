@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const models = require('../models');
 
 //  여기서 모델을 가져와서 user에 filePath와 downloadPath를 따로 만들자, submit에서도 마찬가지다
 // 그렇게 2 모델을 불러와서 user의 경우는 바로 userId로 찾으면 되고 submit의 경우는 workId를 받아서 그걸로 찾아서
@@ -13,10 +14,23 @@ const storage = multer.diskStorage({
         let dynamicPart = '';
         if (req.url === '/user') {
             dynamicPart = 'profile';
+            models.User.findOne({
+                where: {
+                    id: req.session.passport.user
+                }
+            }).then((data) => {
+                if (data.dataValues.filePath) {
+                    fs.unlink(data.dataValues.filePath, (unlinkErr) => {
+                        if (unlinkErr && unlinkErr.code !== 'ENOENT') {
+                            console.error('Error deleting previous image:', unlinkErr);
+                            return;
+                        }
+                    });
+                }
+            })
         } else if (req.url === '/submit') {
             dynamicPart = 'submit';
         } else {
-            // 기본적으로 사용할 폴더 설정
             dynamicPart = 'default_folder';
         }
         const userUploadPath = path.join(parentDir, 'uploads', dynamicPart, req.session.passport.user.toString());
