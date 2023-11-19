@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
- 
+
 
   return (
     <div
@@ -41,9 +41,9 @@ function a11yProps(index) {
   };
 }
 
-export default function ClassTabs({ isTeacher}) {
+export default function ClassTabs({ isTeacher, classData, setClassData }) {
   const [value, setValue] = React.useState(0);
-  
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -59,7 +59,7 @@ export default function ClassTabs({ isTeacher}) {
     },
     {
       title: '할일목록',
-      content: <ClassWork  isTeacher={isTeacher} />,
+      content: <ClassWork isTeacher={isTeacher} />,
     },
     {
       title: '참여자',
@@ -71,7 +71,7 @@ export default function ClassTabs({ isTeacher}) {
     },
     {
       title: '클래스 설정',
-      content: <ClassSetting isTeacher={isTeacher} />,
+      content: <ClassSetting isTeacher={isTeacher} classData={classData} setClassData={setClassData} />,
     },
   ];
 
@@ -84,8 +84,8 @@ export default function ClassTabs({ isTeacher}) {
           aria-label="basic tabs example"
         >
           {tabs.map((tab, index) => (
-            !isTeacher && tab.title === '클래스 설정'? null:
-            <Tab key={index} label={tab.title} {...a11yProps(index)} />
+            !isTeacher && tab.title === '클래스 설정' ? null :
+              <Tab key={index} label={tab.title} {...a11yProps(index)} />
           ))}
         </Tabs>
       </Stack>

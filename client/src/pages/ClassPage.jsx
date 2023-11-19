@@ -33,6 +33,8 @@ export default function ClassPage() {
       <ClassCard title={classData.title} section={classData.section} />
       <ClassTabs
         isTeacher={isTeacher}
+        classData={classData}
+        setClassData={setClassData}
       // curriculums={curriculums}
       // notices={notices}
       // assignments={assignments}
