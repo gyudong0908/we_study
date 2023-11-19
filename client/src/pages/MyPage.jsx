@@ -74,7 +74,7 @@ export default function MyPage() {
               if (data.teacher !== userData.userData.id) {
                 return (
                   <Grid item key={index}>
-                    {bindedClassCard(data)}
+                    {bindedClassCard(data, navigate)}
                   </Grid>
                 );
               }

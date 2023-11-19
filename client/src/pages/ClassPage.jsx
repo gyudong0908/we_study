@@ -8,12 +8,16 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 export default function ClassPage() {
-  const [isTeacher, setIsTeacher] = useState(true);
+  const [isTeacher, setIsTeacher] = useState(false);
   const [classData, setClassData] = useState({});
+  const user = useSelector(state => state.userData);
   const { classId } = useParams();
   function getClassData() {
     axios.get(`http://localhost:8081/class?classId=${classId}`, { withCredentials: true }).then(data => {
       setClassData(data.data);
+      if (data.data.id == user.userData.id) {
+        setIsTeacher(true);
+      }
     });
   }
   useEffect(() => {
