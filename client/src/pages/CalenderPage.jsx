@@ -1,4 +1,4 @@
-import { Stack, Button, styled,Typography, Box } from "@mui/material"
+import { Stack, Button, styled, Typography, Box } from "@mui/material"
 import Calendar from '@toast-ui/react-calendar';
 import '@toast-ui/calendar/dist/toastui-calendar.min.css';
 import { createRef, useEffect, useState } from "react";
@@ -6,27 +6,38 @@ export default function CalenderPage() {
     const [calendarDate, setCalendarDate] = useState(new Date());
 
     const template = {
-            monthGridHeader(model) {
-                const date = parseInt(model.date.split('-')[2], 10);                  
-                return <span style={{margin: "15px"}}>{date}</span>;
-              },
-              monthDayName(model) {
-                return <div style={{fontSize: "20pt", fontWeight: 'bold'}}>{model.label}</div>;
-              },       
-              monthMoreTitleDate(moreTitle) {
-                const { date } = moreTitle;          
-                return `<span>${date}</span>`;
-              },              
-                           
+        monthGridHeader(model) {
+            const date = parseInt(model.date.split('-')[2], 10);
+            if (model.isToday) {
+                return <span style={{ padding: "10px", backgroundColor: 'green', borderRadius: '20px' }} >{date}</span>
+            } else {
+                return <span style={{ margin: "15px" }}>{date}</span>;
+            }
+        },
+        monthDayName(model) {
+            return <div style={{ fontSize: "20pt", fontWeight: 'bold' }}>{model.label}</div>;
+        },
+        monthMoreTitleDate(moreTitle) {
+            const { date } = moreTitle;
+            return `<span>${date}</span>`;
+        },
+
+    }
+    const theme = {
+        common: {
+            dayName: {
+                fontSize: '30pt',
+            },
+        },
     }
 
     const MoveButton = styled(Button)(({ theme }) => ({
-        margin : '10px',
-        borderRadius : '20px',
+        margin: '10px',
+        borderRadius: '20px',
         background: 'none',
-        color : 'black',
+        color: 'black',
         fontSize: '30pt'
-      }));
+    }));
 
     const calendarRef = createRef();
     let items = [];
@@ -270,7 +281,7 @@ export default function CalenderPage() {
                 color: 'white',
                 backgroundColor: 'none',
                 borderColor: 'none',
-                customStyle:{
+                customStyle: {
                     color: 'white',
                     backgroundColor: '#0B8043',
                     borderRadius: '5px',
@@ -281,21 +292,23 @@ export default function CalenderPage() {
     }
     changeEvent();
 
-    function movePrev(){
+    function movePrev() {
         calendarRef.current.getInstance().prev();
-        setCalendarDate((prevDate)=>{
+        setCalendarDate((prevDate) => {
             const newDate = new Date(prevDate);
-            newDate.setMonth(prevDate.getMonth()-1);
-            return newDate;})
+            newDate.setMonth(prevDate.getMonth() - 1);
+            return newDate;
+        })
     }
-    function moveNext(){
+    function moveNext() {
         calendarRef.current.getInstance().next();
-        setCalendarDate((prevDate)=>{
+        setCalendarDate((prevDate) => {
             const newDate = new Date(prevDate);
-            newDate.setMonth(prevDate.getMonth()+1);
-            return newDate;})
+            newDate.setMonth(prevDate.getMonth() + 1);
+            return newDate;
+        })
     }
-    function moveNow(){
+    function moveNow() {
         calendarRef.current.getInstance().today();
         setCalendarDate(new Date());
     }
@@ -309,10 +322,10 @@ export default function CalenderPage() {
         >
             <Stack direction='row' alignItems='center' justifyContent='space-between'>
                 <MoveButton onClick={movePrev}>&lt;</MoveButton>
-                <Typography sx={{ fontSize: '30pt'}}>{calendarDate.getMonth()+1}月  {calendarDate.getFullYear()}</Typography>
+                <Typography sx={{ fontSize: '30pt' }}>{calendarDate.getMonth() + 1}月  {calendarDate.getFullYear()}</Typography>
                 <MoveButton onClick={moveNext}>&gt;</MoveButton>
             </Stack>
-            <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button onClick={moveNow}>현재날짜로 돌아가기</Button>
             </Box>
 
@@ -340,14 +353,8 @@ export default function CalenderPage() {
                         tooltip: 'Seoul'
                     }
                 ]}
-                theme={{
-                    common: {
-                        dayName: {
-                          fontSize: '30pt',
-                        },
-                      },
-                }}
-                template= {template}
+                theme={theme}
+                template={template}
                 useFormPopup
                 useDetailPopup
                 useCreationPopup
