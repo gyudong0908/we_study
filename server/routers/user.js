@@ -22,7 +22,7 @@ router.get('/user', function (req, res) {
 router.put('/user', upload.single('file'), function (req, res) {
     const userId = req.session.passport.user;
     const fileName = req.file.filename;
-    const downloadPath = `${req.protocol}://${req.hostname}:${8081}/download/profile/${fileName}`;
+    const downloadPath = `${req.protocol}://${req.hostname}:${8081}/download/profile/${userId}/${fileName}`;
     const filePath = req.file.path;
     models.User.update({ ...req.body, filePath: filePath, downloadPath: downloadPath }, {
         where: {

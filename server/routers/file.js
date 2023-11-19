@@ -4,10 +4,11 @@ const models = require('../models');
 const path = require('path');
 const fs = require('fs');
 
-router.get('/download/profile/:fileName', function (req, res) {
+router.get('/download/profile/:userId/:fileName', function (req, res) {
+    const userId = req.params.userId;
     const fileName = req.params.fileName;
 
-    const filePath = path.join(path.resolve(__dirname, '..'), `uploads/profile/${req.session.passport.user}`, fileName);
+    const filePath = path.join(path.resolve(__dirname, '..'), `uploads/profile/${userId}`, fileName);
     if (fs.existsSync(filePath)) {
         res.setHeader('Content-disposition', 'inline; filename=' + fileName);
         res.sendFile(filePath);
