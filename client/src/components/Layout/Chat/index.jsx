@@ -46,11 +46,6 @@ export default function Chat({ closeChat }) {
     setChatId(null);
     socket.disconnect();
   }
-
-  const classData = [
-    { name: "KOSTA 265기" },
-    { name: "2023 OUTTA 데이터분석" },
-  ];
   const personalData = [
     { name: "이동규" },
     { name: "조정석" },
@@ -69,7 +64,7 @@ export default function Chat({ closeChat }) {
     }}>
       <Stack>
         <Stack sx={{ textAlign: 'right', display: 'inline-block' }}>
-          <CloseIcon onClick={closeChat} sx={{
+          <CloseIcon onClick={() => { closeChat(); socket.disconnect(); }} sx={{
             cursor: 'pointer',
             margin: '10px',
             color: 'black',

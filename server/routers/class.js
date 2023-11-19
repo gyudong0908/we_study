@@ -3,37 +3,47 @@ const router = express.Router();
 const axios = require('axios');
 const models = require('../models');
 const submit = require('../models/submit');
+const uuid = require('uuid');
 router.use(express.json());
 
 router.post('/class', function (req, res) {
     const userId = req.session.passport.user;
 
     models.Class.create({ ...req.body, teacher: userId }).then((data) => {
+        const basecode = uuid.v4();
+        const shortBaseCode = basecode.slice(0, 6);
         data.addUser(userId);
-        models.Topic.create({
-            classId: data.dataValues.id,
-            name: '기타'
+        data.update({
+            code: shortBaseCode + data.dataValues.id
         }).then(() => {
-            models.ClassChat.create({
-                title: data.dataValues.title,
-                classId: data.dataValues.id
-            }).then((classChat) => {
-                models.ChatUser.create({
-                    chatId: classChat.dataValues.id,
-                    userId: userId
-                }).then(() => {
-                    res.status(200).send(data.dataValues)
+            models.Topic.create({
+                classId: data.dataValues.id,
+                name: '기타'
+            }).then(() => {
+                models.ClassChat.create({
+                    title: data.dataValues.title,
+                    classId: data.dataValues.id
+                }).then((classChat) => {
+                    models.ChatUser.create({
+                        chatId: classChat.dataValues.id,
+                        userId: userId
+                    }).then(() => {
+                        res.status(200).send(data.dataValues);
+                    }).catch(err => {
+                        console.log(err);
+                        res.status(500).send('클래스 채팅방 참가 오류');
+                    })
                 }).catch(err => {
                     console.log(err);
-                    res.status(500).send('클래스 채팅방 참가 오류');
+                    res.status(500).send('클래스 채팅방 생성 오류');
                 })
             }).catch(err => {
                 console.log(err);
-                res.status(500).send('클래스 채팅방 생성 오류');
+                res.status(500).send('기타 Topic 생성 오류');
             })
         }).catch(err => {
             console.log(err);
-            res.status(500).send('기타 Topic 생성 오류');
+            res.status(500).send('초대 코드 생성 오류');
         })
     }).catch(err => {
         console.log(err);
@@ -115,7 +125,24 @@ router.post('/class/join', function (req, res) {
 
     models.Class.findOne({ where: { code: code } }).then(data => {
         data.addUser(userId);
-        res.status(200).send(data.dataValues);
+        models.ClassChat.findOne({
+            where: {
+                classId: data.dataValues.id
+            }
+        }).then(classChat => {
+            models.ChatUser.create({
+                chatId: classChat.dataValues.id,
+                userId: userId
+            }).then(() => {
+                res.status(200).send(data.dataValues);
+            }).catch(err => {
+                console.log(err);
+                res.status(500).send('채팅방 참여 오류 발생');
+            })
+        }).catch(err => {
+            console.log(err);
+            res.status(500).send('채팅방 참여 오류 발생');
+        })
     }).catch(err => {
         console.log(err);
         res.status(500).send('클래스 초대 오류');
@@ -132,6 +159,7 @@ router.put('/class', function (req, res) {
         res.status(500).send("클래스 변경 오류");
     })
 })
+
 router.delete('class', function (req, res) {
     const classId = req.query.classId;
     models.Class.destory({
