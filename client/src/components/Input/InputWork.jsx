@@ -29,12 +29,13 @@ export default function InputWork({ isTeacher, works, setWorks}) {
     const data = {
       title: inputTitle,
       description: inputDescription,
-      topicId: inputTopicId,
       dueDateTime: inputDueDateTime.toISOString(),
     }
 
     axios.post(`http://localhost:8081/work?topicId=${topicId}`, data, { withCredentials:true }).then((response)=>{
-      setWorks([response.data, ...works]);
+      const newWorks = works.map(work=>{return work.id === response.data.topicId? {...work, Work:[...work.Work, response.data ]}: work})
+      console.log(newWorks);
+      setWorks(newWorks);
       setInputTitle('');
       setInputDescription('');
       setInputTopicId('');
@@ -47,9 +48,9 @@ export default function InputWork({ isTeacher, works, setWorks}) {
 
   
 
-  useEffect(() => {
-    console.log(works.id);
-  }, []);
+  // useEffect(() => {
+  //   console.log(works.id);
+  // }, []);
 
   return (
     <div style={styles}>

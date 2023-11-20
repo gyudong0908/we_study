@@ -27,6 +27,7 @@ export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
               </Grid>
               <Grid item xs={6} sx={{ paddingRight: '5px' }}>
                 <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end' }}>{dayjs(notice.createdAt).format('YYYY년MM월DD일 hh:mm A')}</Typography>
+
               </Grid>
             </Grid>
           </AccordionSummary>
