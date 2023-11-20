@@ -12,17 +12,20 @@ export default function ClassPage() {
   const [classData, setClassData] = useState({});
   const user = useSelector(state => state.userData);
   const { classId } = useParams();
+
   function getClassData() {
     axios.get(`http://localhost:8081/class?classId=${classId}`, { withCredentials: true }).then(data => {
       setClassData(data.data);
-      if (data.data.id == user.userData.id) {
+      if (data.data.teacher == user.userData.id) {
         setIsTeacher(true);
+      }else{
+        setIsTeacher(false);
       }
     });
   }
   useEffect(() => {
     getClassData()
-  }, [classId])
+  }, [classId,user])
   return (
 
     <Stack
