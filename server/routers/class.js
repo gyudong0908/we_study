@@ -3,14 +3,48 @@ const router = express.Router();
 const axios = require('axios');
 const models = require('../models');
 const submit = require('../models/submit');
+const uuid = require('uuid');
 router.use(express.json());
 
 router.post('/class', function (req, res) {
     const userId = req.session.passport.user;
 
     models.Class.create({ ...req.body, teacher: userId }).then((data) => {
+        const basecode = uuid.v4();
+        const shortBaseCode = basecode.slice(0, 6);
         data.addUser(userId);
-        res.status(200).send(data.dataValues)
+        data.update({
+            code: shortBaseCode + data.dataValues.id
+        }).then(() => {
+            models.Topic.create({
+                classId: data.dataValues.id,
+                name: '기타'
+            }).then(() => {
+                models.ClassChat.create({
+                    title: data.dataValues.title,
+                    classId: data.dataValues.id
+                }).then((classChat) => {
+                    models.ChatUser.create({
+                        chatId: classChat.dataValues.id,
+                        userId: userId
+                    }).then(() => {
+                        res.status(200).send(data.dataValues);
+                    }).catch(err => {
+                        console.log(err);
+                        res.status(500).send('클래스 채팅방 참가 오류');
+                    })
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).send('클래스 채팅방 생성 오류');
+                })
+            }).catch(err => {
+                console.log(err);
+                res.status(500).send('기타 Topic 생성 오류');
+            })
+        }).catch(err => {
+            console.log(err);
+            res.status(500).send('초대 코드 생성 오류');
+        })
     }).catch(err => {
         console.log(err);
         res.status(500).send("Class 생성 오류");
@@ -48,16 +82,17 @@ router.get('/class', function (req, res) {
 
 router.get('/class/submits', function (req, res) {
     const classId = req.query.classId;
-    models.Class.findByPk(classId, {  
-        include:[{
+    models.Class.findByPk(classId, {
+        raw: true,
+        include: [{
             model: models.Topic,
-            include:[{
+            include: [{
                 model: models.Work,
-                include:[{
+                include: [{
                     model: models.Submit,
                 }]
             }]
-        }] 
+        }]
     }).then(data => {
         res.status(200).send(data);
     }).catch(err => {
@@ -66,19 +101,19 @@ router.get('/class/submits', function (req, res) {
     })
 })
 
-router.get('/class/user',function(req,res){
+router.get('/class/user', function (req, res) {
     const classId = req.query.classId;
-    models.Class.findByPk(classId,{
+    models.Class.findByPk(classId, {
         include: [
-            { 
+            {
                 model: models.User,
                 through: 'classUser',
             }
         ]
-    }).then((classData)=>{
+    }).then((classData) => {
         const userData = classData.Users.map(data => data.dataValues);
-        res.status(200).send({userData, teacherId:classData.dataValues.teacher});
-    }).catch(err=>{
+        res.status(200).send({ userData, teacherId: classData.dataValues.teacher });
+    }).catch(err => {
         console.log(err);
         res.status(500).send('Class 유저 조회 에러 발생');
     })
@@ -90,7 +125,24 @@ router.post('/class/join', function (req, res) {
 
     models.Class.findOne({ where: { code: code } }).then(data => {
         data.addUser(userId);
-        res.sendStatus(200);
+        models.ClassChat.findOne({
+            where: {
+                classId: data.dataValues.id
+            }
+        }).then(classChat => {
+            models.ChatUser.create({
+                chatId: classChat.dataValues.id,
+                userId: userId
+            }).then(() => {
+                res.status(200).send(data.dataValues);
+            }).catch(err => {
+                console.log(err);
+                res.status(500).send('채팅방 참여 오류 발생');
+            })
+        }).catch(err => {
+            console.log(err);
+            res.status(500).send('채팅방 참여 오류 발생');
+        })
     }).catch(err => {
         console.log(err);
         res.status(500).send('클래스 초대 오류');
@@ -107,15 +159,16 @@ router.put('/class', function (req, res) {
         res.status(500).send("클래스 변경 오류");
     })
 })
-router.delete('class',function(req,res){
+
+router.delete('class', function (req, res) {
     const classId = req.query.classId;
     models.Class.destory({
         where: {
             id: classId
         }
-    }).then(()=>{
+    }).then(() => {
         res.sendStatus(200);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send('Class 삭제 오류 발생');
     })

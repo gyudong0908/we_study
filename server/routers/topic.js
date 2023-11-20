@@ -19,8 +19,8 @@ router.post('/topic', function (req, res) {
 
 router.post('/topics', function (req, res) {
     const classId = req.query.classId;
-    models.Topic.bulkCreate(req.body).then(() => {
-        res.sendStatus(200);
+    models.Topic.bulkCreate(req.body).then((data) => {
+        res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
         res.status(500).send('Topic 생성 에러 발생');
@@ -42,18 +42,18 @@ router.get('/topics', function (req, res) {
     })
 })
 
-router.get('/topic/work',function(req,res){
+router.get('/topic/work', function (req, res) {
     const classId = req.query.classId;
     models.Topic.findAll({
-        where:{
+        where: {
             classId: classId
         },
         include: [{
             model: models.Work,
-          }]
-    }).then((data)=>{
+        }]
+    }).then((data) => {
         res.status(200).send(data);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send('공지사항 삭제 에러 발생');
     })
@@ -68,15 +68,15 @@ router.put('/topic', function (req, res) {
         res.status(500).send('Topic 변경 에러 발생');
     })
 })
-router.delete('/topic',function(req,res){
+router.delete('/topic', function (req, res) {
     const topicId = req.query.topicId;
     models.Topic.destroy({
-        where:{
+        where: {
             id: topicId
         }
-    }).then(()=>{
+    }).then(() => {
         res.sendStatus(200);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send('Topic 삭제 오류 발생');
     })

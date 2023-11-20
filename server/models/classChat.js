@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class ChatMessage extends Model { // 클래스 이름 모델 이름으로 바꿔 줘야함
+    class ClassChat extends Model { // 클래스 이름 모델 이름으로 바꿔 줘야함
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,31 +11,31 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            ChatMessage.belongsTo(models.ClassChat, { foreignKey: 'chatId' });
-            ChatMessage.belongsTo(models.ChatUser, { foreignKey: 'chatUserId' });
+            ClassChat.hasMany(models.ChatMessage, { foreignKey: 'chatId' });
+            ClassChat.belongsTo(models.Class, { foreignKey: 'classId' });
+            ClassChat.hasMany(models.ChatUser, { foreignKey: 'chatId' });
+
         }
     }
-    ChatMessage.init({
+    ClassChat.init({
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        chatId: {
-            type: DataTypes.INTEGER,
-        },
-        chatUserId: {
-            type: DataTypes.INTEGER,
-        },
-        message: {
+        title: {
             type: DataTypes.STRING,
-        }
+        },
+        classId: {
+            type: DataTypes.INTEGER,
+        },
+
     }, {
         sequelize,
-        modelName: 'ChatMessage', // 모델 이름 바꿔줘야함
+        modelName: 'ClassChat', // 모델 이름 바꿔줘야함
         timestamps: true,
         underscored: true,
-        tableName: 'chatMessages', // 테이블 이름 바꿔줘야함
+        tableName: 'classchats', // 테이블 이름 바꿔줘야함
     });
-    return ChatMessage; // return 할때 모델 이름으로 바꿔줘야함
+    return ClassChat; // return 할때 모델 이름으로 바꿔줘야함
 };

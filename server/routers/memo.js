@@ -6,7 +6,7 @@ router.use(express.json());
 router.get('/memos', function (req, res) {
     const userId = req.session.passport.user;
     models.Memo.findAll({
-        order:[
+        order: [
             ['createdAt', 'DESC']
         ],
         where: {
@@ -53,22 +53,22 @@ router.put('/memo', function (req, res) {
     models.Memo.update(req.body, {
         where: { id: memoId }
     }).then(() => {
-        res.status(200).send('잘됨');
+        res.sendStatus(200);
     }).catch(err => {
         console.log(err);
         res.status(500).send('메모 변경 오류 발생');
     })
 });
 
-router.delete('/memo',function(req,res){
+router.delete('/memo', function (req, res) {
     const memoId = req.query.memoId;
     models.Memo.destory({
-        where:{
+        where: {
             id: memoId
         }
-    }).then(()=>{
+    }).then(() => {
         res.sendStatus(200);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send('메모 삭제 오류 발생');
     })

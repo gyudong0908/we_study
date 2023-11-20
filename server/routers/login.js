@@ -27,24 +27,4 @@ router.get('/auth/google/callback',
 	}), function (req, res) {
 	});
 
-router.get('/user', function (req, res) {
-	const id = req.session.passport.user;
-	models.User.findOne({
-		raw: true,
-		where: {
-			id: id
-		}
-	}).then(data => {
-		const userData = {
-			id: data.id,
-			nickName: data.nickName,
-			email: data.email
-		}
-		res.send(userData);
-	}).catch(err => {
-		res.status(500).send("user 조회 오류");
-		console.log(err)
-	})
-})
-
 module.exports = router;

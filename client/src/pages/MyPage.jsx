@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, CardContent, Stack, Typography, Grid } from '@mui/material';
 import axios from 'axios';
-import {setClassCards, deleteClassCards} from '../reducer/classCardsSlice';
+import { setClassCards, deleteClassCards } from '../reducer/classCardsSlice';
 
 
 
 export default function MyPage() {
   // const [classCards, setClassCards] = React.useState([]);
   // const [data, setData] = useState([]);
-  const data = useSelector((state)=>state.classCards);
+  const data = useSelector((state) => state.classCards);
   const userData = useSelector((state) => state.userData);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -53,12 +53,13 @@ export default function MyPage() {
           </Grid>
           <Grid container spacing={2} sx={{ width: '100%' }}>
             {data.map((data) => {
-              console.log(data);
-              return (
-                <Grid item key={data.id}>
-                  {bindedClassCard(data, navigate)}
-                </Grid>
-              );
+              if (data.teacher == userData.userData.id) {
+                return (
+                  <Grid item key={data.id}>
+                    {bindedClassCard(data, navigate)}
+                  </Grid>
+                );
+              }
             })}
           </Grid>
         </Stack>
@@ -69,16 +70,17 @@ export default function MyPage() {
               <Typography variant='h4' sx={{ fontWeight: 'bold', color: '#0092ea' }}>내가 배우는 클래스</Typography>
             </Grid>
           </Grid>
-          {/* <Grid container spacing={2} sx={{width:'100%'}}>
+          <Grid container spacing={2} sx={{ width: '100%' }}>
             {data.map((data, index) => {
-              //console.log(data);
-              return(
-                <Grid item key={index}>
-                  {bindedClassCard(data)}
-                </Grid> 
-              );
-              })}
-        </Grid> */}
+              if (data.teacher !== userData.userData.id) {
+                return (
+                  <Grid item key={index}>
+                    {bindedClassCard(data, navigate)}
+                  </Grid>
+                );
+              }
+            })}
+          </Grid>
         </Stack>
       </Stack>
     </Stack>
