@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { Link, useParams, } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -7,7 +7,6 @@ import { Table, TableContainer, TableCell, TableBody, TableHead, TableRow,
         Grid, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Button,  } from '@mui/material';
 
 export default function WorksForTeacher(){
-    const assignmentss = {title:'과제1', content:'과제 내용입니다.'};
     const workData = [
         {
             id:1,
@@ -45,6 +44,12 @@ export default function WorksForTeacher(){
         console.log('workId:', workId);
       }, [workId]);
 
+    const navigate = useNavigate();
+    const handleGoBack = () => {
+        // 이전 페이지로 이동
+        navigate(-1);
+      };
+
     return(
         <Stack
             sx={{
@@ -56,6 +61,9 @@ export default function WorksForTeacher(){
             }}>
             <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
                 <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📎 제출된 과제 확인하기</Typography>
+            </Stack>
+            <Stack sx={{mb:2, alignItems:'flex-end'}}>
+                <Button variant='outlined' sx={{width:'20%'}} onClick={handleGoBack}>목록</Button>
             </Stack>
             <Stack sx={{mb:5}}>
                 <Accordion>
@@ -77,6 +85,8 @@ export default function WorksForTeacher(){
                     </AccordionDetails>
                 </Accordion>
             </Stack>
+
+            
 
             <TableContainer sx={{boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius:'10px'}}>
             <Table sx={{ width:'100%' }} aria-label='works table'>

@@ -1,5 +1,5 @@
 import {React, useState, } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import BackupRoundedIcon from '@mui/icons-material/BackupRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Table, TableContainer, TableCell, TableBody, TableHead, TableRow, TextField,
@@ -24,6 +24,12 @@ export default function WorksForStudent(){
         },
     ];
 
+    const navigate = useNavigate();
+    const handleGoBack = () => {
+        // 이전 페이지로 이동
+        navigate(-1);
+      };
+    
     return(
         <Stack
             sx={{
@@ -35,6 +41,9 @@ export default function WorksForStudent(){
             }}>
             <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
                 <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📎 과제 제출하기</Typography>
+            </Stack>
+            <Stack sx={{mb:2, alignItems:'flex-end'}}>
+                <Button variant='outlined' sx={{width:'20%'}} onClick={handleGoBack}>목록</Button>
             </Stack>
             <Stack sx={{mb:3}}>
                 <Accordion>

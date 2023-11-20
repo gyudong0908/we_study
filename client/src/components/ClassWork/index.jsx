@@ -25,7 +25,11 @@ export default function ClassWork({ isTeacher }) {
   
   return (
     <>
-      <InputWork isTeacher={isTeacher} works={works} setWorks={setWorks} ></InputWork>
+    {
+      isTeacher&&(
+        <InputWork isTeacher={isTeacher} works={works} setWorks={setWorks} ></InputWork>
+      )
+    }
         {works.map((topic, index)=>(
           <Stack key={index} sx={{mb:5}}>
             <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
