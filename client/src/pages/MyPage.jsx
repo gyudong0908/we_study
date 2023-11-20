@@ -42,6 +42,7 @@ export default function MyPage() {
         marginTop: '100px',
         marginLeft: '270px',
         marginRight: '70px',
+        marginBottom: '200px',
       }}>
       <Stack direction='column' spacing={10}>
         <Stack direction="column" spacing={1}>

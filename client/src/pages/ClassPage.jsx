@@ -27,7 +27,8 @@ export default function ClassPage() {
         spacing: '10px',
         marginTop: '100px',
         marginLeft: '270px',
-        marginRight: '70px'
+        marginRight: '70px',
+        marginBottom: '200px',
       }}
     >
       <ClassCard title={classData.title} section={classData.section} />
