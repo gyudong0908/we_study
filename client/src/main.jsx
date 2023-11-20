@@ -41,18 +41,18 @@ const router = createBrowserRouter([
         path: 'classes/:classId',
         element: <ClassPage />,
       },
-          {
-            path: 'classes/:classId/worksforteacher',
-            element: <WorksForTeacher />,
-          },
-          {
-            path: 'classes/:classId/worksforstudent',
-            element: <WorksForStudent />,
-          },
-          {
-            path: 'classes/:classId/workdetail',
-            element: <WorkDetail />,
-          },
+      {
+        path: 'classes/:topicId/:assignmentId/worksforteacher',
+        element: <WorksForTeacher />,
+      },
+      {
+        path: 'classes/:topicId/:id/worksforstudent',
+        element: <WorksForStudent />,
+      },
+      {
+        path: 'classes/:classId/workdetail',
+        element: <WorkDetail />,
+      },
       {
         path: 'setting',
         element: <SettingPage />,

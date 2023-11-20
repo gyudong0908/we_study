@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 export default function ClassWork({ isTeacher }) {
-  const assignments = [
+  const assignment = [
     {
     title: 'sdf',
     content: 'dfsdf',
@@ -14,7 +14,6 @@ export default function ClassWork({ isTeacher }) {
   ]
   const [works, setWorks] = useState([]);
   const {classId} = useParams();
-  console.log('classId:', classId);
 
   function getWorks(){
     axios.get(`http://localhost:8081/topic/work?classId=${classId}`, { withCredentials: true }).then(data=>{
@@ -27,25 +26,22 @@ export default function ClassWork({ isTeacher }) {
   useEffect(()=>{
     getWorks();
   },[])
-
-  useEffect(()=>{
-    console.log(works)
-  },[works])
+  
   
   return (
     <>
       <InputWork isTeacher={isTeacher} works={works} setWorks={setWorks} ></InputWork>
         {works.map((topic, index)=>(
-          <Stack sx={{mb:5}}>
-            <Stack key={index} sx={{borderBottom:'1.5px solid black', mb:2}}>
+          <Stack key={index} sx={{mb:5}}>
+            <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
               <Typography variant="h4" component="span" sx={{ mb:1, fontWeight: 'bold', color:'#0091ea'}}>
                 {topic.name}
               </Typography>
             </Stack>
-            <WorkAccordion isTeacher={isTeacher} works={works} setWorks={setWorks} assignments={assignments} />
+            <WorkAccordion isTeacher={isTeacher} assignments={topic.Works} topicId={topic.id} />
           </Stack>
         ))} 
-          <Stack sx={{mb:5}}>
+          {/* <Stack sx={{mb:5}}>
             <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
               <Typography variant="h4" component="span" sx={{ mb:1, fontWeight: 'bold', color:'#0091ea'}}>
                 기타
@@ -53,7 +49,7 @@ export default function ClassWork({ isTeacher }) {
             </Stack>
             <WorkAccordion isTeacher={isTeacher} works={works} setWorks={setWorks} assignments={assignments} />
           </Stack>
-      
+       */}
     </>
   );
 }

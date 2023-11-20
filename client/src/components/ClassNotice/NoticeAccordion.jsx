@@ -25,7 +25,7 @@ export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
                 <Typography variant='h6'>{notice.title}</Typography>
               </Grid>
               <Grid item xs={6} sx={{paddingRight:'5px'}}>
-                <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>2023년 11월 16일</Typography>
+                <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>{notice.createdAt}</Typography>
               </Grid>
             </Grid>
           </AccordionSummary>

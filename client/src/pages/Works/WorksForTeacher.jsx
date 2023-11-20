@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { React, useEffect, useState } from 'react';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Table, TableContainer, TableCell, TableBody, TableHead, TableRow,
         Grid, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Button,  } from '@mui/material';
 
 export default function WorksForTeacher(){
-    const assignment = {title:'과제1', content:'과제 내용입니다.'};
+    const assignmentss = {title:'과제1', content:'과제 내용입니다.'};
     const workData = [
         {
             id:1,
@@ -22,6 +22,20 @@ export default function WorksForTeacher(){
             date:'2023.11.17.'
         },
     ];
+
+    const { topicId, assignmentId } = useParams();
+    const location = useLocation();
+  const { state } = location;
+  const current = state ? state.assignment : [];
+  const selectedAssignment = current.find((one) => one.id === parseInt(assignmentId, 10));
+
+    useEffect(() => {
+        // topicId와 assignmentId를 사용하여 필요한 데이터를 가져오거나 처리합니다.
+        console.log('topicId:', topicId);
+        console.log('assignmentId:', assignmentId);
+    
+        // TODO: 필요한 데이터를 가져오거나 처리하는 로직을 작성합니다.
+      }, [topicId, assignmentId]);
 
     return(
         <Stack
@@ -43,7 +57,7 @@ export default function WorksForTeacher(){
                         id="work-header">
                         <Grid container spacing={0} sx={{ alignItems:'center'}}>
                         <Grid item xs={6}>
-                            <Typography variant='h6'>{assignment.title}</Typography>
+                            <Typography variant='h6'>{selectedAssignment.title}</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{paddingRight:'5px'}}>
                             <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>2023년 11월 16일</Typography>
@@ -51,7 +65,7 @@ export default function WorksForTeacher(){
                         </Grid>
                     </AccordionSummary>
                     <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-                        <Typography variant='body1'>{assignment.content}</Typography>
+                        <Typography variant='body1'>{selectedAssignmentt.content}</Typography>
                     </AccordionDetails>
                 </Accordion>
             </Stack>
@@ -98,3 +112,22 @@ export default function WorksForTeacher(){
         </Stack>
     );
 }
+
+// assignment = [
+// {
+//     id:1,
+//     topicId : 2,
+//     title:'테스트1',
+//     description:'테스트1내용',
+//     dueDateTime: '2023-11-23T05:00:00.000Z',
+//     createdAt: '2023-11-17T08:38:23.000Z'
+// },
+// {
+//     id: 2,
+//     topicId : 2,
+//     title:'테스트2',
+//     description:'테스트2내용',
+//     dueDateTime: '2023-11-23T06:00:00.000Z',
+//     createdAt: '2023-11-17T08:54:34.000Z'
+// }
+// ]
