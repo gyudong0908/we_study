@@ -80,7 +80,9 @@ export default function PrivateProgress(){
 
     return(
         <Stack spacing={4} justifyContent='center'>
-            <Typography variant='h4' fontWeight='bold' sx={{color:'#0091ea'}} >나의 학습 진행 상황</Typography>
+          <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
+            <Typography variant='h4' sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}} >나의 학습 진행 상황</Typography>
+          </Stack>
             <Stack direction='row' spacing={30}>
                 <Stack textAlign='center'>
                 <Typography variant='h4' fontWeight='bold'>출석</Typography>

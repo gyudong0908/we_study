@@ -5,13 +5,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+
 export default function ClassWork({ isTeacher }) {
-  const assignment = [
-    {
-    title: 'sdf',
-    content: 'dfsdf',
-    },
-  ]
   const [works, setWorks] = useState([]);
   const {classId} = useParams();
 
@@ -25,7 +20,7 @@ export default function ClassWork({ isTeacher }) {
 
   useEffect(()=>{
     getWorks();
-  },[])
+  },[classId])
   
   
   return (
@@ -41,15 +36,6 @@ export default function ClassWork({ isTeacher }) {
             <WorkAccordion isTeacher={isTeacher} assignments={topic.Works} topicId={topic.id} />
           </Stack>
         ))} 
-          {/* <Stack sx={{mb:5}}>
-            <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
-              <Typography variant="h4" component="span" sx={{ mb:1, fontWeight: 'bold', color:'#0091ea'}}>
-                기타
-              </Typography>
-            </Stack>
-            <WorkAccordion isTeacher={isTeacher} works={works} setWorks={setWorks} assignments={assignments} />
-          </Stack>
-       */}
     </>
   );
 }

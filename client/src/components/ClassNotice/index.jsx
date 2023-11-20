@@ -23,7 +23,11 @@ export default function ClassNotice({ isTeacher }) {
 
   return (
     <>
-      <InputNotice isTeacher={isTeacher} notices={notices} setNotices={setNotices} ></InputNotice>
+    {
+      isTeacher&&(
+        <InputNotice isTeacher={isTeacher} notices={notices} setNotices={setNotices} ></InputNotice>
+      )
+    }
         <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
           <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>
             공지사항

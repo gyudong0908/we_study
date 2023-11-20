@@ -1,5 +1,7 @@
 import { React, useEffect, useState } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams, } from 'react-router-dom';
+import axios from 'axios';
+import dayjs from 'dayjs';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Table, TableContainer, TableCell, TableBody, TableHead, TableRow,
         Grid, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Button,  } from '@mui/material';
@@ -23,19 +25,25 @@ export default function WorksForTeacher(){
         },
     ];
 
-    const { topicId, assignmentId } = useParams();
-    const location = useLocation();
-  const { state } = location;
-  const current = state ? state.assignment : [];
-  const selectedAssignment = current.find((one) => one.id === parseInt(assignmentId, 10));
+    const { workId } = useParams();
+    const [uploadedWorks, setUploadedWorks] = useState([]);
+
+    function getUploadedWorks(){
+        axios.get(`http://localhost:8081/work?workId=${workId}`, { withCredentials: true }).then(data=>{
+            setUploadedWorks(data.data);
+            console.log(data);
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
+    
+    useEffect(()=>{
+        getUploadedWorks();
+      },[workId])
 
     useEffect(() => {
-        // topicId와 assignmentId를 사용하여 필요한 데이터를 가져오거나 처리합니다.
-        console.log('topicId:', topicId);
-        console.log('assignmentId:', assignmentId);
-    
-        // TODO: 필요한 데이터를 가져오거나 처리하는 로직을 작성합니다.
-      }, [topicId, assignmentId]);
+        console.log('workId:', workId);
+      }, [workId]);
 
     return(
         <Stack
@@ -57,15 +65,15 @@ export default function WorksForTeacher(){
                         id="work-header">
                         <Grid container spacing={0} sx={{ alignItems:'center'}}>
                         <Grid item xs={6}>
-                            <Typography variant='h6'>{selectedAssignment.title}</Typography>
+                            <Typography variant='h6'>{uploadedWorks.title}</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{paddingRight:'5px'}}>
-                            <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>2023년 11월 16일</Typography>
+                            <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>{dayjs(uploadedWorks.createAt).format('YYYY-MM-DD hh:mm A')}</Typography>
                         </Grid>
                         </Grid>
                     </AccordionSummary>
                     <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-                        <Typography variant='body1'>{selectedAssignmentt.content}</Typography>
+                        <Typography variant='body1'>{uploadedWorks.description}</Typography>
                     </AccordionDetails>
                 </Accordion>
             </Stack>

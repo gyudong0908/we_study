@@ -42,15 +42,15 @@ const router = createBrowserRouter([
         element: <ClassPage />,
       },
       {
-        path: 'classes/:topicId/:assignmentId/worksforteacher',
+        path: 'classes/:workId/worksforteacher',
         element: <WorksForTeacher />,
       },
       {
-        path: 'classes/:topicId/:id/worksforstudent',
+        path: 'classes/:workId/worksforstudent',
         element: <WorksForStudent />,
       },
       {
-        path: 'classes/:classId/workdetail',
+        path: 'classes/:submitId/workdetail',
         element: <WorkDetail />,
       },
       {

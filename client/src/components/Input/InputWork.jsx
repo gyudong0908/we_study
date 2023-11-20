@@ -80,7 +80,6 @@ export default function InputWork({ isTeacher, works, setWorks}) {
                   {works.map((topic)=>(
                     <MenuItem key={topic.id} value={topic.name} onClick={(e)=>{setTopicId(topic.id); }} >{topic.name}</MenuItem>
                   ))}
-                  <MenuItem key='etc'>기타</MenuItem>
                 </Select>
               </FormControl>
               <Picker inputDueDateTime={inputDueDateTime} setInputDueDateTime={setInputDueDateTime}/>

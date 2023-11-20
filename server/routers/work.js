@@ -30,6 +30,16 @@ router.get('/works', function (req, res) {
     })
 })
 
+router.get('/work',function(req,res){
+    const workId = req.query.workId;
+    models.Work.findByPk(workId).then((data)=>{
+        res.status(200).send(data);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('work 조회 에러');
+    })
+})
+
 router.put('/work', function (req, res) {
     const workId = req.query.workId;
     models.Work.update(req.body, { where: { id: workId } }).then(() => {

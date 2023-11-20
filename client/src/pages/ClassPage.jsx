@@ -22,7 +22,7 @@ export default function ClassPage() {
   }
   useEffect(() => {
     getClassData()
-  }, [classId])
+  }, [classId, user])
   return (
 
     <Stack
