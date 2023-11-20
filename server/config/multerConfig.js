@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
         const currentDir = path.resolve(__dirname); // 현재 디렉토리 경로를 문자열로 얻기
         const parentDir = path.resolve(currentDir, '..'); // 현재 디렉토리의 상위 디렉토리
         let dynamicPart = '';
-        if (req.url === '/user') {
+        if (req.path === '/user') {
             dynamicPart = 'profile';
             models.User.findOne({
                 where: {
@@ -27,10 +27,11 @@ const storage = multer.diskStorage({
                         }
                     });
                 }
-            })
-        } else if (req.url === '/submit') {
+            })            
+        } else if (req.path === '/create/submit') {
             dynamicPart = 'submit';
         } else {
+            console.log(req.url)
             dynamicPart = 'default_folder';
         }
         const userUploadPath = path.join(parentDir, 'uploads', dynamicPart, req.session.passport.user.toString());

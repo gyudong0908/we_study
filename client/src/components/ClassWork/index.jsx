@@ -11,7 +11,7 @@ export default function ClassWork({ isTeacher }) {
   const {classId} = useParams();
 
   function getWorks(){
-    axios.get(`http://localhost:8081/topic/work?classId=${classId}`, { withCredentials: true }).then(data=>{
+    axios.get(`http://localhost:8081/curriculums/work?classId=${classId}`, { withCredentials: true }).then(data=>{
       setWorks(data.data);
     }).catch(err=>{
       console.log(err);
@@ -34,7 +34,7 @@ export default function ClassWork({ isTeacher }) {
           <Stack key={index} sx={{mb:5}}>
             <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
               <Typography variant="h4" component="span" sx={{ mb:1, fontWeight: 'bold', color:'#0091ea'}}>
-                {topic.name}
+                {topic.title}
               </Typography>
             </Stack>
             <WorkAccordion isTeacher={isTeacher} assignments={topic.Works} topicId={topic.id} />

@@ -34,7 +34,7 @@ function CreateClassModal({ open, handleClose }) {
       axios.post('http://localhost:8081/class', data, { withCredentials: true }).then((response) => {
         dispatch(setClassCards([response.data]));
       }).catch(err => {
-        alert('오류발생', err);
+        console.log(err);
       })
     }
   }

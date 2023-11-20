@@ -37,7 +37,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId }) {
                 <Link to={{
                   pathname: `/mypage/classes/${assignment.id}/worksforteacher`,
                   }}>
-                  <Button variant="outlined">📎 제출된 과제 확인하기</Button>
+                  <Button variant="outlined">📑 제출된 과제 확인하기</Button>
                 </Link>
                 <Button variant="outlined">삭제</Button>
                 <Button variant="outlined">수정</Button>
@@ -46,7 +46,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId }) {
             {!isTeacher&& (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
                 <Link to={`/mypage/classes/${assignment.id}/worksforstudent`}>
-                  <Button variant="outlined">📎 과제 제출하기</Button>
+                  <Button variant="outlined">📑 과제 제출하기</Button>
                 </Link>
               </Stack>
             )}

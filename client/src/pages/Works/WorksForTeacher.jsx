@@ -60,7 +60,7 @@ export default function WorksForTeacher(){
                 marginRight: '70px'
             }}>
             <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
-                <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📎 제출된 과제 확인하기</Typography>
+                <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📑 제출된 과제 확인하기</Typography>
             </Stack>
             <Stack sx={{mb:2, alignItems:'flex-end'}}>
                 <Button variant='outlined' sx={{width:'20%'}} onClick={handleGoBack}>목록</Button>

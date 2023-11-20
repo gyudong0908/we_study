@@ -1,27 +1,46 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
+const upload = require('../config/multerConfig.js');
 
 router.use(express.json());
 
-router.post('/submit', function (req, res) {
+router.post('/create/submit',upload.single('file'), function (req, res) {
     const workId = req.query.workId;
     const userId = req.session.passport.user;
-    models.Submit.create({ ...req.body, workId: workId, userId: userId }).then((data) => {
-        res.status(200).send(data.dataValues);
+    let fileData = {}
+    if (req.file) {
+        const fileName = req.file.filename;
+        const downloadPath = `${req.protocol}://${req.hostname}:${8081}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
+        const filePath = req.file.path;
+        fileData = { filePath: filePath, downloadPath: downloadPath };
+    }
+    models.Submit.create({ ...req.body, workId: workId, userId: userId, ...fileData }, {
+        include:[{
+            model: models.User
+        }]
+    }).then((data) => {
+        models.User.findByPk(userId).then(user=>{
+            res.status(200).send({...data.dataValues, User:user.dataValues});            
+        }).catch(err=>{
+            console.log(err);
+            res.status(500).send('user 데이터 조회 에러 발생')
+        })
     }).catch(err => {
         console.log(err);
         res.status(500).send("submit 생성 에러 발생");
     })
-})
+});
 
 router.get('/submits', function (req, res) {
     const workId = req.query.workId;
     models.Submit.findAll({
-        raw: true,
         where: {
             workId: workId,
-        }
+        },
+        include:[{
+            model: models.User
+        }]
     }).then((submits => {
         res.status(200).send(submits);
     })).catch(err => {
