@@ -81,7 +81,7 @@ export default function ClassPage() {
   const [isTeacher, setIsTeacher] = useState(true);
   const { title, section, curriculums, notices, assignments } = useLoaderData();
 
-  console.log(userData);
+
   return (
     <Stack
       sx={{

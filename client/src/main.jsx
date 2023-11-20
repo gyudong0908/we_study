@@ -31,8 +31,8 @@ const router = createBrowserRouter([
   },
   {
     path: '/mypage',
-    element: <Layout />,
-    children: [
+    element: <Layout />, 
+    children: [      
       {
         index: true,
         element: <MyPage />,
@@ -46,6 +46,7 @@ const router = createBrowserRouter([
         path: 'setting',
         element: <SettingPage />,
       },
+      {
         path: 'rank',
         element: <RankPage />,
       },
