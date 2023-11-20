@@ -35,12 +35,24 @@ export default function ClassDashboard({ isTeacher }) {
     <>
       {isLoading ?
         <Stack>
-          <InputCurriculum isTeacher={isTeacher} marginBottom={20} setCurriculums={setCurriculums} curriculums={curriculums}></InputCurriculum>
-          <PrivateProgress />
-          <StudyProgress />
-          <Typography variant="h4" component="span" sx={{ mb: 2, fontWeight: 'bold', color: '#0091ea' }}>
-            커리큘럼
-          </Typography>
+          {
+            isTeacher&&(
+              <InputCurriculum isTeacher={isTeacher} marginBottom={20} setCurriculums={setCurriculums} curriculums={curriculums}></InputCurriculum>
+            )
+          }
+          {
+            !isTeacher&&(
+              <PrivateProgress />
+            )
+         }
+          {
+            isTeacher&&(
+              <StudyProgress />
+            )
+          }
+          <Stack sx={{borderBottom:'1.5px solid black', mb:2, mt:5}}>
+            <Typography variant='h4' sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}} >커리큘럼</Typography>
+          </Stack>
           <BasicAccordion isTeacher={isTeacher} curriculums={curriculums} setCurriculums={setCurriculums} />
         </Stack> :
         null

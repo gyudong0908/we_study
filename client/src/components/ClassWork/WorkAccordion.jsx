@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import dayjs from 'dayjs';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Typography, Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button } from '@mui/material';
 
@@ -25,7 +26,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId }) {
                 <Typography variant='h6'>{assignment.title}</Typography>
               </Grid>
               <Grid item xs={6} sx={{paddingRight:'5px'}}>
-                <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>{assignment.createdAt}</Typography>
+                <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>{dayjs(assignment.createdAt).format('YYYY년MM월DD일 hh:mm A')}</Typography>
               </Grid>
             </Grid>
           </AccordionSummary>
@@ -34,8 +35,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId }) {
             {isTeacher&& (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
                 <Link to={{
-                  pathname: `/mypage/classes/${topicId}/${assignment.id}/worksforteacher`,
-                  state: { assignment: assignment }
+                  pathname: `/mypage/classes/${assignment.id}/worksforteacher`,
                   }}>
                   <Button variant="outlined">📎 제출된 과제 확인하기</Button>
                 </Link>
@@ -43,9 +43,9 @@ export default function WorkAccordion({ isTeacher, assignments, topicId }) {
                 <Button variant="outlined">수정</Button>
               </Stack>
             )}
-            {isTeacher&& (
+            {!isTeacher&& (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
-                <Link to={`/mypage/classes/:classId/worksforstudent`}>
+                <Link to={`/mypage/classes/${assignment.id}/worksforstudent`}>
                   <Button variant="outlined">📎 과제 제출하기</Button>
                 </Link>
               </Stack>

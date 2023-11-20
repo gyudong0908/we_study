@@ -25,7 +25,7 @@ export default function ClassPage() {
   }
   useEffect(() => {
     getClassData()
-  }, [classId,user])
+  }, [classId, user])
   return (
 
     <Stack
