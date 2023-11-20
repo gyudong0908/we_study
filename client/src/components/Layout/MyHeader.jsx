@@ -10,11 +10,12 @@ import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useLocation } from 'react-router-dom';
 import InvoteClassModal from '../MyModal/InvoteClassModal';
-
+import { useSelector } from 'react-redux/es/hooks/useSelector';
   
   function MyHeader() {
     const userSettings = ['누적 학습 시간 랭킹', 'Calendar','Setting', 'Logout'];
     const classSettings = ['클래스 만들기', '클래스 참여하기'];
+    const user = useSelector(state=>state.userData);
     const StyledBadge = styled(Badge)(({theme})=>({
         '& .MuiBadge-badge': {
             right: -3,
@@ -152,7 +153,7 @@ import InvoteClassModal from '../MyModal/InvoteClassModal';
                 <Stack sx={{ flexGrow: 0 }}>
                   <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                      <Avatar src={(user.userData)?user.userData.downloadPath:''} />
                     </IconButton>
                   </Tooltip>
                   <Menu
