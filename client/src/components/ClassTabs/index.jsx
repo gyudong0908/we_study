@@ -43,6 +43,11 @@ function a11yProps(index) {
 
 export default function ClassTabs({ isTeacher, classData, setClassData }) {
   const [value, setValue] = React.useState(0);
+  const {classId} = useParams();
+
+  React.useEffect(()=>{
+      setValue(0);
+  },[classId])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
