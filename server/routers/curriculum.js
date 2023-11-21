@@ -46,7 +46,7 @@ router.get('/curriculums/work',function(req,res){
 })
 router.put('/curriculum', function (req, res) {
     const curriculumId = req.query.curriculumId;
-    models.update(req.body, { where: { id: curriculumId } }).then(() => {
+    models.Curriculum.update(req.body, { where: { id: curriculumId } }).then(() => {
         res.sendStatus(200);
     }).catch(err => {
         console.log(err);
