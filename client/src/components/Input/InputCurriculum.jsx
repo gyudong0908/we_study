@@ -29,7 +29,7 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
     }
 
     function onClickSave(){
-      const resultString = curriculumList.join('\n');
+      const resultString = curriculumList.join('\n  ');
       const data = {
         title: title,
         content: resultString,

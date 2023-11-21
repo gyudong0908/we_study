@@ -13,7 +13,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1000 * 60 * 60
+    maxAge: 10000 * 60 * 60
   },
 }));
 
@@ -64,4 +64,3 @@ models.sequelize.sync({ force: false }).then(() => {
   console.log("연결 실패");
   console.log(err);
 });
-

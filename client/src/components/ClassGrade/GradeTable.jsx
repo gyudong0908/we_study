@@ -41,14 +41,38 @@ const columns = [
     createData('Brazil', 'BR', 210147125, 8515767),
   ];
   
-  export default function GradeTable() {
-    
+  export default function GradeTable({curriculums, setCurriculums}) {
+    // function mapData(){
+    //   return(
+    //   curriculums.map(curriculum=>{
+    //     const curriculumTitle = curriculum.title;
+    //      curriculum.Works.map(work=>{
+    //       const workTitle = work.title;
+    //       work.Submits.map(submit=>{
+    //         return(
+    //           <TableRow>
+    //             <TableCell>{submit.User.nickName}</TableCell>
+    //             <TableCell>{curriculumTitle}</TableCell>
+    //             <TableCell>{workTitle}</TableCell>
+    //             <TableCell>{submit.updatedAt}</TableCell>
+    //             <TableCell>{submit.grade}</TableCell>
+    //           </TableRow>
+    //         )
+    //       })
+    //      })
+    //   })
+    //   )
+    // }
+    console.log(curriculums)
     return (
       <Paper sx={{ width: '90%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 440}}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
+                <TableCell>
+                  
+                </TableCell>                
                 {columns.map((column) => (                  
                   <TableCell>
                     <Typography sx={{width: column.width}}>{column.label}</Typography>                    
@@ -57,21 +81,24 @@ const columns = [
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows
-                .map((row) => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            <Typography sx={{width: column.width, overflow: 'hidden', textOverflow: 'ellipsis'}}>{value}</Typography>
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
+            {/* 선택한 유저에 맞는 데이터 렌더링 */}
+            {curriculums.length !== 0
+                ? curriculums.map((curriculum) =>
+                    curriculum.Works.map((work) =>
+                      work.Submits.map((submit) =>
+                        selectedUser === submit.User.nickName ? (
+                          <TableRow key={submit.id}>
+                            <TableCell>{submit.User.nickName}</TableCell>
+                            <TableCell>{curriculum.title}</TableCell>
+                            <TableCell>{work.title}</TableCell>
+                            <TableCell>{submit.updatedAt}</TableCell>
+                            <TableCell>{submit.grade}</TableCell>
+                          </TableRow>
+                        ) : null
+                      )
+                    )
+                  )
+                : null}
             </TableBody>
           </Table>
         </TableContainer>

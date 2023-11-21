@@ -8,8 +8,8 @@ import { Table, TableContainer, TableCell, TableBody, TableHead, TableRow, TextF
         Grid, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Button } from '@mui/material';
 
 export default function WorksForStudent(){
-    const assignment = {title:'과제1', content:'과제 내용입니다.'};
-    const [workData,setWorkData] = useState([]);
+    const [submitData,setSubmitData] = useState([]);
+    const [workData, setWorkData] = useState({});
     const {workId} = useParams();
 
     const navigate = useNavigate();
@@ -20,13 +20,22 @@ export default function WorksForStudent(){
     
     function getSubmits(){
         axios.get(`http://localhost:8081/submits?workId=${workId}`, {withCredentials: true}).then((response)=>{
-            setWorkData(response.data)
+            setSubmitData(response.data)
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
+    function getWork(){
+        axios.get(`http://localhost:8081/work?workId=${workId}`, {withCredentials: true}).then(response=>{
+            console.log(response.data)
+            setWorkData(response.data);            
         }).catch(err=>{
             console.log(err);
         })
     }
     useEffect(()=>{
         getSubmits();
+        getWork()
     },[])
     
     return(
@@ -36,7 +45,8 @@ export default function WorksForStudent(){
                 spacing: '10px',
                 marginTop: '100px',
                 marginLeft: '270px',
-                marginRight: '70px'
+                marginRight: '70px',
+                marginBottom: '200px'
             }}>
             <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
                 <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📑 과제 제출하기</Typography>
@@ -52,20 +62,20 @@ export default function WorksForStudent(){
                         id="work-header">
                         <Grid container spacing={0} sx={{ alignItems:'center'}}>
                         <Grid item xs={6}>
-                            <Typography variant='h6'>{assignment.title}</Typography>
+                            <Typography variant='h6'>{workData.title}</Typography>
                         </Grid>
                         <Grid item xs={6} sx={{paddingRight:'5px'}}>
-                            <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>2023년 11월 16일</Typography>
+                            <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>{dayjs(workData.createAt).format('YYYY-MM-DD hh:mm A')}</Typography>
                         </Grid>
                         </Grid>
                     </AccordionSummary>
                     <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-                        <Typography variant='body1'>{assignment.content}</Typography>
+                        <Typography variant='body1'>{workData.description}</Typography>
                     </AccordionDetails>
                 </Accordion>
             </Stack>
             <Stack sx={{mb:5}}>
-                <SubmitWork  workData = {workData} setWorkData ={setWorkData} workId={workId}/>
+                <SubmitWork  submitData = {submitData} setSubmitData ={setSubmitData} workId={workId}/>
             </Stack>
             
             <TableContainer sx={{boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius:'10px'}}>
@@ -84,7 +94,7 @@ export default function WorksForStudent(){
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                {workData.map((item) => {
+                {submitData.map((item) => {
                     return(
                     <TableRow
                     key={item.id}
@@ -96,11 +106,11 @@ export default function WorksForStudent(){
                             '&:hover': {
                                 backgroundColor: 'rgba(0, 0, 0, 0.1)', // 변경하고자 하는 배경 색상
                             },}}>
-                        <Link to="/mypage/classes/:classId/workdetail" style={{textDecoration:'none', color:'black'}}>
+                        <Link to= {`/mypage/classes/${item.id}/workdetail`} style={{textDecoration:'none', color:'black'}}>
                             {item.title}
                         </Link>
                     </TableCell>
-                    <TableCell align="center">{dayjs(item.createAt).format('YYYY-DD-MM hh:mm A')}</TableCell>
+                    <TableCell align="center">{dayjs(item.createdAt).format('YYYY-DD-MM hh:mm A')}</TableCell>
                     </TableRow>
                     );
                 })}
@@ -111,7 +121,7 @@ export default function WorksForStudent(){
     );
 }
 
-function SubmitWork({workData, setWorkData, workId}){
+function SubmitWork({submitData, setSubmitData, workId}){
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [file, setFile] = useState('');
@@ -122,7 +132,7 @@ function SubmitWork({workData, setWorkData, workId}){
                 'Content-Type': 'multipart/form-data',
             },
         }).then((response)=>{
-            setWorkData([...workData, response.data]);
+            setSubmitData([...submitData, response.data]);
             setTitle('');
             setContent('');
             setFile('');

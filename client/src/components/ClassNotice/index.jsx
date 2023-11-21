@@ -17,8 +17,9 @@ export default function ClassNotice({ isTeacher }) {
     })
   }
 
+  console.log(notices)
   useEffect(()=>{
-    getNotices();
+    getNotices();    
   },[])
 
   return (

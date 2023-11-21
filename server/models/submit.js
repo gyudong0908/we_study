@@ -31,17 +31,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     content: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     private: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
     filePath: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     downloadPath: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     grade: {
       type: DataTypes.INTEGER,
@@ -49,6 +49,9 @@ module.exports = (sequelize, DataTypes) => {
     feedback: {
       type: DataTypes.STRING,
     },
+    fileName:{
+      type: DataTypes.TEXT,
+    }
   }, {
     sequelize,
     modelName: 'Submit', // 모델 이름 바꿔줘야함
