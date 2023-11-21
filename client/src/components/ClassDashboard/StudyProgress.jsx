@@ -1,14 +1,14 @@
 import React from 'react';
-import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Stack, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 function StudyProgress(){
     const students = ['이동규', '조정석', '최혜린'];
 
     return(
         <>
-        <Typography variant="h4" component="span" sx={{mb:'2', fontWeight: 'bold', marginBottom:'15px', color:'#0091ea'}}>
-            학습 진행 상황
-        </Typography>
+        <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
+            <Typography variant='h4' sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}} >학습 진행 상황</Typography>
+        </Stack>
         {StudentTable(students)}
         </>
     );

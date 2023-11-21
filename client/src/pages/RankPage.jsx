@@ -32,7 +32,8 @@ export default function RankPage() {
         spacing: 'px',
         marginTop: '100px',
         marginLeft: '300px',
-        marginRight: '65px',
+        marginRight: '70px',
+        marginBottom: '200px',
       }}
     >
       <Typography variant="h3" textAlign="center" gutterBottom>

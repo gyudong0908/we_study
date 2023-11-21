@@ -11,19 +11,43 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Class.hasMany(models.Topic, { foreignKey: 'classId' });
+      Class.hasMany(models.Attendance, { foreignKey: 'classId' });
+      Class.hasMany(models.ClassChat, { foreignKey: 'classId' });
+      Class.belongsToMany(models.User, { through: 'classUser' });
+      Class.hasMany(models.Notice, { foreignKey: 'classId' });
+      Class.hasMany(models.Curriculum, { foreignKey: 'classId' });
+
     }
   }
   Class.init({
     id: {
-        type :DataTypes.STRING,
-        primaryKey : true
-    }    
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    title: {
+      type: DataTypes.STRING,
+    },
+    section: {
+      type: DataTypes.STRING,
+    },
+    description: {
+      type: DataTypes.TEXT,
+    },
+    code: {
+      type: DataTypes.STRING,
+    },
+    teacher: {
+      type: DataTypes.INTEGER,
+    },
+
   }, {
     sequelize,
-    modelName: 'class', // 모델 이름 바꿔줘야함
+    modelName: 'Class', // 모델 이름 바꿔줘야함
     timestamps: true,
     underscored: true,
     tableName: 'classes', // 테이블 이름 바꿔줘야함
-  });   
+  });
   return Class; // return 할때 모델 이름으로 바꿔줘야함
 };

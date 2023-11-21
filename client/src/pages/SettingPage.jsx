@@ -7,6 +7,7 @@ export default function SettingPage() {
             marginTop: '100px',
             marginLeft: '270px',
             marginRight: '70px',
+            marginBotton: '200px',
         }}>
             <MyPfrofileSetting/>
         </Box>

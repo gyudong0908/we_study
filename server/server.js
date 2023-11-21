@@ -7,7 +7,6 @@ const models = require("./models/index.js");
 const dotenv = require('dotenv').config();
 const cors = require('cors');
 
-
 // 세션 미들웨어 설정
 app.use(session({
   secret: process.env.sessionSecret, // 세션 암호화에 사용될 키 (필요한 경우 변경)
@@ -42,6 +41,16 @@ app.use((req, res, next) => {
 
 app.use('/', require('./routers/login.js'));
 app.use('/', require('./routers/class.js'));
+app.use('/', require('./routers/memo.js'));
+app.use('/', require('./routers/work.js'));
+app.use('/', require('./routers/attendance.js'));
+app.use('/', require('./routers/topic.js'));
+app.use('/', require('./routers/curriculum.js'));
+app.use('/', require('./routers/notice.js'));
+app.use('/', require('./routers/submit.js'));
+app.use('/', require('./routers/user.js'));
+app.use('/', require('./routers/file.js'));
+app.use('/', require('./routers/classChat.js'));
 // app.use('/', require('./routers/rank.js'));
 
 const httpServer = app.listen(8081, () => {
@@ -50,9 +59,11 @@ const httpServer = app.listen(8081, () => {
 
 socketModule(httpServer);
 
+//orm
 models.sequelize.sync({ force: false }).then(() => {
   console.log(" DB 연결 성공");
 }).catch(err => {
   console.log("연결 실패");
   console.log(err);
 });
+

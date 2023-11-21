@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            ChatUser.belongsTo(models.user, { foreignKey: 'userId' });
-            ChatUser.belongsTo(models.chat, { foreignKey: 'chatId' });
-            ChatUser.hasMany(models.chatMessage, { foreignKey: 'chatUserId' });
+            ChatUser.belongsTo(models.User, { foreignKey: 'userId' });
+            ChatUser.belongsTo(models.ClassChat, { foreignKey: 'chatId' });
+            ChatUser.hasMany(models.ChatMessage, { foreignKey: 'chatUserId' });
         }
     }
     ChatUser.init({
@@ -26,11 +26,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
         },
         userId: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
         }
     }, {
         sequelize,
-        modelName: 'chatUser', // 모델 이름 바꿔줘야함
+        modelName: 'ChatUser', // 모델 이름 바꿔줘야함
         timestamps: true,
         underscored: true,
         tableName: 'chatUsers', // 테이블 이름 바꿔줘야함

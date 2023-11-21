@@ -6,11 +6,14 @@ import * as React from 'react';
 import ClassDashboard from '../ClassDashboard';
 import ClassNotice from '../ClassNotice';
 import ClassPeople from '../ClassPeople';
-import ClassTodo from '../ClassTodo';
+import ClassWork from '../ClassWork';
 import ClassSetting from '../ClassSetting';
+import ClassGrade from '../ClassGrade';
+import { useParams } from 'react-router-dom';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
+
 
   return (
     <div
@@ -38,8 +41,13 @@ function a11yProps(index) {
   };
 }
 
-export default function ClassTabs({ isTeacher, curriculums, notices, assignments }) {
+export default function ClassTabs({ isTeacher, classData, setClassData }) {
   const [value, setValue] = React.useState(0);
+  const {classId} = useParams();
+
+  React.useEffect(()=>{
+      setValue(0);
+  },[classId])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -48,27 +56,27 @@ export default function ClassTabs({ isTeacher, curriculums, notices, assignments
   const tabs = [
     {
       title: '대시보드',
-      content: <ClassDashboard curriculums={curriculums} isTeacher={isTeacher} />,
+      content: <ClassDashboard isTeacher={isTeacher} />,
     },
     {
       title: '공지사항',
-      content: <ClassNotice notices={notices} isTeacher={isTeacher} />,
+      content: <ClassNotice isTeacher={isTeacher} />,
     },
     {
       title: '할일목록',
-      content: <ClassTodo assignments={assignments} isTeacher={isTeacher}/>,
+      content: <ClassWork isTeacher={isTeacher} />,
     },
     {
       title: '참여자',
-      content: <ClassPeople/>,
+      content: <ClassPeople />,
     },
     {
       title: '성적',
-      content: <div>성적 내용</div>,
+      content: <ClassGrade isTeacher={isTeacher} />,
     },
     {
       title: '클래스 설정',
-      content: <ClassSetting isTeacher={isTeacher}/>,
+      content: <ClassSetting isTeacher={isTeacher} classData={classData} setClassData={setClassData} />,
     },
   ];
 
@@ -81,8 +89,8 @@ export default function ClassTabs({ isTeacher, curriculums, notices, assignments
           aria-label="basic tabs example"
         >
           {tabs.map((tab, index) => (
-            !isTeacher && tab.title === '클래스 설정'? null:
-            <Tab key={index} label={tab.title} {...a11yProps(index)} />
+            !isTeacher && tab.title === '클래스 설정' ? null :
+              <Tab key={index} label={tab.title} {...a11yProps(index)} />
           ))}
         </Tabs>
       </Stack>

@@ -13,17 +13,17 @@ import '@fontsource/roboto/700.css';
 
 import LandingPage from './pages/LandingPage.jsx';
 import Layout from './components/Layout';
-import ClassPage, { classPageLoader } from './pages/ClassPage.jsx';
+import ClassPage from './pages/ClassPage.jsx';
 import MyPage from './pages/MyPage.jsx';
 import SettingPage from './pages/SettingPage.jsx';
 import RankPage from './pages/RankPage.jsx';
+import CalenderPage from './pages/CalenderPage.jsx';
+import WorksForTeacher from './pages/Works/WorksForTeacher.jsx';
+import WorksForStudent from './pages/Works/WorksForStudent.jsx';
+import WorkDetail from './pages/Works/WorkDetail.jsx';
+
 import { initializeUserData } from './reducer/userdata.js';
 
-
-import MenuItem from '@mui/material/MenuItem';
-
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -40,7 +40,18 @@ const router = createBrowserRouter([
       {
         path: 'classes/:classId',
         element: <ClassPage />,
-        loader: classPageLoader,
+      },
+      {
+        path: 'classes/:workId/worksforteacher',
+        element: <WorksForTeacher />,
+      },
+      {
+        path: 'classes/:workId/worksforstudent',
+        element: <WorksForStudent />,
+      },
+      {
+        path: 'classes/:submitId/workdetail',
+        element: <WorkDetail />,
       },
       {
         path: 'setting',
@@ -50,15 +61,21 @@ const router = createBrowserRouter([
         path: 'rank',
         element: <RankPage />,
       },
+      {
+        path: 'calender',
+        element: <CalenderPage />,
+      },
     ],
   },
 ]);
+
+
 Store.dispatch(initializeUserData());
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={Store}>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 );

@@ -1,49 +1,176 @@
 const express = require('express');
 const router = express.Router();
-const dotenv = require('dotenv').config();
 const axios = require('axios');
 const models = require('../models');
+const submit = require('../models/submit');
+const uuid = require('uuid');
 router.use(express.json());
 
-router.get('/classes',function(req,res){    
-    const Authorization = "Bearer " + req.session.passport.user.accessToken;
-    axios.get(`https://classroom.googleapis.com/v1/courses`,{
-        headers:{
-            'Authorization':Authorization,
-            'Accept' : 'application/json',
-        }
-    }).then((data)=>{       
-        res.send(data.data.courses);
-    }).catch((err)=>{
-        console.log(err.message);
+router.post('/class', function (req, res) {
+    const userId = req.session.passport.user;
+
+    models.Class.create({ ...req.body, teacher: userId }).then((data) => {
+        const basecode = uuid.v4();
+        const shortBaseCode = basecode.slice(0, 6);
+        data.addUser(userId);
+        data.update({
+            code: shortBaseCode + data.dataValues.id
+        }).then(() => {
+            models.Topic.create({
+                classId: data.dataValues.id,
+                name: '기타'
+            }).then(() => {
+                models.ClassChat.create({
+                    title: data.dataValues.title,
+                    classId: data.dataValues.id
+                }).then((classChat) => {
+                    models.ChatUser.create({
+                        chatId: classChat.dataValues.id,
+                        userId: userId
+                    }).then(() => {
+                        res.status(200).send(data.dataValues);
+                    }).catch(err => {
+                        console.log(err);
+                        res.status(500).send('클래스 채팅방 참가 오류');
+                    })
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).send('클래스 채팅방 생성 오류');
+                })
+            }).catch(err => {
+                console.log(err);
+                res.status(500).send('기타 Topic 생성 오류');
+            })
+        }).catch(err => {
+            console.log(err);
+            res.status(500).send('초대 코드 생성 오류');
+        })
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send("Class 생성 오류");
+    })
+});
+
+router.get('/classes', function (req, res) {
+    const userId = req.session.passport.user;
+
+    models.User.findByPk(userId, {
+        include: [
+            {
+                model: models.Class,
+                through: 'classUser',
+            }
+        ]
+    }).then(user => {
+        const classData = user.Classes.map(data => data.dataValues);
+        res.status(200).send(classData);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send('Class 조회 에러 발생');
     })
 })
 
-router.post('/class',function(req,res){    
-    const Authorization = "Bearer " + req.session.passport.user.accessToken;
-    axios.post(`https://classroom.googleapis.com/v1/courses`,req.body,{
-        headers:{
-            'Authorization': Authorization,
-            'Accept' : 'application/json',
-        }
-    }).then((data)=>{
-        axios.put(`https://classroom.googleapis.com/v1/courses/${data.data.id}`,{ 
-            courseState : "ACTIVE",
-            name: data.data.name            
-        },{
-            headers:{
-                'Authorization': Authorization,
-                'Accept' : 'application/json',
+router.get('/class', function (req, res) {
+    const classId = req.query.classId;
+    models.Class.findByPk(classId, { raw: true }).then(data => {
+        res.status(200).send(data);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send("클래스 조회 에러 발생");
+    })
+})
+
+router.get('/class/submits', function (req, res) {
+    const classId = req.query.classId;
+    models.Class.findByPk(classId, {
+        raw: true,
+        include: [{
+            model: models.Topic,
+            include: [{
+                model: models.Work,
+                include: [{
+                    model: models.Submit,
+                }]
+            }]
+        }]
+    }).then(data => {
+        res.status(200).send(data);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send("클래스 조회 에러 발생");
+    })
+})
+
+router.get('/class/user', function (req, res) {
+    const classId = req.query.classId;
+    models.Class.findByPk(classId, {
+        include: [
+            {
+                model: models.User,
+                through: 'classUser',
             }
-        }).then((updateData)=>{
-            models.class.create({
-                id : updateData.data.id
+        ]
+    }).then((classData) => {
+        const userData = classData.Users.map(data => data.dataValues);
+        res.status(200).send({ userData, teacherId: classData.dataValues.teacher });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send('Class 유저 조회 에러 발생');
+    })
+})
+
+router.post('/class/join', function (req, res) {
+    const code = req.query.code;
+    const userId = req.session.passport.user;
+
+    models.Class.findOne({ where: { code: code } }).then(data => {
+        data.addUser(userId);
+        models.ClassChat.findOne({
+            where: {
+                classId: data.dataValues.id
+            }
+        }).then(classChat => {
+            models.ChatUser.create({
+                chatId: classChat.dataValues.id,
+                userId: userId
+            }).then(() => {
+                res.status(200).send(data.dataValues);
+            }).catch(err => {
+                console.log(err);
+                res.status(500).send('채팅방 참여 오류 발생');
             })
-        }).catch((err)=>{
-            console.log(err.message)
+        }).catch(err => {
+            console.log(err);
+            res.status(500).send('채팅방 참여 오류 발생');
         })
-    }).catch((err)=>{
-        console.log(err.message);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send('클래스 초대 오류');
+    })
+});
+
+router.put('/class', function (req, res) {
+    const classId = req.query.classId;
+
+    models.Class.update(req.body, { where: { id: classId } }).then(() => {
+        res.sendStatus(200);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send("클래스 변경 오류");
+    })
+})
+
+router.delete('class', function (req, res) {
+    const classId = req.query.classId;
+    models.Class.destory({
+        where: {
+            id: classId
+        }
+    }).then(() => {
+        res.sendStatus(200);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send('Class 삭제 오류 발생');
     })
 })
 

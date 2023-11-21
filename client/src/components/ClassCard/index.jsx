@@ -1,8 +1,7 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
+import { Card, CardContent, Typography } from '@mui/material';
 
 export default function ClassCard({ title, section }) {
+
   return (
     <Card variant="outlined" sx={{ px: 2, py: 4 }}>
       <CardContent>
@@ -11,7 +10,7 @@ export default function ClassCard({ title, section }) {
         </Typography>
         <Typography color="text.secondary" textAlign="center">
           {section}
-        </Typography>
+        </Typography>        
       </CardContent>
     </Card>
   );

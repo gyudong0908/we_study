@@ -1,14 +1,18 @@
-import Stack from '@mui/material/Stack';
 import * as React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import ChatPeople from './ChatPeople';
 import ChatDisplay from './ChatDisplay';
-import { Button, styled, Typography } from '@mui/material';
-
+import { Button, styled, Typography, Box, Stack } from '@mui/material';
+import axios from 'axios';
+import io from "socket.io-client";
 
 export default function Chat({ closeChat }) {
   const [value, setValue] = React.useState(0);
-  const [chatId, setChatId] = React.useState('');
+  const [chatId, setChatId] = React.useState(null);
+  const [chatTitle, setChatTitle] = React.useState('');
+  const [chatUserId, setChatUserId] = React.useState();
+  const [chatUsers, setChatUsers] = React.useState([]);
+  const socket = io.connect("http://localhost:8081");
 
   const TabButton = styled(Button)(({ theme, isActive }) => ({
     margin: '10px',
@@ -19,24 +23,29 @@ export default function Chat({ closeChat }) {
     '&:hover': {
       backgroundColor: isActive ? 'grey' : 'white',
     },
-  }));
+  }))
+  function getClassChats() {
+    axios.get(`http://localhost:8081/classchats`, { withCredentials: true }).then((response) => {
+      setChatUsers(response.data)
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  React.useEffect(() => {
+    getClassChats();
+  }, [])
 
-  function onClickHandler(name) {
-    setChatId(name);
+  function onClickHandler(classChatId, chatUserId, title) {
+    setChatId(classChatId);
+    setChatUserId(chatUserId);
+    setChatTitle(title);
   }
 
   function rewind() {
-    setChatId('');
+    setChatId(null);
+    socket.disconnect();
   }
-
-  const classData = [
-    { name: "KOSTA 265기" },
-    { name: "2023 OUTTA 데이터분석" },
-  ];
   const personalData = [
     { name: "이동규" },
     { name: "조정석" },
@@ -55,21 +64,26 @@ export default function Chat({ closeChat }) {
     }}>
       <Stack>
         <Stack sx={{ textAlign: 'right', display: 'inline-block' }}>
-          <CloseIcon onClick={closeChat} sx={{ cursor: 'pointer', '&:hover': { border: '2px solid skyblue' } }} />
+          <CloseIcon onClick={() => { closeChat(); socket.disconnect(); }} sx={{
+            cursor: 'pointer',
+            margin: '10px',
+            color: 'black',
+            '&:hover': { transform: 'scale(1.1)' },
+          }} />
         </Stack>
         {
-          chatId !== '' ? <ChatDisplay rewind={rewind} name={chatId} /> : (
+          chatId !== null ? <ChatDisplay rewind={rewind} value={value} classChatId={chatId} chatTitle={chatTitle} chatUserId={chatUserId} socket={socket} /> : (
             <div>
-              <Stack sx={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
                 <TabButton onClick={() => { setValue(0) }} isActive={value === 0}>
                   <Typography variant='h5'>클래스</Typography>
                 </TabButton>
                 <TabButton onClick={() => { setValue(1) }} isActive={value === 1}>
                   <Typography variant='h5'>개인</Typography>
                 </TabButton>
-              </Stack>
+              </Box>
               {
-                value === 0 ? <ChatPeople data={classData} onClickHandler={onClickHandler} /> : <ChatPeople data={personalData} onClickHandler={onClickHandler} />
+                value === 0 ? <ChatPeople data={chatUsers} onClickHandler={onClickHandler} /> : <ChatPeople data={personalData} onClickHandler={onClickHandler} />
               }
             </div>
           )

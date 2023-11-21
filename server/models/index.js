@@ -6,7 +6,16 @@ const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+// const config = require(__dirname + '/../config/config.json')[env];
+const dotenv = require('dotenv').config();
+const config = {
+  "username": "root",
+  "password": process.env.dbPassword,
+  "database": "we_study",
+  "host": process.env.host,
+  "dialect": "mysql",
+  "port": process.env.port
+};
 const db = {};
 
 let sequelize;

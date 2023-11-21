@@ -1,4 +1,5 @@
 import { useState, React } from 'react';
+import { Link } from 'react-router-dom';
 import {AppBar, Stack, Typography, Toolbar, IconButton, Menu, Avatar, Tooltip, Badge, MenuItem} from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
@@ -8,19 +9,21 @@ import CreateClassModal from '../MyModal/CreateClassModal';
 import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useLocation } from 'react-router-dom';
-
-const userSettings = ['Calendar', '나의 노트', 'Setting', 'Logout'];
-const classSettings = ['클래스 만들기', '클래스 참여하기'];
-const StyledBadge = styled(Badge)(({theme})=>({
-    '& .MuiBadge-badge': {
-        right: -3,
-        top: 5,
-        border: 0,
-    },
-  }));
-
+import InvoteClassModal from '../MyModal/InvoteClassModal';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
   
   function MyHeader() {
+    const userSettings = ['누적 학습 시간 랭킹', 'Calendar','Setting', 'Logout'];
+    const classSettings = ['클래스 만들기', '클래스 참여하기'];
+    const user = useSelector(state=>state.userData);
+    const StyledBadge = styled(Badge)(({theme})=>({
+        '& .MuiBadge-badge': {
+            right: -3,
+            top: 5,
+            border: 0,
+        },
+      }));
+
     const location = useLocation();
     const [anchorElUser, setAnchorElUser] = useState(null);
     const handleOpenUserMenu = (event) => {
@@ -42,7 +45,15 @@ const StyledBadge = styled(Badge)(({theme})=>({
     setIsModalOpen(true);
     handleCloseClassMenu();
     };
-    const handleCloseModal = () => setIsModalOpen(false);
+    const [isInvoteModalOpen, setIsInvoteModalOpen] = useState(false);
+    const handleOpenInvoteModal = () => {
+      setIsInvoteModalOpen(true);
+      handleCloseClassMenu();
+      };
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+      setIsInvoteModalOpen(false);
+    }
 
     const mypageTool = (
       <>
@@ -63,13 +74,15 @@ const StyledBadge = styled(Badge)(({theme})=>({
             open={Boolean(anchorElClass)}
             onClose={handleCloseClassMenu}
           >
-            {classSettings.map((setting) => (
-              <MenuItem key={setting} onClick={handleOpenModal}>
-                <Typography textAlign="center">{setting}</Typography>
+              <MenuItem key={classSettings[0]} onClick={handleOpenModal}>
+                <Typography textAlign="center">{classSettings[0]}</Typography>
               </MenuItem>
-              ))}
+              <MenuItem key={classSettings[1]} onClick={handleOpenInvoteModal}>
+                <Typography textAlign="center">{classSettings[1]}</Typography>
+              </MenuItem>
         </Menu>
         {isModalOpen && <CreateClassModal open={isModalOpen} handleClose={handleCloseModal} />}
+        {isInvoteModalOpen && <InvoteClassModal open={isInvoteModalOpen} handleClose={handleCloseModal} />}
       </>
     );
 
@@ -92,7 +105,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
               }}>
               <Toolbar disableGutters width='100%'>
                 <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'black' }} />
-                <Typography variant="h6" noWrap component="a" href="/mypage"
+                <Typography variant="h6" noWrap component={Link} to='/mypage'
                   sx={{
                       mr: 2,
                       display: { xs: 'none', md: 'flex' },
@@ -104,7 +117,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
                   }}>WeStudy</Typography>
                 
                 <AdbIcon sx={{ display: { xs: 'flex', md: 'none', color:'black' }, mr: 1 }} />
-                <Typography variant="h5" noWrap component="a" href="/mypage"
+                <Typography variant="h5" noWrap component={Link} to='/mypage'
                   sx={{
                       mr: 2,
                       display: { xs: 'flex', md: 'none' },
@@ -140,7 +153,7 @@ const StyledBadge = styled(Badge)(({theme})=>({
                 <Stack sx={{ flexGrow: 0 }}>
                   <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                      <Avatar src={(user.userData)?user.userData.downloadPath:''} />
                     </IconButton>
                   </Tooltip>
                   <Menu
@@ -159,8 +172,12 @@ const StyledBadge = styled(Badge)(({theme})=>({
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    {userSettings.map((setting) => (
-                      <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    {userSettings.map((setting, index) => (
+                      <MenuItem key={index} onClick={handleCloseUserMenu}
+                        component={Link} to={index === 0 ? '/mypage/rank' : 
+                          index === 1 ? '/mypage/calender' : 
+                          index ===2 ? '/mypage/setting' : 'http://localhost:8081/logout'}
+                      >
                         <Typography textAlign="center">{setting}</Typography>
                       </MenuItem>
                     ))}

@@ -11,21 +11,49 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.chatUser, { foreignKey: 'userId' });
+      User.hasMany(models.ChatUser, { foreignKey: 'userId' });
+      User.hasMany(models.Memo, { foreignKey: 'userId' });
+      User.hasMany(models.Attendance, { foreignKey: 'userId' });
+      User.hasMany(models.Submit, { foreignKey: 'userId' });
+      User.belongsToMany(models.Class, { through: 'classUser' });
     }
   }
   User.init({
     id: {
-      type: DataTypes.STRING,
-      primaryKey: true
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
     nickName: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    birthDay: {
+      type: DataTypes.DATE,
+    },
+    gender: {
+      type: DataTypes.STRING,
+    },
+    job: {
+      type: DataTypes.STRING,
+    },
+    goal: {
+      type: DataTypes.STRING,
+    },
+    filePath: {
+      type: DataTypes.STRING,
+    },
+    downloadPath: {
+      type: DataTypes.STRING,
+    },
+
   }, {
     sequelize,
-    modelName: 'user', // 모델 이름 바꿔줘야함
+    modelName: 'User', // 모델 이름 바꿔줘야함
     timestamps: true,
     underscored: true,
     tableName: 'users', // 테이블 이름 바꿔줘야함
