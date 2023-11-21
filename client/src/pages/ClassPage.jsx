@@ -42,7 +42,7 @@ export default function ClassPage() {
         marginBottom: '200px',
       }}
     >
-      <ClassCard title={classData.title} section={classData.section} />
+      <ClassCard title={classData.title} section={classData.section} description={classData.description}/>
       <ClassTabs
         isTeacher={isTeacher}
         classData={classData}
