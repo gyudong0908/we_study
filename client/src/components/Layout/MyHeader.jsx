@@ -111,7 +111,9 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
                       display: { xs: 'none', md: 'flex' },
                       fontFamily: 'lobster',
                       fontWeight: 700,
-                      color: '#0091ea',
+                      background : 'linear-gradient(to bottom, #0091ea 35%, #6200ea)',
+                      WebkitBackgroundClip: 'text',
+                      color: 'transparent', 
                       textDecoration: 'none',
                       justifyContent: 'center',
                   }}>WeStudy</Typography>
