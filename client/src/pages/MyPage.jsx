@@ -8,8 +8,6 @@ import { setClassCards, deleteClassCards } from '../reducer/classCardsSlice';
 
 
 export default function MyPage() {
-  // const [classCards, setClassCards] = React.useState([]);
-  // const [data, setData] = useState([]);
   const data = useSelector((state) => state.classCards);
   const userData = useSelector((state) => state.userData);
   const navigate = useNavigate();

@@ -3,6 +3,7 @@ import { Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button, Typ
 import axios from 'axios';
 import dayjs from 'dayjs';
 
+
 export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
   function onClickDelete(target) {
     axios.delete(`http://localhost:8081/notice?noticeId=${target.id}`, { withCredentials: true }).then(() => {
@@ -27,7 +28,6 @@ export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
               </Grid>
               <Grid item xs={6} sx={{ paddingRight: '5px' }}>
                 <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end' }}>{dayjs(notice.createdAt).format('YYYY-MM-DD hh:mm A')}</Typography>
-
               </Grid>
             </Grid>
           </AccordionSummary>
