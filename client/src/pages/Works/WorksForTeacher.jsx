@@ -2,6 +2,7 @@ import { React, useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Table, TableContainer, TableCell, TableBody, TableHead, TableRow,
         Grid, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Button,  } from '@mui/material';
@@ -59,8 +60,9 @@ export default function WorksForTeacher(){
                 marginLeft: '270px',
                 marginRight: '70px'
             }}>
-            <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
-                <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📎 제출된 과제 확인하기</Typography>
+            <Stack direction='row' sx={{borderBottom:'1.5px solid black', mb:2}}>
+                {/* <AttachFileRoundedIcon fontSize='large'/> */}
+                <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📑 제출된 과제 확인하기</Typography>
             </Stack>
             <Stack sx={{mb:2, alignItems:'flex-end'}}>
                 <Button variant='outlined' sx={{width:'20%'}} onClick={handleGoBack}>목록</Button>
