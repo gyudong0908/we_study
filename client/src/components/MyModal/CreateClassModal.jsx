@@ -58,7 +58,7 @@ function CreateClassModal({ open, handleClose }) {
               variant="outlined"
               fullWidth
               rows={8}
-              sx={{ mt: 2 }}
+              sx={{ mt: 3 }}
               required
               onChange={(e) => { setTitle(e.target.value); }}
               value={title}

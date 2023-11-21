@@ -91,9 +91,19 @@ function bindedClassCard(data, navigate) {
       <CardContent sx={{ width: '250px', height: '244px', cursor: 'pointer' }}
         onClick={() => { navigate(`/mypage/classes/${data.id}`) }}>
         <Stack sx={{ backgroundColor: '#0092ea', width: '100%', height: '40%', borderRadius: '4px', opacity: '80%', mb: 2 }} />
-        <Typography variant="h5">{data.title}</Typography>
-        <Typography variant="subtitle1">교사명 : {data.section}</Typography>
-        <Typography variant="body2" marginTop={'10px'}>{data.description}</Typography>
+        <Typography variant="h5"
+          sx={{
+            whiteSpace:'nowrap',
+            overflow:'hidden',
+            textOverflow:'ellipsis',
+          }}>{data.title}</Typography>
+        <Typography variant="subtitle1" sx={{mb:4, color:'#757575'}}>🧑‍🏫 {data.section}</Typography>
+        <Typography variant="body2" 
+          sx={{
+            whiteSpace:'nowrap',
+            overflow:'hidden',
+            textOverflow:'ellipsis',
+          }}>{data.description}</Typography>
       </CardContent>
     </Card>
   );

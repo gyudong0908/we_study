@@ -15,20 +15,20 @@ const style = {
   p: 4,
 };
 
-function EditNoticeModal({ onClose, target, notices, setNotices }) {
+function EditCurriculumModal({ onClose, target, curriculums, setCurriculums }) {
     const [editTitle, setEditTitle] = useState(target.title);
     const [editContent, setEditContent] = useState(target.content);
     console.log(target);
     
-    const UpdateNotice =()=>{
+    const UpdateCurriculum =()=>{
         const updateData = {
             title: editTitle,
             content: editContent,
             updatedAt: new Date()
         }
 
-        axios.put(`http://localhost:8081/notice?noticeId=${target.id}`, updateData, { withCredentials: true }).then(() => {
-            setNotices(notices.map(notice=>(notice.id === target.id? updateData :notice )));
+        axios.put(`http://localhost:8081/curriculum?curriculumId=${target.id}`, updateData, { withCredentials: true }).then(() => {
+            setCurriculums(curriculums.map(curriculum=>(curriculum.id === target.id? updateData :curriculum )));
         }).catch(err => {
             console.log(err);
         })
@@ -39,12 +39,12 @@ function EditNoticeModal({ onClose, target, notices, setNotices }) {
       <Modal open={true} onClose={onClose}>
         <Stack sx={style}>
           <Typography id="modal-modal-title" variant="h4" component="h2" textAlign={'center'}>
-            공지사항 수정
+            커리큘럼 수정
           </Typography>
           <Stack id="modal-modal-description">
             <TextField
               id="inputNoticeTitle"
-              label='제목을 입력하세요.'
+              label='단원명을 입력하세요.'
               variant="outlined"
               fullWidth
               rows={8}
@@ -55,7 +55,7 @@ function EditNoticeModal({ onClose, target, notices, setNotices }) {
             />
             <TextField
               id="teacherName"
-              label='세부 내용을 입력하세요.'
+              label='세부 목차를 입력하세요.'
               variant="outlined"
               fullWidth
               multiline
@@ -68,7 +68,7 @@ function EditNoticeModal({ onClose, target, notices, setNotices }) {
           </Stack>
           <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 2 }}>
             <Button variant="outlined" type="reset" onClick={onClose}>취소</Button>
-            <Button variant="outlined" onClick={()=>{UpdateNotice(); onClose();}}>저장</Button>
+            <Button variant="outlined" onClick={()=>{UpdateCurriculum(); onClose();}}>저장</Button>
           </Stack>
         </Stack>
       </Modal>
@@ -76,4 +76,4 @@ function EditNoticeModal({ onClose, target, notices, setNotices }) {
   );
 }
 
-export default EditNoticeModal;
+export default EditCurriculumModal;
