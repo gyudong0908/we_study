@@ -81,13 +81,15 @@ router.get('/class', function (req, res) {
 router.get('/class/submits', function (req, res) {
     const classId = req.query.classId;
     models.Class.findByPk(classId, {
-        raw: true,
         include: [{
-            model: models.Curriclum,
+            model: models.Curriculum,
             include: [{
                 model: models.Work,
                 include: [{
                     model: models.Submit,
+                    include:[{
+                        model: models.User
+                    }]
                 }]
             }]
         }]
