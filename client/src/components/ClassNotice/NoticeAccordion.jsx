@@ -13,6 +13,7 @@ export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
       console.log(err);
     })
   }
+  console.log(notices)
   return (
     <>
       {notices.map((notice, index) => (

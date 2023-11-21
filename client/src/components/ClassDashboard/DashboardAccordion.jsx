@@ -15,13 +15,8 @@ export default function DashboardAccordion({ isTeacher, curriculums }) {
           >
             {index + 1}. {curriculum.title}
           </AccordionSummary>
-          <AccordionDetails>
-          {curriculum.content.split('\n').map((line, index) => (
-            <React.Fragment key={index}>
-            🔹 {line}
-            <br />
-            </React.Fragment>
-          ))}
+          <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
+          {curriculum.content}
             {isTeacher&& (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
                 <Button variant="outlined">수정</Button>

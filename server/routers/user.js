@@ -24,7 +24,7 @@ router.put('/user', upload.single('file'), function (req, res) {
     let fileData = {}
     if (req.file) {
         const fileName = req.file.filename;
-        const downloadPath = `${req.protocol}://${req.hostname}:${8081}/download/profile/${userId}/${fileName}`;
+        const downloadPath = `${req.protocol}://${req.hostname}:${8081}/download/profile/${userId}/${encodeURIComponent(fileName)}`;
         const filePath = req.file.path;
         fileData = { filePath: filePath, downloadPath: downloadPath };
     }

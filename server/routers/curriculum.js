@@ -28,7 +28,22 @@ router.get('/curriculums', function (req, res) {
         res.status(500).send('curriculum 조회 에러 발생');
     })
 })
-
+router.get('/curriculums/work',function(req,res){
+    const classId = req.query.classId;
+    models.Curriculum.findAll({
+        where:{
+            classId: classId
+        },
+        include:[{
+            model: models.Work
+        }]
+    }).then(data=>{
+        res.status(200).send(data);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('work 목록 조회 에러');
+    })
+})
 router.put('/curriculum', function (req, res) {
     const curriculumId = req.query.curriculumId;
     models.update(req.body, { where: { id: curriculumId } }).then(() => {

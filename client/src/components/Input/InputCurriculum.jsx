@@ -41,13 +41,6 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
       .catch(err=>{
         alert('오류 발생:', err);
       });   
-
-      axios.post(`http://localhost:8081/topic?classId=${classId}`,{
-        name: title
-      },{ withCredentials: true }).catch(err=>{
-        alert('오류 발생:', err);
-      });
-
       setTitle('');
       setCurriculumList([]);
     }

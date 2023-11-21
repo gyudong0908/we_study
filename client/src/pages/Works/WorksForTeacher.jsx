@@ -60,8 +60,9 @@ export default function WorksForTeacher(){
                 marginLeft: '270px',
                 marginRight: '70px'
             }}>
-            <Stack direction='row' sx={{borderBottom:'1.5px solid black', mb:2}}>
-                {/* <AttachFileRoundedIcon fontSize='large'/> */}
+
+            <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
+
                 <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📑 제출된 과제 확인하기</Typography>
             </Stack>
             <Stack sx={{mb:2, alignItems:'flex-end'}}>

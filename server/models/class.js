@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Class.hasMany(models.Topic, { foreignKey: 'classId' });
       Class.hasMany(models.Attendance, { foreignKey: 'classId' });
       Class.hasMany(models.ClassChat, { foreignKey: 'classId' });
       Class.belongsToMany(models.User, { through: 'classUser' });

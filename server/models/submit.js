@@ -45,8 +45,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     grade: {
       type: DataTypes.INTEGER,
-    }
-
+    },
+    feedback: {
+      type: DataTypes.STRING,
+    },
   }, {
     sequelize,
     modelName: 'Submit', // 모델 이름 바꿔줘야함
