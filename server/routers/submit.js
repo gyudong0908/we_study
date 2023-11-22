@@ -66,10 +66,19 @@ router.get('/submit', function(req,res){
     })
 })
 
-router.put('/submit', function (req, res) {
+router.put('/submit',upload.single('file'), function (req, res) {
     const submitId = req.query.submitId;
-    models.Submit.update(req.body, { where: { id: submitId } }).then(() => {
-        res.sendStatus(200);
+    const userId = req.session.passport.user;
+    let fileData = {}
+    if (req.file) {
+        console.log()
+        const fileName = req.file.filename;
+        const downloadPath = `${req.protocol}://${req.hostname}:${8081}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
+        const filePath = req.file.path;        
+        fileData = { filePath: filePath, downloadPath: downloadPath, fileName: fileName };
+    }
+    models.Submit.update({...req.body, ...fileData}, { where: { id: submitId } }).then(() => {
+        res.status(200).send(fileData);
     }).catch(err => {
         console.log(err);
         res.status(500).send('submit 변경 에러 발생');

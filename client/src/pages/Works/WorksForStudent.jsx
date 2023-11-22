@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import BackupRoundedIcon from '@mui/icons-material/BackupRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { Table, TableContainer, TableCell, TableBody, TableHead, TableRow, TextField,
         Grid, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Button } from '@mui/material';
 
