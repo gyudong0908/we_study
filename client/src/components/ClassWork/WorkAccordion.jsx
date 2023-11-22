@@ -4,12 +4,14 @@ import dayjs from 'dayjs';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Typography, Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button } from '@mui/material';
 import EditWorkModal from '../MyModal/EditWorkModal';
+import DeleteAlertModal from '../MyModal/DeleteAlertModal';
+import axios from 'axios';
 
 export default function WorkAccordion({ isTeacher, assignments, topicId, works, setWorks }) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [target, setTarget] = useState('');
   const [isAlertOpen, setAlertOpen] = useState(false);
-  const [deleteNotice, setDeleteNotice] = useState({});
+  const [deleteData, setDeleteData] = useState({});  
 
   useEffect(() => {
     // filteredAssignments 배열 내의 모든 객체의 topicId를 출력
@@ -18,14 +20,14 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
 
   //파라미터 바꿔야합니다.
   function onClickDelete(target) {
-    axios.delete(`http://localhost:8081/curriculum?curriculumId=${target.id}`, { withCredentials: true }).then(() => {
-      const newCurriculums = curriculums.filter(curriculum => curriculum.id !== target.id);
-      setCurriculums(newCurriculums);
+    axios.delete(`http://localhost:8081/work?workId=${target.id}`, { withCredentials: true }).then(() => {
+      const newWorks = works.map(curriculum => {return {...curriculum, Works:curriculum.Works.filter(work=>work.id !== target.id)}});
+      setWorks(newWorks);
     }).catch(err => {
       console.log(err);
     })
   }
-
+  
   return (
     <>
       {assignments && assignments.map((assignment, index) => (
@@ -60,7 +62,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
                   }}>
                   <Button variant="outlined">📑 제출된 과제 확인하기</Button>
                 </Link>
-                <Button variant="outlined">삭제</Button>
+                <Button variant="outlined" onClick={()=>{setDeleteData(assignment);setAlertOpen(true) }}>삭제</Button>
                 <Button variant="outlined" onClick={()=>{setModalOpen(true); setTarget(assignment);}}>수정</Button>
               </Stack>
             )}
@@ -81,6 +83,15 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
             works={works}
             setWorks={setWorks}
             onClose={()=>{setModalOpen(false)}} />
+        )
+      }
+      {
+        isAlertOpen && (
+          <DeleteAlertModal
+            onClose={()=>{setAlertOpen(false)}}
+            deleteData = {deleteData}
+            onClickDelete = {onClickDelete}
+           />
         )
       }
     </>

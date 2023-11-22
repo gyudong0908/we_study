@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models');
 const upload = require('../config/multerConfig.js');
+const fs = require('fs');
 
 router.use(express.json());
 
@@ -87,15 +88,20 @@ router.put('/submit',upload.single('file'), function (req, res) {
 
 router.delete('/submit', function (req, res) {
     const submitId = req.query.submitId;
-    models.Submit.destroy({
-        where: {
-            id: submitId
+    models.Submit.findByPk(submitId).then(submit=>{
+        submit.destroy();
+        if(submit.filePath){
+            fs.unlink(submit.filePath, (unlinkErr) => {
+                if (unlinkErr && unlinkErr.code !== 'ENOENT') {
+                    console.error('Error deleting previous image:', unlinkErr);
+                    res.status(500).send('제출물 파일 삭제 오류');
+                }
+            });
         }
-    }).then(() => {
         res.sendStatus(200);
-    }).catch(err => {
+    }).catch(err=>{
         console.log(err);
-        res.status(500).send('제출물 삭제 오류');
+        res.status(500).send('submitId가 잘못 되었습니다.');
     })
 })
 

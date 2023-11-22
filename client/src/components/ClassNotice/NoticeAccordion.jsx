@@ -8,7 +8,7 @@ import DeleteAlertModal from '../MyModal/DeleteAlertModal';
 
 
 export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
-  const [deleteNotice, setDeleteNotice] = useState({});
+  const [deleteData, setDeleteData] = useState({});
   const [isModalOpen, setModalOpen] = useState(false);
   const [target, setTarget] = useState('');
   const [isAlertOpen, setAlertOpen] = useState(false);
@@ -47,7 +47,7 @@ export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
             </Stack>
               {isTeacher && (
                 <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop: '15px' }}>
-                  <Button variant="outlined" onClick={() => { setDeleteNotice(notice); setAlertOpen(true)}}>삭제</Button>
+                  <Button variant="outlined" onClick={() => { setDeleteData(notice); setAlertOpen(true)}}>삭제</Button>
                   <Button variant="outlined" onClick={()=> {setModalOpen(true); setTarget(notice);}}>수정</Button>
                 </Stack>
               )}
@@ -57,7 +57,7 @@ export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
       ))}
       {
         isAlertOpen &&(
-          <DeleteAlertModal deleteNotice={deleteNotice} onClose={()=>setAlertOpen(false)} onClickDelete={onClickDelete} />
+          <DeleteAlertModal deleteData={deleteData} onClose={()=>setAlertOpen(false)} onClickDelete={onClickDelete} />
       )
       }
       
