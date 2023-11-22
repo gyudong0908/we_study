@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Stack, Button }  from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Stack, Button, Typography }  from '@mui/material';
 import EditCurriculumModal from '../MyModal/EditCurriculumModal';
 import DeleteAlertModal from '../MyModal/DeleteAlertModal';
 import axios from 'axios';
@@ -28,11 +28,16 @@ export default function DashboardAccordion({ isTeacher, curriculums, setCurricul
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
             id="panel1a-header"
+            sx={{margin:'5px'}}
           >
-            {index + 1}. {curriculum.title}
+            <Stack sx={{wordBreak:'keep-all', wordWrap:'break-word'}}>
+              <Typography variant='h6'>{index + 1}. {curriculum.title}</Typography>
+            </Stack>
           </AccordionSummary>
-          <AccordionDetails sx={{ whiteSpace: 'pre-line', marginLeft:'10px' }}>
-          {curriculum.content}
+          <AccordionDetails sx={{ whiteSpace: 'pre-line', mr:'5px', ml:'5px', mb:'5px'}}>
+            <Stack sx={{mr:2, ml:2, mb:6}}>
+              <Typography variant='body1'> {curriculum.content}</Typography>
+            </Stack>
             {isTeacher&& (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
                 <Button variant="outlined" onClick={() => { setDeleteNotice(curriculum); setAlertOpen(true)}}>삭제</Button>

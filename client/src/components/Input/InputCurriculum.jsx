@@ -73,24 +73,24 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
               label="세부 목차를 하나씩 입력하세요."
               variant="outlined"
               fullWidth
-              sx={{ mb: 2 }}
+              sx={{mb:2, wordBreak:'keep-all', wordWrap:'break-word'}}
               required
               value={content}
               onChange={(e)=>{setContent(e.target.value) }}
               onKeyPress={(e)=>{keyUpHandler(e);}}
             />
-            <Typography variant="h5" sx={{marginBottom:'15px', fontWeight:'bold'}}>{title}</Typography>
+            <Typography variant="h5" sx={{marginBottom:'15px', fontWeight:'bold', wordBreak:'keep-all', wordWrap:'break-word'}}>{title}</Typography>
               {
                 curriculumList.map((data,key)=>{
                     return(
-                        <Stack direction="row" sx={{display: 'flex', justifyContent: 'space-between'}}>
+                        <Stack direction="row" sx={{display: 'flex', justifyContent: 'space-between',wordBreak:'keep-all', wordWrap:'break-word'}}>
                           <Typography  variant="body1" gutterBottom key={key} sx={{marginLeft:"10px", marginBottom:'5px'}}> 🔹 {data} </Typography>
                           <CloseRoundedIcon key={key} onClick={()=>{onClickDelete(key)}} sx={{cursor:'pointer', fontSize:'medium'}}></CloseRoundedIcon>
                         </Stack>
                     )
                 })  
               }
-            <Typography variant="h5" sx={{marginLeft:"10px"}}>{content}</Typography>
+            <Typography variant="h5" sx={{marginLeft:"10px", wordBreak:'keep-all', wordWrap:'break-word'}}>{content}</Typography>
 
             <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
               <Button variant="outlined" type="reset">취소</Button>

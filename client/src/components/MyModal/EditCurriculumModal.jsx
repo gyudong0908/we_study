@@ -60,7 +60,7 @@ function EditCurriculumModal({ onClose, target, curriculums, setCurriculums }) {
               fullWidth
               multiline
               rows={8}
-              sx={{ mt: 2 }}
+              sx={{ mt: 3 }}
               required
               onChange={(e) => { setEditContent(e.target.value); }}
               value={editContent}
