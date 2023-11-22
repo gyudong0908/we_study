@@ -9,7 +9,7 @@ const style = {
 
 };
 
-function DeleteAlertModal({ onClose, deleteNotice, onClickDelete}) {
+function DeleteAlertModal({ onClose, deleteData, onClickDelete}) {
     
 
   return (
@@ -29,9 +29,8 @@ function DeleteAlertModal({ onClose, deleteNotice, onClickDelete}) {
                 <Typography variant='h6'>삭제하시겠습니까?</Typography>
               </Stack>
               <Stack direction='row' spacing={1} >
-                <Button variant="outlined" color='warning'
-                  onClick={()=>{onClickDelete(deleteNotice); onClose()}}>확인</Button>
-                <Button variant="outlined" color='warning'
+                <Button variant="outlined" color='warning' onClick={()=>{onClickDelete(deleteData); onClose()}}>확인</Button>
+                <Button variant="outlined" color='warning' 
                   onClick={()=>{onClose(); }}>취소</Button>
               </Stack>
             </Stack>

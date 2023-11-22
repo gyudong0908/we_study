@@ -5,12 +5,15 @@ import { Card, CardActions, CardContent, Button, Typography, Stack, Grid, TextFi
 import EditSubmitModal from '../../components/MyModal/EditSubmitModal';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import DeleteAlertModal from '../../components/MyModal/DeleteAlertModal';
+
 
 export default function WorkDetail(){
     const {submitId} = useParams();
     const [submitData, setsubmitData] = useState([]);
     const [open, setOpen] = useState(false);
-    console.log(submitData)
+    const [alertOpen, setAlertOpen] = useState(false);
+
     function getSubmitData(){
         axios.get(`http://localhost:8081/submit?submitId=${submitId}`, {withCredentials: true}).then(response=>{
             console.log(response.data)
@@ -19,12 +22,21 @@ export default function WorkDetail(){
             console.log(err);
         })
     }
+
     function onClose(){
         setOpen(false);
     }
+
     useEffect(()=>{
         getSubmitData();
     },[])
+    function onClickDelete(target){
+        axios.delete(`http://localhost:8081/submit?submitId=${target.id}`, {withCredentials: true}).then(response=>{
+            navigate(-1);
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
     const navigate = useNavigate();
     const handleGoBack = () => {
         // 이전 페이지로 이동
@@ -68,7 +80,7 @@ export default function WorkDetail(){
                      </CardActions>
                      {submitData.grade? null:
                          <Stack direction='row' spacing={1} sx={{justifyContent:'flex-end', alignItems:'center',}}>
-                            <Button variant='outlined' sx={{width:'10%'}}>삭제</Button>
+                            <Button variant='outlined' sx={{width:'10%'}} onClick={()=>{setAlertOpen(true)}}>삭제</Button>
                             <Button variant='outlined' sx={{width:'10%'}} onClick={()=>{setOpen(true)}}>수정</Button>
                         </Stack>
                      }
@@ -84,6 +96,14 @@ export default function WorkDetail(){
                     setsubmitData={setsubmitData}
                     onClose={onClose}
                 ></EditSubmitModal>:null
+        }
+        {
+            alertOpen && (
+            <DeleteAlertModal
+                onClose={()=>{setAlertOpen();}}
+                deleteData={submitData}
+                onClickDelete={onClickDelete}
+            />)
         }
         </>
     );

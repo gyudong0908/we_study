@@ -4,16 +4,28 @@ import dayjs from 'dayjs';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Typography, Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button } from '@mui/material';
 import EditWorkModal from '../MyModal/EditWorkModal';
+import DeleteAlertModal from '../MyModal/DeleteAlertModal';
+import axios from 'axios';
 
 export default function WorkAccordion({ isTeacher, assignments, topicId, works, setWorks }) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [target, setTarget] = useState('');
+  const [isAlertOpen, setAlertOpen] = useState(false);
+  const [deleteData, setDeleteData] = useState({});  
 
   useEffect(() => {
     // filteredAssignments 배열 내의 모든 객체의 topicId를 출력
     console.log('assignments:', assignments);
   }, [assignments]);
 
+  function onClickDelete(target) {
+    axios.delete(`http://localhost:8081/work?workId=${target.id}`, { withCredentials: true }).then(() => {
+      const newWorks = works.map(curriculum => {return {...curriculum, Works:curriculum.Works.filter(work=>work.id !== target.id)}});
+      setWorks(newWorks);
+    }).catch(err => {
+      console.log(err);
+    })
+  }  
   return (
     <>
       {assignments && assignments.map((assignment, index) => (
@@ -50,6 +62,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
                 </Link>
                 <Button variant="outlined" sx={{width:'10%'}}>삭제</Button>
                 <Button variant="outlined" onClick={()=>{setModalOpen(true); setTarget(assignment);}} sx={{width:'10%'}}>수정</Button>
+
               </Stack>
             )}
             {!isTeacher&& (
@@ -69,6 +82,15 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
             works={works}
             setWorks={setWorks}
             onClose={()=>{setModalOpen(false)}} />
+        )
+      }
+      {
+        isAlertOpen && (
+          <DeleteAlertModal
+            onClose={()=>{setAlertOpen(false)}}
+            deleteData = {deleteData}
+            onClickDelete = {onClickDelete}
+           />
         )
       }
     </>
