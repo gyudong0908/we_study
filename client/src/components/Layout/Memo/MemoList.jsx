@@ -1,30 +1,26 @@
-import { React, useState } from 'react';
-import { Stack, Grid, Typography } from '@mui/material';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { Stack, Typography, Button } from "@mui/material";
+import * as React from "react";
+import dayjs from 'dayjs';
+import CloseIcon from '@mui/icons-material/Close';
 
-
-export default function MemoList({memos, onClickHandler, onClickDelete}){
-   
-    return(
-        <Stack sx={{padding:'10px 30px'}}>
+export default function MemoList({ memos, moveView, moveCreate, deleteMemo }) {
+    return (
+        <Stack marginTop={2}>
             {
-                memos.map((memo)=>(
-                    <>
-                    <Grid key={memo.id} container spacing={2}>
-                        <Grid item xs={6} sx={{cursor:'pointer'}} onClick={()=>{onClickHandler(memo.id)}}>
-                            <Typography  variant='subtitle1'>{memo.title}</Typography>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Stack sx={{ mb: 1, float: 'right' }} direction='row'>
-                                <Typography variant='caption'>{new Date(memo.createdAt).toLocaleDateString().slice(0,-1)}</Typography>
-                                <CloseRoundedIcon onClick={()=>{console.log(memo.id);onClickDelete(memo.id)}} sx={{cursor:'pointer', fontSize:'large'}}></CloseRoundedIcon>
-                            </Stack>
-                        </Grid>
-                    </Grid>
-                    </>
-
+                memos.map(memo => (
+                    <Stack direction='row' justifyContent='space-between' marginTop={2}>
+                        <Typography onClick={() => { moveView(memo); }} sx={{ cursor: 'pointer' }}>{memo.title}</Typography>
+                        <Stack direction='row'>
+                            <Typography>{dayjs(memo.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
+                            <CloseIcon sx={{ cursor: 'pointer' }} onClick={() => { deleteMemo(memo.id) }}></CloseIcon>
+                        </Stack>
+                    </Stack>
                 ))
             }
+            <Button
+                sx={{ position: 'absolute', bottom: 0, left: '42%' }}
+                onClick={moveCreate}
+            >생성하기</Button>
         </Stack>
-    );
-};
+    )
+}
