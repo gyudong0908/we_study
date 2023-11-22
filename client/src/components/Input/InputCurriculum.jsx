@@ -14,6 +14,11 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
     const [title,setTitle] = useState('');
     const [content,setContent] = useState('');
     const {classId} = useParams();
+    const [expanded, setExpanded] = useState(false);
+
+    const inputToggleChange=()=>{
+      setExpanded((prevExpanded)=>!prevExpanded);
+    };
 
     function keyUpHandler(e){
         if(e.key === 'Enter'){
@@ -35,13 +40,14 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
       };
 
       axios.post(`http://localhost:8081/curriculum?classId=${classId}`,data,{ withCredentials: true }).then(response=>{
-        setCurriculums([...curriculums,response.data])
+        setCurriculums([...curriculums,response.data]);
+        setTitle('');
+        setCurriculumList([]);
+        setExpanded(false);
       })
       .catch(err=>{
         alert('오류 발생:', err);
-      });   
-      setTitle('');
-      setCurriculumList([]);
+      }); 
     }
 
     const styles = {marginBottom:'40px'};
@@ -49,7 +55,10 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
   return (
     <div style={styles}>
     {isTeacher && (
-        <Accordion sx={{ mb: 10 }}>
+        <Accordion 
+          expanded={expanded}
+          onChange={inputToggleChange}
+          sx={{ mb: 10 }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -93,8 +102,8 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
             <Typography variant="h5" sx={{marginLeft:"10px", wordBreak:'keep-all', wordWrap:'break-word'}}>{content}</Typography>
 
             <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
-              <Button variant="outlined" type="reset">취소</Button>
-              <Button variant="outlined" tyep='submit' onClick={onClickSave}>저장</Button>
+              <Button variant="outlined" type="reset" onClick={inputToggleChange} sx={{width:'10%'}}>취소</Button>
+              <Button variant="outlined" tyep='submit' onClick={onClickSave} sx={{width:'10%'}}>저장</Button>
             </Stack>
           </AccordionDetails>
         </Accordion>

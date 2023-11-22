@@ -18,7 +18,6 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
     console.log('assignments:', assignments);
   }, [assignments]);
 
-  //파라미터 바꿔야합니다.
   function onClickDelete(target) {
     axios.delete(`http://localhost:8081/work?workId=${target.id}`, { withCredentials: true }).then(() => {
       const newWorks = works.map(curriculum => {return {...curriculum, Works:curriculum.Works.filter(work=>work.id !== target.id)}});
@@ -26,8 +25,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
     }).catch(err => {
       console.log(err);
     })
-  }
-  
+  }  
   return (
     <>
       {assignments && assignments.map((assignment, index) => (
@@ -60,16 +58,17 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
                 <Link to={{
                   pathname: `/mypage/classes/${assignment.id}/worksforteacher`,
                   }}>
-                  <Button variant="outlined">📑 제출된 과제 확인하기</Button>
+                  <Button variant="outlined" size='large'>📑 제출된 과제 확인하기</Button>
                 </Link>
-                <Button variant="outlined" onClick={()=>{setDeleteData(assignment);setAlertOpen(true) }}>삭제</Button>
-                <Button variant="outlined" onClick={()=>{setModalOpen(true); setTarget(assignment);}}>수정</Button>
+                <Button variant="outlined" sx={{width:'10%'}}>삭제</Button>
+                <Button variant="outlined" onClick={()=>{setModalOpen(true); setTarget(assignment);}} sx={{width:'10%'}}>수정</Button>
+
               </Stack>
             )}
             {!isTeacher&& (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
                 <Link to={`/mypage/classes/${assignment.id}/worksforstudent`}>
-                  <Button variant="outlined">📑 과제 제출하기</Button>
+                  <Button variant="outlined" size='large'>📑 과제 제출하기</Button>
                 </Link>
               </Stack>
             )}

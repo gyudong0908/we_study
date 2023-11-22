@@ -31,12 +31,13 @@ export default function ProfileCardModal({open, handleClose, userId}){
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 1000,
-        height: 500,
-        // background: 'none',        
+        // height: 500,       
         background : 'linear-gradient(to bottom, #0091ea 25%, 75%, #6200ea)',
         borderRadius: '20px',
         boxShadow: 24,
         p: 4,
+        alignItems:'center',
+        zIndex: '1',
       };
     return (
         <>
@@ -50,7 +51,7 @@ export default function ProfileCardModal({open, handleClose, userId}){
                     open={open}
                     sx={style}
                     >
-                    <Stack sx={{ background: 'white', margin: '20px', height:'100%', borderRadius: '20px', }}>
+                    <Stack sx={{ background: 'white', margin:'20px', height:'100%', borderRadius: '20px', width:'95%'}}>
                     <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
                         Profile
                     </DialogTitle>
@@ -61,26 +62,31 @@ export default function ProfileCardModal({open, handleClose, userId}){
                         position: 'absolute',
                         right: 8,
                         top: 8,
-                        color: 'black',
+                        color: 'white',
                         }}
                     >
                         <CloseIcon />
                     </IconButton>
                     <DialogContent dividers>  
-                    <Stack spacing={4}>
-                        <Stack direction='row' alignItems='center' spacing={2}>
+                    <Stack spacing={4} sx={{padding:'15px'}}>
+                        <Stack direction='row' alignItems='center' spacing={5}>
                             <Avatar alt="Travis Howard" src={userData.downloadPath} sx={{width: 100, height:100}}/>          
-                        <Stack direction='row' spacing={4}>
-                            <Typography variant="h5">이름: {userData.nickName}</Typography>
-                            <Typography variant="h5">생년월일: {dayjs(userData.birthDay).format('YYYY년MM월DD일')}</Typography>
+                            <Stack direction={'column'} spacing={2}>
+                                <Stack direction='row'>
+                                    <Typography variant="h5" mr={5}>이름 _ {userData.nickName}</Typography>
+                                    <Typography variant="h5">성별 _ {userData.gender}</Typography>
+                                </Stack>
+                                <Stack direction='row' spacing={5}>
+                                    <Typography variant="h5">직업 _ {userData.job}</Typography>
+                                    <Typography variant="h5">생년월일 _ {dayjs(userData.birthDay).format('YYYY/MM/DD')}</Typography>
+                                </Stack>
+                                <Typography variant="h5">이메일 _ {userData.email}</Typography>
+                            </Stack>
                         </Stack>
-                    </Stack>
-                    <Stack direction='row' justifyContent='space-between'>
-                        <Typography variant="h5">직업: {userData.job}</Typography>
-                        <Typography variant="h5">성별: {userData.gender}</Typography>
-                        <Typography variant="h5">이메일: {userData.email}</Typography>
-                    </Stack>
-                    <Typography variant="h5">목표: {userData.goal}</Typography>
+                        <Stack direction='column' spacing={2}>
+                            <Typography variant="h5" xs={{wordBreak:'keep-all', wordWrap:'break-word'}}>📌 목표 _ {userData.goal}</Typography>
+                            <Typography variant='h5' xs={{wordBreak:'keep-all', wordWrap:'break-word'}}>📌 한 줄 소개 _ {userData.aboutMe}</Typography>
+                        </Stack>
                     </Stack>
                     </DialogContent>
                     </Stack>

@@ -59,18 +59,25 @@ export default function WorksForStudent(){
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
-                        id="work-header">
+                        id="work-header"
+                        sx={{margin:'5px'}}
+                        >
                         <Grid container spacing={0} sx={{ alignItems:'center'}}>
-                        <Grid item xs={6}>
-                            <Typography variant='h6'>{workData.title}</Typography>
+                        <Grid item xs={10}>
+                            <Typography variant='h6' sx={{wordBreak:'keep-all', wordWrap:'break-word'}}>{workData.title}</Typography>
                         </Grid>
-                        <Grid item xs={6} sx={{paddingRight:'5px'}}>
+                        <Grid item xs={2} sx={{paddingRight:'5px'}}>
                             <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>{dayjs(workData.createAt).format('YYYY-MM-DD hh:mm A')}</Typography>
                         </Grid>
                         </Grid>
                     </AccordionSummary>
-                    <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-                        <Typography variant='body1'>{workData.description}</Typography>
+                    <AccordionDetails sx={{ whiteSpace: 'pre-line', margin:'5px'}}>
+                        <Stack sx={{ mr:2, ml:2, mb:2}}>
+                            <Typography variant='subtitile1' sx={{fontWeight:'bold'}}>🔔 과제 마감 기한 : {dayjs(workData.dueDateTime).format('YYYY년 MM월 DD일 hh:mm A')}</Typography>
+                        </Stack>
+                        <Stack sx={{mt:2, mr:2, ml:2, mb:3}}>
+                            <Typography variant='body1' sx={{wordBreak:'keep-all', wordWrap:'break-word'}}>{workData.description}</Typography>
+                        </Stack>
                     </AccordionDetails>
                 </Accordion>
             </Stack>
@@ -125,6 +132,12 @@ function SubmitWork({submitData, setSubmitData, workId}){
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [file, setFile] = useState('');
+    const [expanded, setExpanded] = useState(false);
+
+    const inputToggleChange=()=>{
+        setExpanded((prevExpanded)=>!prevExpanded);
+      };
+
     function submit(){
         axios.post(`http://localhost:8081/create/submit?workId=${workId}`, { title: title, content:content, file:file}, {
             withCredentials: true,
@@ -136,12 +149,16 @@ function SubmitWork({submitData, setSubmitData, workId}){
             setTitle('');
             setContent('');
             setFile('');
+            setExpanded(false);
         }).catch(err=>{
             console.log(err);
         })
     }
     return(
-        <Accordion sx={{ mb: 10, borderRadius:'10px' }}>
+        <Accordion 
+            expanded={expanded}
+            onChange={inputToggleChange}
+            sx={{ mb: 10, borderRadius:'10px' }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -173,8 +190,9 @@ function SubmitWork({submitData, setSubmitData, workId}){
               onChange={(e)=>{setContent(e.target.value)}}
             />
             <InputFileUpload setFile={setFile} file={file} />
-            <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'10px'}}>
-              <Button variant="outlined" onClick={submit}>제출</Button>
+            <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop:'10px', }}>
+                <Button variant="outlined" onClick={inputToggleChange} sx={{width:'10%'}}>취소</Button>
+                <Button variant="outlined" onClick={submit}  sx={{width:'10%'}}>제출</Button>
             </Stack>
           </AccordionDetails>
         </Accordion>

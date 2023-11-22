@@ -25,19 +25,20 @@ export default function MyProfileSetting() {
     }
     console.log(user)
     return (
-        <Stack spacing={4}>
+        <>
             {user.userData !== undefined ?
                 <>
-                    <Stack direction='row' justifyContent='space-between'>
-                        <Typography variant="h2" fontWeight="bold">프로필</Typography>
-                        <Button variant="contained" size='large' sx={{ marginBottom: '30px' }} onClick={saveProfile}>저장</Button>
+                    <Typography variant='h4' sx={{mb:3, fontWeight: 'bold', color:'#0091ea'}}>프로필</Typography>
+                    <Stack sx={{alignItems:'center', mb:3}}>
+                        <ProfileCard userData={user.userData} newUserData={newUserData} setNewUserData={setNewUserData} />
                     </Stack>
-                    <ProfileCard userData={user.userData} newUserData={newUserData} setNewUserData={setNewUserData}></ProfileCard>
-                    <Typography variant="h2" fontWeight="bold">클래스 별 알림 설정</Typography>
+                    <Button variant="outlined" size='large' sx={{ float:'right', width:'20%'}} onClick={saveProfile}>저장</Button>
+
+                    <Typography variant='h4' sx={{mb:3, fontWeight: 'bold', color:'#0091ea', mt:15}}>클래스 별 알림 설정</Typography>
                     <SettiingAlarm></SettiingAlarm>
                 </> : null
             }
-        </Stack>
+        </>
 
     )
 }

@@ -110,13 +110,13 @@ export default function WorkDetail(){
 }
 
 function InputGrade({submitData, setsubmitData, submitId}){
-    const [grade, setGrade] = useState('');
+    const [grade, setGrade] = useState();
     const [feedback, setFeedback] = useState('');
     function onSave(){
-        axios.put(`http://localhost:8081/submit?submitId=${submitId}`,{grade:grade, feedback:feedback}, {withCredentials: true}).then(()=>{
+        axios.put(`http://localhost:8081/submit?submitId=${submitId}`,{grade:grade, feedback:feedback? feedback: submitData.feedback }, {withCredentials: true}).then(()=>{
             setGrade('');
             setFeedback('');
-            setsubmitData({...submitData, grade: grade, feedback: feedback});
+            setsubmitData({...submitData, grade: grade, feedback:feedback? feedback: submitData.feedback});
         }).catch(err=>{
             console.log(err);
         })
@@ -182,7 +182,7 @@ function CheckGrade({submitData}){
                             </Stack>
                         </Stack>
                     </Stack>
-                    <Stack direction='row' spacing={1} sx={{justifyContent:'flex-end',alignItems:'center',}}>
+                    <Stack direction='row' spacing={1} sx={{justifyContent:'flex-end',alignItems:'center', }}>
                         <Button variant='outlined' sx={{width:'10%'}}>삭제</Button>
                         <Button variant='outlined' sx={{width:'10%'}}>수정</Button>
                     </Stack> 
