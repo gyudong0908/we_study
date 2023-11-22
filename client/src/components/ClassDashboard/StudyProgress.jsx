@@ -16,14 +16,22 @@ function StudyProgress(){
 
 function StudentTable(students){
     return(
-        <TableContainer sx={{marginBottom:'30px'}}>
+        <TableContainer sx={{marginBottom:'30px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius:'10px'}}>
             <Table sx={{ width:'100%' }} aria-label='study progress table'>
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center" sx={{ borderBottom: '1px solid black' }}>학생명</TableCell>
-                        <TableCell align="center" sx={{ borderBottom: '1px solid black' }}>출결</TableCell>
-                        <TableCell align="center" sx={{ borderBottom: '1px solid black' }}>과제 제출</TableCell>
-                        <TableCell align="center" sx={{ borderBottom: '1px solid black' }}>퀴즈 제출</TableCell>
+                        <TableCell align="center" sx={{ borderBottom: '0.5px solid #333' }}>
+                            <Typography variant='subtitle1'>학생명</Typography>
+                        </TableCell>
+                        <TableCell align="center" sx={{ borderBottom: '0.5px solid #333' }}>
+                            <Typography variant='subtitle1'>출결</Typography>
+                        </TableCell>
+                        <TableCell align="center" sx={{ borderBottom: '0.5px solid #333' }}>
+                            <Typography variant='subtitle1'>과제 제출률</Typography>
+                        </TableCell>
+                        <TableCell align="center" sx={{ borderBottom: '0.5px solid #333' }}>
+                            <Typography variant='subtitle1'>퀴즈 제출률</Typography>
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

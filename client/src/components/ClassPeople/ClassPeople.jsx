@@ -1,4 +1,4 @@
-import { Stack, Grid, styled, Button, Box } from "@mui/material";
+import { Stack, Grid, styled, Button, Box , Avatar} from "@mui/material";
 import { Typography } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { purple } from '@mui/material/colors';
@@ -28,7 +28,7 @@ export default function PeopleComponent({ people }) {
     return (
         <Grid container columns={24}>
             <Grid item xs={8} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <AccountCircleIcon sx={{ fontSize: '40px', marginY: 'auto' }} />
+                <Avatar sx={{ fontSize: '40px', marginY: 'auto' }} src={people.downloadPath? people.downloadPath : ''}/>
                 <Typography variant='h6' sx={{ textAlign: 'left', marginLeft: '10px' }}>{people.nickName}</Typography>
             </Grid>
 

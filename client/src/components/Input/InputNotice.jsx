@@ -72,10 +72,8 @@ export default function InputNotice({ isTeacher, notices, setNotices}) {
               required
             />
             <Stack direction="row" justifyContent="flex-end" gap={1}>
-              <Button variant="outlined" type="reset">
-                취소
-              </Button>
-              <Button variant="outlined" onClick={onClickSave}>저장</Button>
+              <Button variant="outlined" type="reset" onClick={inputToggleChange} sx={{width:'10%'}}>취소</Button>
+              <Button variant="outlined" onClick={onClickSave} sx={{width:'10%'}}>저장</Button>
             </Stack>
           </AccordionDetails>
         </Accordion>

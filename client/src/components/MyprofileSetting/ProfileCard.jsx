@@ -28,9 +28,9 @@ export default function ProfileCard({ userData, newUserData, setNewUserData }) {
     reader.readAsDataURL(profile);
   }
   return (
-    <Card sx={{ maxWidth: '600px' }}>
+    <Card sx={{ maxWidth: '700px' }}>
       <CardContent>
-        <Stack spacing={2}>
+        <Stack spacing={3}>
           <Stack direction='row' justifyContent='space-between'>
             <Stack direction='row' alignItems='center'>
               <Avatar alt="Remy Sharp" sx={{ width: 60, height: 60, marginLeft: '10px', marginRight: '10px' }} src={profile ? profile : userData.downloadPath} />
@@ -70,6 +70,8 @@ export default function ProfileCard({ userData, newUserData, setNewUserData }) {
           </Stack>
           <TextField id="filled-basic" label="학습 목적"
             defaultValue={userData.goal} onChange={(e) => { setNewUserData({ ...newUserData, goal: e.target.value }) }} />
+          <TextField id="filled-basic" label="한 줄 소개"
+            defaultValue={userData.aboutMe} onChange={(e) => { setNewUserData({ ...newUserData, aboutMe: e.target.value }) }} />
         </Stack>
       </CardContent>
     </Card>

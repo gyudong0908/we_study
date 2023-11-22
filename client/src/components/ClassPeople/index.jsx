@@ -52,6 +52,7 @@ export default function ClassPeople() {
                     })
                 }
             </Stack>
+            
         </Stack>
     )
 }

@@ -50,6 +50,10 @@ module.exports = (sequelize, DataTypes) => {
     downloadPath: {
       type: DataTypes.TEXT,
     },
+    aboutMe: {
+      type: DataTypes.TEXT,
+    },
+    
 
   }, {
     sequelize,
