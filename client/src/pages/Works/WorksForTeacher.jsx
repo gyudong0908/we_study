@@ -56,7 +56,6 @@ export default function WorksForTeacher(){
             }}>
 
             <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
-
                 <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📑 제출된 과제 확인하기</Typography>
             </Stack>
             <Stack sx={{mb:2, alignItems:'flex-end'}}>
@@ -67,18 +66,25 @@ export default function WorksForTeacher(){
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
-                        id="work-header">
+                        id="work-header"
+                        sx={{margin:'5px'}}
+                    >
                         <Grid container spacing={0} sx={{ alignItems:'center'}}>
-                        <Grid item xs={6}>
-                            <Typography variant='h6'>{uploadedWorks.title}</Typography>
+                        <Grid item xs={10}>
+                            <Typography variant='h6' sx={{wordBreak:'keep-all', wordWrap:'break-word'}}>{uploadedWorks.title}</Typography>
                         </Grid>
-                        <Grid item xs={6} sx={{paddingRight:'5px'}}>
+                        <Grid item xs={2} sx={{paddingRight:'5px'}}>
                             <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>{dayjs(uploadedWorks.createAt).format('YYYY-MM-DD hh:mm A')}</Typography>
                         </Grid>
                         </Grid>
                     </AccordionSummary>
-                    <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-                        <Typography variant='body1'>{uploadedWorks.description}</Typography>
+                    <AccordionDetails sx={{ whiteSpace: 'pre-line', margin:'5px'}}>
+                        <Stack sx={{ mr:2, ml:2, mb:2}}>
+                            <Typography variant='subtitile1' sx={{fontWeight:'bold'}}>🔔 과제 마감 기한 : {dayjs(uploadedWorks.dueDateTime).format('YYYY년 MM월 DD일 hh:mm A')}</Typography>
+                        </Stack>
+                        <Stack sx={{mt:2, mr:2, ml:2,mb:3}}>
+                            <Typography variant='body1' sx={{wordBreak:'keep-all', wordWrap:'break-word'}}>{uploadedWorks.description}</Typography>
+                        </Stack>
                     </AccordionDetails>
                 </Accordion>
             </Stack>

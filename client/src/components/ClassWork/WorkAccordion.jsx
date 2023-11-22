@@ -3,35 +3,56 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Typography, Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button } from '@mui/material';
+import EditWorkModal from '../MyModal/EditWorkModal';
 
-export default function WorkAccordion({ isTeacher, assignments, topicId }) {
+export default function WorkAccordion({ isTeacher, assignments, topicId, works, setWorks }) {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [target, setTarget] = useState('');
+  const [isAlertOpen, setAlertOpen] = useState(false);
+  const [deleteNotice, setDeleteNotice] = useState({});
 
   useEffect(() => {
     // filteredAssignments 배열 내의 모든 객체의 topicId를 출력
     console.log('assignments:', assignments);
   }, [assignments]);
 
+  //파라미터 바꿔야합니다.
+  function onClickDelete(target) {
+    axios.delete(`http://localhost:8081/curriculum?curriculumId=${target.id}`, { withCredentials: true }).then(() => {
+      const newCurriculums = curriculums.filter(curriculum => curriculum.id !== target.id);
+      setCurriculums(newCurriculums);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
   return (
     <>
       {assignments && assignments.map((assignment, index) => (
-        <Accordion key={index}>
+        <Accordion key={index} >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
             id={`work-header-${index}`}
+            sx={{margin:'5px'}}
           >
             <Grid container spacing={0} sx={{ alignItems:'center'}}>
-              <Grid item xs={6}>
-                <Typography variant='h6'>{assignment.title}</Typography>
+              <Grid item xs={10}>
+                <Typography variant='h6' sx={{wordBreak:'keep-all', wordWrap:'break-word'}}>{assignment.title}</Typography>
               </Grid>
-              <Grid item xs={6} sx={{paddingRight:'5px'}}>
+              <Grid item xs={2} sx={{paddingRight:'5px'}}>
                 <Typography variant='caption' sx={{display:'flex', justifyContent:'flex-end'}}>{dayjs(assignment.createdAt).format('YYYY년MM월DD일 hh:mm A')}</Typography>
               </Grid>
-            </Grid>
+            </Grid> 
           </AccordionSummary>
-          <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-            {assignment.description}
+          <AccordionDetails sx={{ whiteSpace: 'pre-line', margin:'5px'}}>
+            <Stack sx={{ mr:2, ml:2, mb:4}}>
+              <Typography variant='subtitile1' sx={{fontWeight:'bold'}}>🔔 과제 마감 기한 : {dayjs(assignment.dueDateTime).format('YYYY년 MM월 DD일 hh:mm A')}</Typography>
+            </Stack>
+            <Stack sx={{mt:2, mr:2, ml:2, mb:6}}>
+              <Typography variant='body1' sx={{wordBreak:'keep-all', wordWrap:'break-word'}}>{assignment.description}</Typography>
+            </Stack>
+    
             {isTeacher&& (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
                 <Link to={{
@@ -40,7 +61,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId }) {
                   <Button variant="outlined">📑 제출된 과제 확인하기</Button>
                 </Link>
                 <Button variant="outlined">삭제</Button>
-                <Button variant="outlined">수정</Button>
+                <Button variant="outlined" onClick={()=>{setModalOpen(true); setTarget(assignment);}}>수정</Button>
               </Stack>
             )}
             {!isTeacher&& (
@@ -53,6 +74,15 @@ export default function WorkAccordion({ isTeacher, assignments, topicId }) {
           </AccordionDetails>
         </Accordion>
       ))}
+      {
+        isModalOpen && (
+          <EditWorkModal
+            target={target}
+            works={works}
+            setWorks={setWorks}
+            onClose={()=>{setModalOpen(false)}} />
+        )
+      }
     </>
   );
 }

@@ -14,8 +14,8 @@ export default function ClassCard({ title, section, description }) {
           <Stack sx={{mb:2}}>
             <Typography variant='subtitle1' sx={{color:'#757575',}}>📌 클래스 소개</Typography>
           </Stack>
-          <Stack sx={{padding:'30px'}}>
-            <Typography variant='subtitle1'>{description}</Typography>
+          <Stack >
+            <Typography variant='subtitle1' sx={{wordBreak:'keep-all', wordWrap:'break-word'}}>{description}</Typography>
           </Stack>
 
         </Stack>  
