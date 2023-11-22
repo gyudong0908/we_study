@@ -23,7 +23,13 @@ export default function MemoCreate({ moveList, createMemo }) {
                 onChange={(e) => { setContent(e.target.value) }}
                 value={content}
             />
-            <Button onClick={() => { createMemo({ title: title, content: content }); moveList(); }}>생성하기</Button>
+            <Button onClick={() => {
+                if (title === '') {
+                    alert('제목은 필수로 입력해야 합니다.');
+                    return
+                }
+                createMemo({ title: title, content: content }); moveList();
+            }}>생성하기</Button>
         </Stack>
     )
 }

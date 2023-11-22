@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
 export default function MemoEdit({ selectMemo, moveList, editMemo }) {
-    const [title, setTitle] = React.useState('');
-    const [content, setContent] = React.useState('');
+    const [title, setTitle] = React.useState(null);
+    const [content, setContent] = React.useState(null);
     return (
         <Stack sx={{ margin: '4px' }}>
             <ArrowBackRoundedIcon onClick={moveList} sx={{ cursor: 'pointer' }} />
@@ -23,7 +23,13 @@ export default function MemoEdit({ selectMemo, moveList, editMemo }) {
                 defaultValue={selectMemo.content}
                 onChange={(e) => { setContent(e.target.value) }}
             />
-            <Button onClick={() => { editMemo(selectMemo.id, { title: title, content: content }); moveList(); }}>변경하기</Button>
+            <Button onClick={() => {
+                if (title === '') {
+                    alert('제목은 필수로 입력해야 합니다.');
+                    return
+                }
+                editMemo(selectMemo.id, { title: title != null ? title : selectMemo.title, content: content != null ? content : selectMemo.content }); moveList();
+            }}>변경하기</Button>
         </Stack>
     )
 }
