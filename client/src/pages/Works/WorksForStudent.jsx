@@ -21,14 +21,14 @@ export default function WorksForStudent() {
     };
 
     function getSubmits() {
-        axios.get(`http://localhost:8081/submits?workId=${workId}`, { withCredentials: true }).then((response) => {
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/submits?workId=${workId}`, { withCredentials: true }).then((response) => {
             setSubmitData(response.data)
         }).catch(err => {
             console.log(err);
         })
     }
     function getWork() {
-        axios.get(`http://localhost:8081/work?workId=${workId}`, { withCredentials: true }).then(response => {
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/work?workId=${workId}`, { withCredentials: true }).then(response => {
             console.log(response.data)
             setWorkData(response.data);
         }).catch(err => {
@@ -145,7 +145,7 @@ function SubmitWork({ submitData, setSubmitData, workId }) {
     };
 
     function submit() {
-        axios.post(`http://localhost:8081/create/submit?workId=${workId}`, { title: title, content: content, file: file }, {
+        axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/create/submit?workId=${workId}`, { title: title, content: content, file: file }, {
             withCredentials: true,
             headers: {
                 'Content-Type': 'multipart/form-data',

@@ -15,7 +15,7 @@ export default function WorksForTeacher() {
     const [submitData, setSubmitData] = useState([]);
 
     function getUploadedWorks() {
-        axios.get(`http://localhost:8081/work?workId=${workId}`, { withCredentials: true }).then(data => {
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/work?workId=${workId}`, { withCredentials: true }).then(data => {
             setUploadedWorks(data.data);
             console.log(data);
         }).catch(err => {
@@ -24,7 +24,7 @@ export default function WorksForTeacher() {
     }
 
     function getSubmits() {
-        axios.get(`http://localhost:8081/submits?workId=${workId}`, { withCredentials: true }).then((response) => {
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/submits?workId=${workId}`, { withCredentials: true }).then((response) => {
             setSubmitData(response.data)
         }).catch(err => {
             console.log(err);

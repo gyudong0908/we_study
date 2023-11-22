@@ -25,7 +25,7 @@ export default function Chat({ closeChat }) {
     },
   }))
   function getClassChats() {
-    axios.get(`http://localhost:8081/classchats`, { withCredentials: true }).then((response) => {
+    axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/classchats`, { withCredentials: true }).then((response) => {
       setChatUsers(response.data)
     }).catch(err => {
       console.log(err);

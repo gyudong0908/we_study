@@ -2,7 +2,7 @@ import React from 'react';
 import { Stack, Typography, Modal, Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setClassCards } from '../../reducer/classCardsSlice'; 
+import { setClassCards } from '../../reducer/classCardsSlice';
 import axios from 'axios';
 
 const style = {
@@ -29,9 +29,9 @@ function CreateClassModal({ open, handleClose }) {
         title: title,
         section: teacher,
         description: description,
-      }      
-      
-      axios.post('http://localhost:8081/class', data, { withCredentials: true }).then((response) => {
+      }
+
+      axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/class`, data, { withCredentials: true }).then((response) => {
         dispatch(setClassCards([response.data]));
       }).catch(err => {
         console.log(err);

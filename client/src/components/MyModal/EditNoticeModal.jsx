@@ -16,22 +16,22 @@ const style = {
 };
 
 function EditNoticeModal({ onClose, target, notices, setNotices }) {
-    const [editTitle, setEditTitle] = useState(target.title);
-    const [editContent, setEditContent] = useState(target.content);
-    console.log(target);
-    
-    const UpdateNotice =()=>{
-        const updateData = {
-            title: editTitle,
-            content: editContent,
-            updatedAt: new Date()
-        }
+  const [editTitle, setEditTitle] = useState(target.title);
+  const [editContent, setEditContent] = useState(target.content);
+  console.log(target);
 
-        axios.put(`http://localhost:8081/notice?noticeId=${target.id}`, updateData, { withCredentials: true }).then(() => {
-            setNotices(notices.map(notice=>(notice.id === target.id? updateData :notice )));
-        }).catch(err => {
-            console.log(err);
-        })
+  const UpdateNotice = () => {
+    const updateData = {
+      title: editTitle,
+      content: editContent,
+      updatedAt: new Date()
+    }
+
+    axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/notice?noticeId=${target.id}`, updateData, { withCredentials: true }).then(() => {
+      setNotices(notices.map(notice => (notice.id === target.id ? updateData : notice)));
+    }).catch(err => {
+      console.log(err);
+    })
   }
 
   return (
@@ -48,7 +48,7 @@ function EditNoticeModal({ onClose, target, notices, setNotices }) {
               variant="outlined"
               fullWidth
               rows={8}
-              sx={{ mt:3 }}
+              sx={{ mt: 3 }}
               required
               onChange={(e) => { setEditTitle(e.target.value); }}
               value={editTitle}
@@ -68,7 +68,7 @@ function EditNoticeModal({ onClose, target, notices, setNotices }) {
           </Stack>
           <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 2 }}>
             <Button variant="outlined" type="reset" onClick={onClose}>취소</Button>
-            <Button variant="outlined" onClick={()=>{UpdateNotice(); onClose();}}>저장</Button>
+            <Button variant="outlined" onClick={() => { UpdateNotice(); onClose(); }}>저장</Button>
           </Stack>
         </Stack>
       </Modal>

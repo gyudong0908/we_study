@@ -16,7 +16,7 @@ export default function MyPage() {
   const fetchCardData = async () => {
     dispatch(deleteClassCards());
     try {
-      const response = await axios.get('http://localhost:8081/classes', { withCredentials: true });
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/classes`, { withCredentials: true });
       const createdClassData = response.data;
       console.log(createdClassData);
       dispatch(setClassCards(createdClassData))
@@ -93,16 +93,16 @@ function bindedClassCard(data, navigate) {
         <Stack sx={{ backgroundColor: '#0092ea', width: '100%', height: '40%', borderRadius: '4px', opacity: '80%', mb: 2 }} />
         <Typography variant="h5"
           sx={{
-            whiteSpace:'nowrap',
-            overflow:'hidden',
-            textOverflow:'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}>{data.title}</Typography>
-        <Typography variant="subtitle1" sx={{mb:4, color:'#757575'}}>🧑‍🏫 {data.section}</Typography>
-        <Typography variant="body2" 
+        <Typography variant="subtitle1" sx={{ mb: 4, color: '#757575' }}>🧑‍🏫 {data.section}</Typography>
+        <Typography variant="body2"
           sx={{
-            whiteSpace:'nowrap',
-            overflow:'hidden',
-            textOverflow:'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}>{data.description}</Typography>
       </CardContent>
     </Card>

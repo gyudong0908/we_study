@@ -15,7 +15,7 @@ export default function WorkDetail() {
     const [alertOpen, setAlertOpen] = useState(false);
 
     function getSubmitData() {
-        axios.get(`http://localhost:8081/submit?submitId=${submitId}`, { withCredentials: true }).then(response => {
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, { withCredentials: true }).then(response => {
             console.log(response.data)
             setsubmitData(response.data);
         }).catch(err => {
@@ -31,7 +31,7 @@ export default function WorkDetail() {
         getSubmitData();
     }, [])
     function onClickDelete(target) {
-        axios.delete(`http://localhost:8081/submit?submitId=${target.id}`, { withCredentials: true }).then(response => {
+        axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${target.id}`, { withCredentials: true }).then(response => {
             navigate(-1);
         }).catch(err => {
             console.log(err);
@@ -113,7 +113,7 @@ function InputGrade({ submitData, setsubmitData, submitId }) {
     const [grade, setGrade] = useState();
     const [feedback, setFeedback] = useState('');
     function onSave(editData) {
-        axios.put(`http://localhost:8081/submit?submitId=${submitId}`, editData, { withCredentials: true }).then(() => {
+        axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, editData, { withCredentials: true }).then(() => {
             if (editData.feedback) {
                 setFeedback('');
             } else if (editData.grade) {
@@ -166,7 +166,7 @@ function InputGrade({ submitData, setsubmitData, submitId }) {
 
 function CheckGrade({ submitData, submitId, setsubmitData }) {
     function initData(initData) {
-        axios.put(`http://localhost:8081/submit?submitId=${submitId}`, initData, { withCredentials: true }).then(() => {
+        axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, initData, { withCredentials: true }).then(() => {
             setsubmitData({ ...submitData, ...initData });
         }).catch(err => {
             console.log(err);

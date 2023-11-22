@@ -27,28 +27,28 @@ export default function Memo({ closeMemo }) {
         setSelectMemo(target);
     }
     function deleteMemo(targetId) {
-        axios.delete(`http://localhost:8081/memo?memoId=${targetId}`, { withCredentials: true }).then(() => {
+        axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/memo?memoId=${targetId}`, { withCredentials: true }).then(() => {
             setmemos(memos.filter(memo => memo.id !== targetId));
         }).catch(err => {
             console.log(err);
         })
     }
     function createMemo(target) {
-        axios.post(`http://localhost:8081/memo?`, target, { withCredentials: true }).then(response => {
+        axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/memo?`, target, { withCredentials: true }).then(response => {
             setmemos([...memos, response.data])
         }).catch(err => {
             console.log(err);
         })
     }
     function getMemos() {
-        axios.get(`http://localhost:8081/memos?`, { withCredentials: true }).then(response => {
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/memos?`, { withCredentials: true }).then(response => {
             setmemos(response.data);
         }).catch(err => {
             console.log(err);
         })
     }
     function editMemo(targetId, target) {
-        axios.put(`http://localhost:8081/memo?memoId=${targetId}`, target, { withCredentials: true }).then(() => {
+        axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/memo?memoId=${targetId}`, target, { withCredentials: true }).then(() => {
             setmemos(memos.map(memo => (memo.id == targetId ? { ...target, id: targetId, updateAt: new Date() } : memo)));
         }).catch(err => {
             console.log(err);
