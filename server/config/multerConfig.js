@@ -29,7 +29,23 @@ const storage = multer.diskStorage({
                 }
             })            
         } else if (req.path === '/create/submit') {
-            dynamicPart = 'submit';
+            dynamicPart = 'submit';            
+        } else if(req.path === '/submit'){
+            dynamicPart = 'submit';   
+            models.Submit.findOne({
+                where: {
+                    id: req.query.submitId
+                }
+            }).then((data) => {
+                if (data.dataValues.filePath) {
+                    fs.unlink(data.dataValues.filePath, (unlinkErr) => {
+                        if (unlinkErr && unlinkErr.code !== 'ENOENT') {
+                            console.error('Error deleting previous image:', unlinkErr);
+                            return;
+                        }
+                    });
+                }
+            })
         } else {
             console.log(req.url)
             dynamicPart = 'default_folder';

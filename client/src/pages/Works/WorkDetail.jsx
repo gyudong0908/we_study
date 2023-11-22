@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { Card, CardActions, CardContent, Button, Typography, Stack, Grid, TextField, Avatar } from '@mui/material';
+import EditSubmitModal from '../../components/MyModal/EditSubmitModal';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
 export default function WorkDetail(){
     const {submitId} = useParams();
     const [submitData, setsubmitData] = useState([]);
-
+    const [open, setOpen] = useState(false);
+    console.log(submitData)
     function getSubmitData(){
         axios.get(`http://localhost:8081/submit?submitId=${submitId}`, {withCredentials: true}).then(response=>{
             console.log(response.data)
@@ -16,6 +18,9 @@ export default function WorkDetail(){
         }).catch(err=>{
             console.log(err);
         })
+    }
+    function onClose(){
+        setOpen(false);
     }
     useEffect(()=>{
         getSubmitData();
@@ -47,7 +52,7 @@ export default function WorkDetail(){
                     <Grid container spacing={1} sx={{alignItems:'center', width:'100%'}}>
                         <Grid item><Avatar fontSize='large' src={submitData.User.downloadPath}/></Grid>
                         <Grid item><Typography variant='h6'>{submitData.User.nickName}</Typography></Grid>
-                        <Grid item><Typography variant='caption'>{dayjs(submitData.createAt).format('YYYY-MM-DD hh:mm A')}</Typography></Grid>
+                        <Grid item><Typography variant='caption'>{dayjs(submitData.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography></Grid>
                     </Grid>
                     <Stack sx={{mt:3, mb:5}}>
                         <Typography variant='h5'>{submitData.title}</Typography>
@@ -64,7 +69,7 @@ export default function WorkDetail(){
                      {submitData.grade? null:
                          <Stack direction='row' spacing={1} sx={{justifyContent:'flex-end', alignItems:'center',}}>
                             <Button variant='outlined' sx={{width:'10%'}}>삭제</Button>
-                            <Button variant='outlined' sx={{width:'10%'}}>수정</Button>
+                            <Button variant='outlined' sx={{width:'10%'}} onClick={()=>{setOpen(true)}}>수정</Button>
                         </Stack>
                      }
                 </CardContent>
@@ -72,7 +77,13 @@ export default function WorkDetail(){
             </Stack>            
             <InputGrade submitData={submitData} setsubmitData={setsubmitData} submitId={submitId}/>
             <CheckGrade  submitData={submitData}/>                    
-        </Stack>: null
+        </Stack>: null}
+        {
+            open?<EditSubmitModal 
+                    submitData={submitData}
+                    setsubmitData={setsubmitData}
+                    onClose={onClose}
+                ></EditSubmitModal>:null
         }
         </>
     );
