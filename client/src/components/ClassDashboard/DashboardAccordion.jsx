@@ -9,7 +9,7 @@ export default function DashboardAccordion({ isTeacher, curriculums, setCurricul
   const [isModalOpen, setModalOpen] = useState(false);
   const [target, setTarget] = useState('');
   const [isAlertOpen, setAlertOpen] = useState(false);
-  const [deleteNotice, setDeleteNotice] = useState({});
+  const [deleteData, setDeleteData] = useState({});
 
   function onClickDelete(target) {
     axios.delete(`http://localhost:8081/curriculum?curriculumId=${target.id}`, { withCredentials: true }).then(() => {
@@ -40,7 +40,7 @@ export default function DashboardAccordion({ isTeacher, curriculums, setCurricul
             </Stack>
             {isTeacher&& (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{marginTop:'15px'}}>
-                <Button variant="outlined" onClick={() => { setDeleteNotice(curriculum); setAlertOpen(true)}}>삭제</Button>
+                <Button variant="outlined" onClick={() => { setDeleteData(curriculum); setAlertOpen(true)}}>삭제</Button>
                 <Button variant="outlined" onClick={()=>{setModalOpen(true); setTarget(curriculum);}}>수정</Button>
               </Stack>
             )}
@@ -49,7 +49,7 @@ export default function DashboardAccordion({ isTeacher, curriculums, setCurricul
       ))}
       {
         isAlertOpen &&(
-          <DeleteAlertModal deleteNotice={deleteNotice} onClose={()=>setAlertOpen(false)} onClickDelete={onClickDelete} />
+          <DeleteAlertModal deleteData={deleteData} onClose={()=>setAlertOpen(false)} onClickDelete={onClickDelete} />
         )
       }
       {
