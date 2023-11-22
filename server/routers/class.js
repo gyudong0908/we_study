@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const axios = require('axios');
 const models = require('../models');
-const submit = require('../models/submit');
 const uuid = require('uuid');
 router.use(express.json());
 
@@ -16,9 +14,9 @@ router.post('/class', function (req, res) {
         data.update({
             code: shortBaseCode + data.dataValues.id
         }).then(() => {
-            models.Topic.create({
+            models.Curriculum.create({
                 classId: data.dataValues.id,
-                name: '기타'
+                title: '기타'
             }).then(() => {
                 models.ClassChat.create({
                     title: data.dataValues.title,
@@ -83,13 +81,15 @@ router.get('/class', function (req, res) {
 router.get('/class/submits', function (req, res) {
     const classId = req.query.classId;
     models.Class.findByPk(classId, {
-        raw: true,
         include: [{
-            model: models.Topic,
+            model: models.Curriculum,
             include: [{
                 model: models.Work,
                 include: [{
                     model: models.Submit,
+                    include:[{
+                        model: models.User
+                    }]
                 }]
             }]
         }]

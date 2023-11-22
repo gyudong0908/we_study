@@ -45,10 +45,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     filePath: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     downloadPath: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
 
   }, {

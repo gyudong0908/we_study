@@ -29,12 +29,11 @@ export default function InputWork({ isTeacher, works, setWorks}) {
     const data = {
       title: inputTitle,
       description: inputDescription,
-      dueDateTime: inputDueDateTime.toISOString(),
+      dueDateTime: inputDueDateTime.toISOString(), 
     }
 
-    axios.post(`http://localhost:8081/work?topicId=${topicId}`, data, { withCredentials:true }).then((response)=>{
-      const newWorks = works.map(work=>{return work.id === response.data.topicId? {...work, Work:[...work.Work, response.data ]}: work})
-      console.log(newWorks);
+    axios.post(`http://localhost:8081/work?curriculumId=${topicId}`, data, { withCredentials:true }).then((response)=>{
+      const newWorks = works.map(work=>{const newWork =  {...work, Works:[...work.Works, response.data]};  return work.id == response.data.curriculumId? newWork: work})
       setWorks(newWorks);
       setInputTitle('');
       setInputDescription('');
@@ -45,12 +44,6 @@ export default function InputWork({ isTeacher, works, setWorks}) {
       console.log(err);
     })
   };
-
-  
-
-  // useEffect(() => {
-  //   console.log(works.id);
-  // }, []);
 
   return (
     <div style={styles}>
@@ -78,7 +71,7 @@ export default function InputWork({ isTeacher, works, setWorks}) {
                   value={inputTopicId}
                 >
                   {works.map((topic)=>(
-                    <MenuItem key={topic.id} value={topic.name} onClick={(e)=>{setTopicId(topic.id); }} >{topic.name}</MenuItem>
+                    <MenuItem key={topic.id} value={topic.title} onClick={(e)=>{setTopicId(topic.id); }} >{topic.title}</MenuItem>
                   ))}
                 </Select>
               </FormControl>

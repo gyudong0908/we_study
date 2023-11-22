@@ -1,32 +1,16 @@
 import { React, useEffect, useState } from 'react';
-import { Link, useParams, } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Table, TableContainer, TableCell, TableBody, TableHead, TableRow,
         Grid, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Button,  } from '@mui/material';
 
 export default function WorksForTeacher(){
-    const assignmentss = {title:'과제1', content:'과제 내용입니다.'};
-    const workData = [
-        {
-            id:1,
-            name:'이동규',
-            title:'과제 제출합니다.',
-            content:'제출 과제에 대한 세부 설명입니다.',
-            date:'2023.11.16.'
-        },
-        {
-            id:2,
-            name:'최혜린',
-            title:'과제 제출!!!',
-            content:'제출 과제에 대한 세부 설명입니다.',
-            date:'2023.11.17.'
-        },
-    ];
-
     const { workId } = useParams();
     const [uploadedWorks, setUploadedWorks] = useState([]);
+    const [submitData, setSubmitData] = useState([]);
 
     function getUploadedWorks(){
         axios.get(`http://localhost:8081/work?workId=${workId}`, { withCredentials: true }).then(data=>{
@@ -36,14 +20,29 @@ export default function WorksForTeacher(){
             console.log(err);
         })
     }
+
+    function getSubmits(){
+        axios.get(`http://localhost:8081/submits?workId=${workId}`, {withCredentials: true}).then((response)=>{
+            setSubmitData(response.data)
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
     
     useEffect(()=>{
         getUploadedWorks();
+        getSubmits()
       },[workId])
 
     useEffect(() => {
         console.log('workId:', workId);
       }, [workId]);
+
+    const navigate = useNavigate();
+    const handleGoBack = () => {
+        // 이전 페이지로 이동
+        navigate(-1);
+      };
 
     return(
         <Stack
@@ -52,10 +51,16 @@ export default function WorksForTeacher(){
                 spacing: '10px',
                 marginTop: '100px',
                 marginLeft: '270px',
-                marginRight: '70px'
+                marginRight: '70px',
+                marginBottom: '200px'
             }}>
+
             <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
-                <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📎 제출된 과제 확인하기</Typography>
+
+                <Typography variant="h4" component="span" sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}}>📑 제출된 과제 확인하기</Typography>
+            </Stack>
+            <Stack sx={{mb:2, alignItems:'flex-end'}}>
+                <Button variant='outlined' sx={{width:'20%'}} onClick={handleGoBack}>목록</Button>
             </Stack>
             <Stack sx={{mb:5}}>
                 <Accordion>
@@ -78,6 +83,8 @@ export default function WorksForTeacher(){
                 </Accordion>
             </Stack>
 
+            
+
             <TableContainer sx={{boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius:'10px'}}>
             <Table sx={{ width:'100%' }} aria-label='works table'>
                 <TableHead>
@@ -94,23 +101,23 @@ export default function WorksForTeacher(){
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                {workData.map((item) => {
+                {submitData.map((item) => {
                     return(
                     <TableRow
                     key={item.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                    <TableCell component="th" scope="row" align="center">{item.name}</TableCell>
+                    <TableCell component="th" scope="row" align="center">{item.User.nickName}</TableCell>
                     <TableCell align="center" sx={{
                             align:'center', 
                             '&:hover': {
                                 backgroundColor: 'rgba(0, 0, 0, 0.1)', // 변경하고자 하는 배경 색상
                             },}}>
-                        <Link to="/mypage/classes/:classId/workdetail" style={{textDecoration:'none', color:'black'}}>
+                        <Link to={`/mypage/classes/${item.id}/workdetail`} style={{textDecoration:'none', color:'black'}}>
                             {item.title}
                         </Link>
                     </TableCell>
-                    <TableCell align="center">{item.date}</TableCell>
+                    <TableCell align="center">{dayjs(item.createdAt).format('YYYY-MM-DD hh:mm A')}</TableCell>
                     </TableRow>
                     );
                 })}

@@ -16,10 +16,9 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
     const {classId} = useParams();
 
     function keyUpHandler(e){
-        e.preventDefault();
         if(e.key === 'Enter'){
             setCurriculumList([...curriculumList,content]);
-            setContent('');
+            setContent(''); 
         }
     }
     function onClickDelete(key){
@@ -29,7 +28,7 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
     }
 
     function onClickSave(){
-      const resultString = curriculumList.join('\n');
+      const resultString = '🔹\u00a0'+curriculumList.join(`\n🔹\u00a0`);
       const data = {
         title: title,
         content: resultString,
@@ -41,13 +40,6 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
       .catch(err=>{
         alert('오류 발생:', err);
       });   
-
-      axios.post(`http://localhost:8081/topic?classId=${classId}`,{
-        name: title
-      },{ withCredentials: true }).catch(err=>{
-        alert('오류 발생:', err);
-      });
-
       setTitle('');
       setCurriculumList([]);
     }
@@ -84,15 +76,15 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
               sx={{ mb: 2 }}
               required
               value={content}
-              onChange={(e)=>{setContent(e.target.value)}}
-              onKeyUp={(e)=>{keyUpHandler(e);}}
+              onChange={(e)=>{setContent(e.target.value) }}
+              onKeyPress={(e)=>{keyUpHandler(e);}}
             />
             <Typography variant="h5" sx={{marginBottom:'15px', fontWeight:'bold'}}>{title}</Typography>
               {
                 curriculumList.map((data,key)=>{
                     return(
                         <Stack direction="row" sx={{display: 'flex', justifyContent: 'space-between'}}>
-                          <Typography  variant="body1" gutterBottom key={key} sx={{marginLeft:"10px", marginBottom:'5px'}}>🔹 {data} </Typography>
+                          <Typography  variant="body1" gutterBottom key={key} sx={{marginLeft:"10px", marginBottom:'5px'}}> 🔹 {data} </Typography>
                           <CloseRoundedIcon key={key} onClick={()=>{onClickDelete(key)}} sx={{cursor:'pointer', fontSize:'medium'}}></CloseRoundedIcon>
                         </Stack>
                     )

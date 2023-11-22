@@ -17,7 +17,7 @@ export default function MyProfileSetting() {
                 'Content-Type': 'multipart/form-data',
             },
         }).then(() => {
-            disPatch(changeUserData({ ...user, ...newUserData }));
+            disPatch(changeUserData({ ...user.userData, ...newUserData }));
             alert('저장되었습니다.');
         }).catch(err => {
             console.log(err);

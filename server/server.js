@@ -13,7 +13,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1000 * 60 * 60
+    maxAge: 10000 * 60 * 60
   },
 }));
 
@@ -44,7 +44,6 @@ app.use('/', require('./routers/class.js'));
 app.use('/', require('./routers/memo.js'));
 app.use('/', require('./routers/work.js'));
 app.use('/', require('./routers/attendance.js'));
-app.use('/', require('./routers/topic.js'));
 app.use('/', require('./routers/curriculum.js'));
 app.use('/', require('./routers/notice.js'));
 app.use('/', require('./routers/submit.js'));
@@ -66,4 +65,3 @@ models.sequelize.sync({ force: false }).then(() => {
   console.log("연결 실패");
   console.log(err);
 });
-

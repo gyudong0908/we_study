@@ -27,7 +27,6 @@ export default function ProfileCard({ userData, newUserData, setNewUserData }) {
     };
     reader.readAsDataURL(profile);
   }
-  console.log(userData.downloadPath)
   return (
     <Card sx={{ maxWidth: '600px' }}>
       <CardContent>

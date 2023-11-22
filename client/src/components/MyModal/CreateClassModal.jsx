@@ -34,7 +34,7 @@ function CreateClassModal({ open, handleClose }) {
       axios.post('http://localhost:8081/class', data, { withCredentials: true }).then((response) => {
         dispatch(setClassCards([response.data]));
       }).catch(err => {
-        alert('오류발생', err);
+        console.log(err);
       })
     }
   }
@@ -58,7 +58,7 @@ function CreateClassModal({ open, handleClose }) {
               variant="outlined"
               fullWidth
               rows={8}
-              sx={{ mt: 2 }}
+              sx={{ mt: 3 }}
               required
               onChange={(e) => { setTitle(e.target.value); }}
               value={title}

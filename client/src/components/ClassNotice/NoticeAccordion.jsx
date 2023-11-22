@@ -2,8 +2,17 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button, Typography } from '@mui/material';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { useState } from 'react';
+import EditNoticeModal from '../MyModal/EditNoticeModal';
+import DeleteAlertModal from '../MyModal/DeleteAlertModal';
+
 
 export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
+  const [deleteNotice, setDeleteNotice] = useState({});
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [target, setTarget] = useState('');
+  const [isAlertOpen, setAlertOpen] = useState(false);
+
   function onClickDelete(target) {
     axios.delete(`http://localhost:8081/notice?noticeId=${target.id}`, { withCredentials: true }).then(() => {
       const newNotices = notices.filter(notice => notice.id !== target.id);
@@ -12,6 +21,7 @@ export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
       console.log(err);
     })
   }
+
   return (
     <>
       {notices.map((notice, index) => (
@@ -26,8 +36,7 @@ export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
                 <Typography variant='h6'>{notice.title}</Typography>
               </Grid>
               <Grid item xs={6} sx={{ paddingRight: '5px' }}>
-                <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end' }}>{dayjs(notice.createdAt).format('YYYY-MM-DD hh:mm A')}</Typography>
-
+                <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end' }}>{dayjs(notice.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
               </Grid>
             </Grid>
           </AccordionSummary>
@@ -35,13 +44,25 @@ export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
             {notice.content}
             {isTeacher && (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop: '15px' }}>
-                <Button variant="outlined" onClick={() => { onClickDelete(notice) }}>삭제</Button>
-                <Button variant="outlined">수정</Button>
+                <Button variant="outlined" onClick={() => { setDeleteNotice(notice); setAlertOpen(true)}}>삭제</Button>
+                <Button variant="outlined" onClick={()=> {setModalOpen(true); setTarget(notice);}}>수정</Button>
               </Stack>
             )}
           </AccordionDetails>
+          
         </Accordion>
       ))}
+      {
+        isAlertOpen &&(
+          <DeleteAlertModal deleteNotice={deleteNotice} onClose={()=>setAlertOpen(false)} onClickDelete={onClickDelete} />
+      )
+      }
+      
+      {
+        isModalOpen && (
+          <EditNoticeModal target={target} notices={notices} setNotices={setNotices} onClose={()=>setModalOpen(false)} />
+        )
+      }
     </>
   );
 }

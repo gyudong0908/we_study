@@ -31,7 +31,7 @@ router.get('/notices', function (req, res) {
 
 router.put('/notice', function (req, res) {
     const noticeId = req.query.noticeId;
-    models.update(req.body, { where: { id: noticeId } }).then(() => {
+    models.Notice.update(req.body, { where: { id: noticeId } }).then(() => {
         res.sendStatus(200);
     }).catch(err => {
         console.log(err);

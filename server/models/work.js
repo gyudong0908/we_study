@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Work.belongsTo(models.Topic, { foreignKey: 'topicId' });
+      Work.belongsTo(models.Curriculum, { foreignKey: 'curriculumId' , onDelete: 'CASCADE'});
       Work.hasMany(models.Submit, { foreignKey: 'workId' });
     }
   }
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    topicId: {
+    curriculumId: {
       type: DataTypes.INTEGER,
     },
     title: {

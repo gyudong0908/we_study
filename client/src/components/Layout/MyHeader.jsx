@@ -1,4 +1,4 @@
-import { useState, React } from 'react';
+import { useState, React, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {AppBar, Stack, Typography, Toolbar, IconButton, Menu, Avatar, Tooltip, Badge, MenuItem} from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
@@ -23,7 +23,7 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
             border: 0,
         },
       }));
-
+      
     const location = useLocation();
     const [anchorElUser, setAnchorElUser] = useState(null);
     const handleOpenUserMenu = (event) => {
@@ -111,7 +111,9 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
                       display: { xs: 'none', md: 'flex' },
                       fontFamily: 'lobster',
                       fontWeight: 700,
-                      color: '#0091ea',
+                      background : 'linear-gradient(to bottom, #0091ea 35%, #6200ea)',
+                      WebkitBackgroundClip: 'text',
+                      color: 'transparent', 
                       textDecoration: 'none',
                       justifyContent: 'center',
                   }}>WeStudy</Typography>

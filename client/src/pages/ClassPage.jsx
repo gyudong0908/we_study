@@ -16,15 +16,19 @@ export default function ClassPage() {
   function getClassData() {
     axios.get(`http://localhost:8081/class?classId=${classId}`, { withCredentials: true }).then(data => {
       setClassData(data.data);
-      if (data.data.teacher == user.userData.id) {
-        setIsTeacher(true);
-      } else {
-        setIsTeacher(false);
+      if(user.userData){
+        if (data.data.teacher == user.userData.id) {
+          setIsTeacher(true);
+        }else{
+          setIsTeacher(false);
+        }  
       }
     });
   }
+  console.log(classData)
   useEffect(() => {
     getClassData()
+
   }, [classId, user])
   return (
 
@@ -38,7 +42,7 @@ export default function ClassPage() {
         marginBottom: '200px',
       }}
     >
-      <ClassCard title={classData.title} section={classData.section} />
+      <ClassCard title={classData.title} section={classData.section} description={classData.description}/>
       <ClassTabs
         isTeacher={isTeacher}
         classData={classData}

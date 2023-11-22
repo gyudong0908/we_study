@@ -10,11 +10,24 @@ router.get('/download/profile/:userId/:fileName', function (req, res) {
 
     const filePath = path.join(path.resolve(__dirname, '..'), `uploads/profile/${userId}`, fileName);
     if (fs.existsSync(filePath)) {
-        res.setHeader('Content-disposition', 'inline; filename=' + fileName);
+        res.setHeader('Content-disposition', 'inline; filename=' + encodeURIComponent(fileName));
         res.sendFile(filePath);
     } else {
         res.status(500).send('파일이 없습니다.');
     }
+})
+router.get('/download/submit/:userId/:fileName',function(req,res){
+    const userId = req.params.userId;
+    const fileName = req.params.fileName;
+
+    const filePath = path.join(path.resolve(__dirname, '..'), `uploads/submit/${userId}`, fileName);
+    if (fs.existsSync(filePath)) {
+        res.setHeader('Content-disposition', 'inline; filename=' + encodeURIComponent(fileName));
+        res.download(filePath);
+    } else {
+        res.status(500).send('파일이 없습니다.');
+    }
+
 })
 
 

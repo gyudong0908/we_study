@@ -5,8 +5,8 @@ const models = require('../models');
 router.use(express.json());
 
 router.post('/work', function (req, res) {
-    const topicId = req.query.topicId;
-    models.Work.create({ ...req.body, topicId: topicId }).then((data) => {
+    const curriculumId = req.query.curriculumId;
+    models.Work.create({ ...req.body, curriculumId: curriculumId }).then((data) => {
         res.status(200).send(data.dataValues);
     }).catch(err => {
         console.log(err);
@@ -16,11 +16,11 @@ router.post('/work', function (req, res) {
 
 
 router.get('/works', function (req, res) {
-    const topicId = req.query.topicId;
+    const curriculumId = req.query.curriculumId;
     models.Work.findAll({
         raw: true,
         where: {
-            topicId: topicId,
+            curriculumId: curriculumId,
         }
     }).then(works => {
         res.status(200).send(works);

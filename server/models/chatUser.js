@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            ChatUser.belongsTo(models.User, { foreignKey: 'userId' });
-            ChatUser.belongsTo(models.ClassChat, { foreignKey: 'chatId' });
+            ChatUser.belongsTo(models.User, { foreignKey: 'userId', onDelete: 'CASCADE' });
+            ChatUser.belongsTo(models.ClassChat, { foreignKey: 'chatId', onDelete: 'CASCADE' });
             ChatUser.hasMany(models.ChatMessage, { foreignKey: 'chatUserId' });
         }
     }
