@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Curriculum.belongsTo(models.Class, { foreignKey: 'classId' })
+            Curriculum.belongsTo(models.Class, { foreignKey: 'classId' , onDelete: 'CASCADE'})
             Curriculum.hasMany(models.Work, { foreignKey: 'curriculumId' });
 
         }

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Memo.belongsTo(models.User, { foreignKey: 'userId' });
+            Memo.belongsTo(models.User, { foreignKey: 'userId' , onDelete: 'CASCADE'});
         }
     }
     Memo.init({

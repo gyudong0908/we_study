@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Notice.belongsTo(models.Class, { foreignKey: 'classId' })
+            Notice.belongsTo(models.Class, { foreignKey: 'classId' , onDelete: 'CASCADE'})
         }
     }
     Notice.init({

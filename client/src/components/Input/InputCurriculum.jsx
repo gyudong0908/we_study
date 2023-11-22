@@ -16,9 +16,7 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
     const {classId} = useParams();
 
     function keyUpHandler(e){
-        e.preventDefault();
         if(e.key === 'Enter'){
-          console.log(content)
             setCurriculumList([...curriculumList,content]);
             setContent(''); 
         }
@@ -78,7 +76,7 @@ export default function InputCurriculum({ isTeacher, setCurriculums, curriculums
               sx={{ mb: 2 }}
               required
               value={content}
-              onChange={(e)=>{setContent(e.target.value)}}
+              onChange={(e)=>{setContent(e.target.value) }}
               onKeyPress={(e)=>{keyUpHandler(e);}}
             />
             <Typography variant="h5" sx={{marginBottom:'15px', fontWeight:'bold'}}>{title}</Typography>

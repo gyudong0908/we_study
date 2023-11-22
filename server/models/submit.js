@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Submit.belongsTo(models.Work, { foreignKey: 'workId' });
-      Submit.belongsTo(models.User, { foreignKey: 'userId' });
+      Submit.belongsTo(models.Work, { foreignKey: 'workId' , onDelete: 'CASCADE'});
+      Submit.belongsTo(models.User, { foreignKey: 'userId' , onDelete: 'CASCADE'});
     }
   }
   Submit.init({
