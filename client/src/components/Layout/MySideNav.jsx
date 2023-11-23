@@ -13,18 +13,61 @@ import { setClassCards, deleteClassCards } from '../../reducer/classCardsSlice';
 function MySideNav() {
     const classDatas = useSelector((state) => state.classCards);
     const user = useSelector((state) => state.userData);
+
+    const [startClicked, setStartClicked] = useState(false);
+    const [stopDisabled, setStopDisabled] = useState(true);
+
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const welcomeText = <div>✍️ 시작해볼까요?<br />{user.userData === undefined ? '' : user.userData.nickName + '님'}</div>
 
     function getClassData() {
+
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/classes`, { withCredentials: true }).then((data) => {
             dispatch(setClassCards(data.data));
         }).catch(err => {
             console.log(err);
         })
     }
+
+
+    const handleStartTime = () => {
+        const startTime = new Date(); // 현재 시각을 가져옵니다.
+        const class_Id = 1; // 예시로 클래스 ID를 1로 가정합니다. 실제 ID에 맞게 변경해주세요.
+        console.log('왜 안나와')
+        // 서버에 데이터를 업데이트하는 요청을 보냅니다.
+        axios.post(`http://localhost:8081/rank`, { startTime: startTime }, { withCredentials: true })
+            .then((response) => {
+                // 업데이트 성공 시 처리 로직
+
+                console.log('시작 시간이 업데이트되었습니다.');
+            })
+            .catch((error) => {
+                // 에러 처리 로직
+                console.log('여긴 에러')
+                console.error('시작 시간 업데이트 중 오류가 발생했습니다:', error);
+            });
+    };
+
+    const handleStopTime = () => {
+        const stopTime = new Date(); // Stop 버튼을 눌렀을 때의 현재 시각을 가져옵니다.
+
+        // 서버에 데이터를 업데이트하는 요청을 보냅니다.
+        axios.post(`http://localhost:8081/rank/stop`, { stopTime: stopTime }, { withCredentials: true })
+            .then((response) => {
+                console.log('종료 시간이 업데이트되었습니다.');
+                console.log(response.data)
+            })
+            .catch((error) => {
+                console.error('종료 시간 업데이트 중 오류가 발생했습니다:', error);
+            });
+    };
+
+
+
+
 
     useEffect(() => {
         getClassData();
@@ -47,8 +90,24 @@ function MySideNav() {
                             primaryTypographyProps={{ fontSize: '45px' }}
                             primary="00:00:00" />
                         <Stack flexDirection='row'>
-                            <ListItemButton>Start</ListItemButton>
-                            <ListItemButton>Stop</ListItemButton>
+
+                            <ListItemButton onClick={() => {
+                                handleStartTime();
+                                setStartClicked(true);
+                                setStopDisabled(false);
+                            }}
+                                disabled={startClicked}
+                            >Start</ListItemButton>
+                            <ListItemButton
+                                onClick={() => {
+                                    handleStopTime();
+                                    setStartClicked(false);
+                                    setStopDisabled(true);
+                                }}
+                                disabled={stopDisabled}
+
+                            >Stop</ListItemButton>
+
                         </Stack>
                     </ListItem>
                 </List>

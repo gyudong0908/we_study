@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Rank.belongsTo(models.User, { foreignKey: 'userId', onDelete: 'CASCADE' })
     }
   }
   Rank.init({
@@ -19,17 +20,17 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    classId: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     userId: {
       type: DataTypes.STRING,
       allowNull: false
     },
     studyTime: {
+      type: DataTypes.INTEGER,
+    },
+    startTime: {
       type: DataTypes.DATE,
-    }
+    },
+
   }, {
     sequelize,
     modelName: 'Rank', // 모델 이름 바꿔줘야함
