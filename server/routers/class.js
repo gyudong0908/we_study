@@ -119,6 +119,7 @@ router.get('/class/user', function (req, res) {
     })
 })
 
+
 router.post('/class/join', function (req, res) {
     const code = req.query.code;
     const userId = req.session.passport.user;

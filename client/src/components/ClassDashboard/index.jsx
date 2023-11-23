@@ -12,6 +12,22 @@ export default function ClassDashboard({ isTeacher }) {
   const [isLoading, setIsLoading] = useState(false);
   const { classId } = useParams();
 
+  const [progress, setProgress] = useState([]);
+
+  function getProgress() {
+    axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/submits?classId=${classId}`, { withCredentials: true }).then(data => {
+      setProgress(data.data);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+  console.log(progress);
+
+  useEffect(() => {
+    getProgress();
+  }, [classId])
+  
+
   async function getCurriculums() {
     try {
       let data = await axios.get(`http://localhost:8081/curriculums?classId=${classId}`, { withCredentials: true });

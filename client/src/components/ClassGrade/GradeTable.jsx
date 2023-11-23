@@ -54,36 +54,36 @@ const columns = [
       )
     )
   );
-    
-    return (
-      <Paper sx={{ width: '90%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 440}}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{width: 150}}>
-                <select value={selectedUser} onChange={(e)=>{setSelectedUser(e.target.value)}}>
-                <option value="">Select a user</option>
-                {
-                  [...uniqueUsers].map((user,idx)=>(
-                    <option key={idx} value={user}>
-                    {user}
-                  </option>
-                  ))
-                }
-              </select>
-              </TableCell> 
-              <TableCell sx={{width: 700}}>
-                <select value={selectedCurriculum} onChange={(e)=>{setSelectedCurriculum(e.target.value)}}>
-                <option value="">Select a Curriculum</option>
-                {curriculums.map((curriculum) =>( curriculum.Works.length !== 0?
-                  <option key={curriculum.id} value={curriculum.title}>
-                  {curriculum.title}
-                  </option>:null
-                ))}
-               </select>
-              </TableCell>   
-              <TableCell sx={{width: 100}}>              
+
+  return (
+    <Paper sx={{ width: '90%', overflow: 'hidden' }}>
+      <TableContainer sx={{ maxHeight: 440 }}>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ width: 150 }}>
+                <select value={selectedUser} onChange={(e) => { setSelectedUser(e.target.value) }}>
+                  <option value="">Select a user</option>
+                  {
+                    [...uniqueUsers].map((user, idx) => (
+                      <option key={idx} value={user}>
+                        {user}
+                      </option>
+                    ))
+                  }
+                </select>
+              </TableCell>
+              <TableCell sx={{ width: 150 }}>
+                <select value={selectedCurriculum} onChange={(e) => { setSelectedCurriculum(e.target.value) }}>
+                  <option value="">Select a Curriculum</option>
+                  {curriculums.map((curriculum) => (curriculum.Works.length !== 0 ?
+                    <option key={curriculum.id} value={curriculum.title}>
+                      {curriculum.title}
+                    </option> : null
+                  ))}
+                </select>
+              </TableCell>
+              <TableCell sx={{ width: 700 }}>
                 과제명
               </TableCell>
               <TableCell sx={{width: 100}}>              
