@@ -19,30 +19,31 @@ const style = {
 };
 
 function EditWorkModal({ onClose, target, works, setWorks }) {
-    const [editTitle, setEditTitle] = useState(target.title);
-    const [editDescription, setEditDescription] = useState(target.description);
-    const [editDueDateTime, setEditDueDateTime] = useState();
-    console.log(target);
-    
-    const UpdateWork =()=>{
-        const updateData = {
-            title: editTitle,
-            description: editDescription,
-            dueDateTime: editDueDateTime.toISOString(), 
-            updatedAt: new Date()
-        }
-      
+  const [editTitle, setEditTitle] = useState(target.title);
+  const [editDescription, setEditDescription] = useState(target.description);
+  const [editDueDateTime, setEditDueDateTime] = useState();
+  console.log(target);
 
-        axios.put(`http://localhost:8081/work?workId=${target.id}`, updateData, { withCredentials: true }).then(() => {
-        setWorks(works.map(curriculum => {
-          return (
-            { ...curriculum, Works: curriculum.Works.map(work => (work.id == target.id ? updateData : work)) }
-          )}))
-        })        
-        .catch(err => {
-            console.log(err);
-        })
-      }
+  const UpdateWork = () => {
+    const updateData = {
+      title: editTitle,
+      description: editDescription,
+      dueDateTime: editDueDateTime.toISOString(),
+      updatedAt: new Date()
+    }
+
+
+    axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/work?workId=${target.id}`, updateData, { withCredentials: true }).then(() => {
+      setWorks(works.map(curriculum => {
+        return (
+          { ...curriculum, Works: curriculum.Works.map(work => (work.id == target.id ? updateData : work)) }
+        )
+      }))
+    })
+      .catch(err => {
+        console.log(err);
+      })
+  }
 
   return (
     <div>
@@ -51,52 +52,52 @@ function EditWorkModal({ onClose, target, works, setWorks }) {
           <Typography id="modal-modal-title" variant="h4" component="h2" textAlign={'center'}>
             과제 수정
           </Typography>
-            <Stack id="modal-modal-description">
-              <Stack sx={{flexDirection:'row', mb:2, mt:3}}>
-                <Stack sx={{mr:2, minWidth:140}}>
-                  <Typography variant='h4'>{target.curriculumId}</Typography>
-                </Stack>
-                <Picker editDueDateTime={editDueDateTime} setEditDueDateTime={setEditDueDateTime}/>
+          <Stack id="modal-modal-description">
+            <Stack sx={{ flexDirection: 'row', mb: 2, mt: 3 }}>
+              <Stack sx={{ mr: 2, minWidth: 140 }}>
+                <Typography variant='h4'>{target.curriculumId}</Typography>
               </Stack>
-              <TextField
-                id="inputWorkTitle"
-                label='제목을 입력하세요.'
-                variant="outlined"
-                fullWidth
-                rows={8}
-                sx={{ mt:3 }}
-                required
-                onChange={(e) => { setEditTitle(e.target.value); }}
-                value={editTitle}
-              />
-              <TextField
-                id="inputWorkDescription"
-                label='세부 내용을 입력하세요.'
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={8}
-                sx={{ mt: 3 }}
-                required
-                onChange={(e) => { setEditDescription(e.target.value); }}
-                value={editDescription}
-              />
+              <Picker editDueDateTime={editDueDateTime} setEditDueDateTime={setEditDueDateTime} />
             </Stack>
-            <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 2 }}>
-              <Button variant="outlined" type="reset" onClick={onClose}>취소</Button>
-              <Button variant="outlined" onClick={()=>{UpdateWork(); onClose();}}>저장</Button>
-            </Stack>
+            <TextField
+              id="inputWorkTitle"
+              label='제목을 입력하세요.'
+              variant="outlined"
+              fullWidth
+              rows={8}
+              sx={{ mt: 3 }}
+              required
+              onChange={(e) => { setEditTitle(e.target.value); }}
+              value={editTitle}
+            />
+            <TextField
+              id="inputWorkDescription"
+              label='세부 내용을 입력하세요.'
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={8}
+              sx={{ mt: 3 }}
+              required
+              onChange={(e) => { setEditDescription(e.target.value); }}
+              value={editDescription}
+            />
           </Stack>
-        </Modal>
+          <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 2 }}>
+            <Button variant="outlined" type="reset" onClick={onClose}>취소</Button>
+            <Button variant="outlined" onClick={() => { UpdateWork(); onClose(); }}>저장</Button>
+          </Stack>
+        </Stack>
+      </Modal>
     </div>
   );
 }
 
-function Picker({editDueDateTime, setEditDueDateTime}){
-  return(
+function Picker({ editDueDateTime, setEditDueDateTime }) {
+  return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Stack components='DateTimePicker'>
-        <DateTimePicker onChange={(value)=>{setEditDueDateTime(value)}} value={editDueDateTime}/>
+        <DateTimePicker onChange={(value) => { setEditDueDateTime(value) }} value={editDueDateTime} />
       </Stack>
     </LocalizationProvider>
   );

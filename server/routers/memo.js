@@ -62,7 +62,7 @@ router.put('/memo', function (req, res) {
 
 router.delete('/memo', function (req, res) {
     const memoId = req.query.memoId;
-    models.Memo.destory({
+    models.Memo.destroy({
         where: {
             id: memoId
         }

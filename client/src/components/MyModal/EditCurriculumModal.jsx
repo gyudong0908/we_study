@@ -16,22 +16,22 @@ const style = {
 };
 
 function EditCurriculumModal({ onClose, target, curriculums, setCurriculums }) {
-    const [editTitle, setEditTitle] = useState(target.title);
-    const [editContent, setEditContent] = useState(target.content);
-    console.log(target);
-    
-    const UpdateCurriculum =()=>{
-        const updateData = {
-            title: editTitle,
-            content: editContent,
-            updatedAt: new Date()
-        }
+  const [editTitle, setEditTitle] = useState(target.title);
+  const [editContent, setEditContent] = useState(target.content);
+  console.log(target);
 
-        axios.put(`http://localhost:8081/curriculum?curriculumId=${target.id}`, updateData, { withCredentials: true }).then(() => {
-            setCurriculums(curriculums.map(curriculum=>(curriculum.id === target.id? updateData :curriculum )));
-        }).catch(err => {
-            console.log(err);
-        })
+  const UpdateCurriculum = () => {
+    const updateData = {
+      title: editTitle,
+      content: editContent,
+      updatedAt: new Date()
+    }
+
+    axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/curriculum?curriculumId=${target.id}`, updateData, { withCredentials: true }).then(() => {
+      setCurriculums(curriculums.map(curriculum => (curriculum.id === target.id ? updateData : curriculum)));
+    }).catch(err => {
+      console.log(err);
+    })
   }
 
   return (
@@ -48,7 +48,7 @@ function EditCurriculumModal({ onClose, target, curriculums, setCurriculums }) {
               variant="outlined"
               fullWidth
               rows={8}
-              sx={{ mt:3 }}
+              sx={{ mt: 3 }}
               required
               onChange={(e) => { setEditTitle(e.target.value); }}
               value={editTitle}
@@ -68,7 +68,7 @@ function EditCurriculumModal({ onClose, target, curriculums, setCurriculums }) {
           </Stack>
           <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 2 }}>
             <Button variant="outlined" type="reset" onClick={onClose}>취소</Button>
-            <Button variant="outlined" onClick={()=>{UpdateCurriculum(); onClose();}}>저장</Button>
+            <Button variant="outlined" onClick={() => { UpdateCurriculum(); onClose(); }}>저장</Button>
           </Stack>
         </Stack>
       </Modal>

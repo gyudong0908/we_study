@@ -1,51 +1,21 @@
-import { Typography } from "@mui/material"    //부트스트랩 쓸때처럼 import 해주란듯.
+import { Typography, FormControl, Select, MenuItem, Grid, Card, CardContent, Divider, Stack, Box } from "@mui/material"    //부트스트랩 쓸때처럼 import 해주란듯.
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import StickyHeadTable from "../components/RankPage/StickyHeadTable";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-
-
-import Grid from "@mui/material/Grid";
-
-import Card from '@mui/material/Card';
-
-import CardContent from '@mui/material/CardContent';
-
-
-
-
 import * as React from 'react';
-import Divider from '@mui/material/Divider';
-
-import Stack from '@mui/material/Stack';
-
-import Box from '@mui/material/Box';
-
-
-
-
-
-
-
 
 const card = (
   <React.Fragment>
     <CardContent sx={{height:"58.88px"}}>
       <Typography sx={{ fontSize: 18}} color="text.secondary" gutterBottom>
-       Top 20
+       👑Top 20
       </Typography>
     </CardContent>
 
   </React.Fragment>
 );
-
-
-
-
 
 export default function RankPage() {
   const [age, setAge] = React.useState('');
@@ -73,7 +43,7 @@ export default function RankPage() {
       <Typography variant="subtitle1" textAlign="center" gutterBottom>
         이번주 누적 학습시간에 따른 학습랭킹을 소개합니다.<p></p>
         나의 일주일 공부 시간을 확인하고 <p></p>
-        스터디 메이트들과 함께 계속 달려봐요!
+        스터디 메이트들과 함께 계속 달려봐요!🔥
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={6}>
@@ -103,23 +73,15 @@ export default function RankPage() {
         </Grid>
       </Grid>
 
-
-
-
       <Stack
         direction="row"
         divider={<Divider orientation="vertical" flexItem />}
         spacing={2}
-
       >
-
         <StickyHeadTable />
-
-        <StickyHeadTable />
+        <StickyHeadTable /> 
       </Stack>
     </Stack>
-
-
 
   )
 }

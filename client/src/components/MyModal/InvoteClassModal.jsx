@@ -23,7 +23,7 @@ function InvoteClassModal({ open, handleClose }) {
 
   function joinClass() {
     if (code !== '') {
-      axios.post(`http://localhost:8081/class/join?code=${code}`, null, { withCredentials: true }).then((response) => {
+      axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/class/join?code=${code}`, null, { withCredentials: true }).then((response) => {
         dispatch(setClassCards([response.data]));
       }).catch(err => {
         alert('오류발생', err);

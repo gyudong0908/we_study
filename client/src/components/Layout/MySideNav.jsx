@@ -7,21 +7,27 @@ import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import MilitaryTechRoundedIcon from '@mui/icons-material/MilitaryTechRounded';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import { useSelector, useDispatch } from 'react-redux';
-import {setClassCards, deleteClassCards} from '../../reducer/classCardsSlice';
+import { setClassCards, deleteClassCards } from '../../reducer/classCardsSlice';
 
 
-function MySideNav(){
-    const classDatas = useSelector((state)=>state.classCards);
-    const user = useSelector((state)=>state.userData);
+function MySideNav() {
+    const classDatas = useSelector((state) => state.classCards);
+    const user = useSelector((state) => state.userData);
+
+    const [startClicked, setStartClicked] = useState(false);
+    const [stopDisabled, setStopDisabled] = useState(true);
+
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const welcomeText = <div>✍️ 시작해볼까요?<br />{user.userData=== undefined? '': user.userData.nickName+'님'}</div>
+    const welcomeText = <div>✍️ 시작해볼까요?<br />{user.userData === undefined ? '' : user.userData.nickName + '님'}</div>
 
     function getClassData() {
-        axios.get('http://localhost:8081/classes',{ withCredentials: true }).then((data)=>{
+
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/classes`, { withCredentials: true }).then((data) => {
             dispatch(setClassCards(data.data));
-        }).catch(err=>{
+        }).catch(err => {
             console.log(err);
         })
     }
@@ -61,7 +67,7 @@ function MySideNav(){
 
     useEffect(() => {
         getClassData();
-    },[])
+    }, [])
 
     const drawer = (
         <div>
@@ -140,24 +146,24 @@ function MySideNav(){
                 </Stack>
             </Stack>
         </div>
-      );
-    
-    return(
+    );
+
+    return (
         <Stack>
-        <CssBaseline>
-        <Drawer
-          variant="permanent"
-          open
-          PaperProps={{
-            sx: { width: "240px" },
-          }}
-          sx={{
-            position: 'fixed',
-            flexShrink: 0,
-          }}>
-          {drawer}
-        </Drawer>
-        </CssBaseline>
+            <CssBaseline>
+                <Drawer
+                    variant="permanent"
+                    open
+                    PaperProps={{
+                        sx: { width: "240px" },
+                    }}
+                    sx={{
+                        position: 'fixed',
+                        flexShrink: 0,
+                    }}>
+                    {drawer}
+                </Drawer>
+            </CssBaseline>
         </Stack>
     );
 };

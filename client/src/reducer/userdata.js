@@ -3,7 +3,7 @@ import axios from 'axios';
 export const initializeUserData = () => {
   return async (dispatch) => {
     if (window.location.pathname !== "/") {
-      axios.get('http://localhost:8081/user', { withCredentials: true })
+      axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/user`, { withCredentials: true })
         .then((response) => {
           dispatch({
             type: 'INITIALIZE_DATA',

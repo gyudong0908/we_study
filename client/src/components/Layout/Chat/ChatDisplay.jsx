@@ -38,7 +38,7 @@ export default function ChatDisplay({ rewind, value, classChatId, chatTitle, cha
     const state = value === 0 ? 'classChat' : 'individualChat';
 
     function getMessage() {
-        axios.get(`http://localhost:8081/chatMessages?chatId=${classChatId}`, { withCredentials: true }).then((response) => {
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/chatMessages?chatId=${classChatId}`, { withCredentials: true }).then((response) => {
             console.log(response.data)
             setContents(response.data);
             setIsLoading(true);
