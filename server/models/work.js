@@ -23,9 +23,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     curriculumId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
     title: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     description: {
       type: DataTypes.STRING,
