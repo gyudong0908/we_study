@@ -3,6 +3,7 @@ import { TextField, Grid, Button, Typography, Box, Stack, Avatar } from '@mui/ma
 import { useRef, useEffect, useState } from "react";
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { useSelector } from 'react-redux';
+import ModeCommentRoundedIcon from '@mui/icons-material/ModeCommentRounded';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
@@ -11,7 +12,7 @@ function RightChat({ content, createdAt }) {
         <Stack>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', marginBottom: '10px' }}>
                 <Typography variant='body2' sx={{ marginTop: '12px' }}>{dayjs(createdAt).format('h:mm:ss A')}</Typography>
-                <Typography sx={{ backgroundColor: 'yellow', margin: '3px', border: '1px solid black', borderRadius: '2px', maxWidth: 270 }} variant='body1'>{content}</Typography>
+                <Typography sx={{ backgroundColor: 'yellow', margin: '3px', border: '1px solid black', maxWidth: 270, borderBottomLeftRadius: '8px', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', padding: '3px' }} variant='body1'>{content}</Typography>
             </Box>
         </Stack>
     )
@@ -23,7 +24,9 @@ function LeftChat({ content, user, createdAt }) {
             <Avatar sx={{ height: 50, width: 50 }} src={user.downloadPath} />
             <Stack>
                 <Typography>{user.nickName}</Typography>
-                <Typography sx={{ backgroundColor: 'yellow', margin: '3px', border: '1px solid black', borderRadius: '2px', maxWidth: 270 }} variant='body1'>{content}</Typography>
+                <Typography sx={{
+                     borderBottomRightRadius: '8px', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', padding: '3px',
+                     backgroundColor: 'yellow', margin: '3px', border: '1px solid black',  maxWidth: 270 }} variant='body1'>{content}</Typography>
             </Stack>
             <Typography variant='body2' sx={{ marginTop: '12px' }}>{dayjs(createdAt).format('h:mm:ss A')}</Typography>
         </Box>
