@@ -30,6 +30,27 @@ router.get('/works', function (req, res) {
     })
 })
 
+router.get('/works/user',async function(req,res){
+    const userId = req.session.passport.user;
+    try {
+        const userInstance = await models.User.findByPk(userId);
+        const classesForUser = await userInstance.getClasses({
+            raw:true,
+            include:[
+                {
+                    model: models.Curriculum,
+                    include:[{
+                        model: models.Work
+                    }]
+                }
+            ]
+        });
+        res.status(200).send(classesForUser);
+    } catch (error) {
+        res.status(500).send('과제 정보 조회 오류');
+    }
+})
+
 router.get('/work',function(req,res){
     const workId = req.query.workId;
     models.Work.findByPk(workId).then((data)=>{
