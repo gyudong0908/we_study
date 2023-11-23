@@ -14,7 +14,7 @@ export default function ClassDashboard({ isTeacher }) {
 
   async function getCurriculums() {
     try {
-      let data = await axios.get(`http://localhost:8081/curriculums?classId=${classId}`, { withCredentials: true });
+      let data = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/curriculums?classId=${classId}`, { withCredentials: true });
       if (data.data) {
         const sortData = data.data.sort((a, b) => new Date(a.creationTime) - new Date(b.creationTime));
         setCurriculums(sortData);
@@ -36,22 +36,22 @@ export default function ClassDashboard({ isTeacher }) {
       {isLoading ?
         <Stack>
           {
-            isTeacher&&(
+            isTeacher && (
               <InputCurriculum isTeacher={isTeacher} marginBottom={20} setCurriculums={setCurriculums} curriculums={curriculums}></InputCurriculum>
             )
           }
           {
-            !isTeacher&&(
+            !isTeacher && (
               <PrivateProgress />
             )
-         }
+          }
           {
-            isTeacher&&(
+            isTeacher && (
               <StudyProgress />
             )
           }
-          <Stack sx={{borderBottom:'1.5px solid black', mb:2, mt:5}}>
-            <Typography variant='h4' sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}} >커리큘럼</Typography>
+          <Stack sx={{ borderBottom: '1.5px solid black', mb: 2, mt: 5 }}>
+            <Typography variant='h4' sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea' }} >커리큘럼</Typography>
           </Stack>
           <BasicAccordion isTeacher={isTeacher} curriculums={curriculums} setCurriculums={setCurriculums} />
         </Stack> :

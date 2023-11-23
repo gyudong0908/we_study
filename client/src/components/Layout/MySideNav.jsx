@@ -13,8 +13,10 @@ import { setClassCards, deleteClassCards } from '../../reducer/classCardsSlice';
 function MySideNav() {
     const classDatas = useSelector((state) => state.classCards);
     const user = useSelector((state) => state.userData);
+
     const [startClicked, setStartClicked] = useState(false);
     const [stopDisabled, setStopDisabled] = useState(true);
+
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -22,12 +24,14 @@ function MySideNav() {
     const welcomeText = <div>✍️ 시작해볼까요?<br />{user.userData === undefined ? '' : user.userData.nickName + '님'}</div>
 
     function getClassData() {
-        axios.get('http://localhost:8081/classes', { withCredentials: true }).then((data) => {
+
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/classes`, { withCredentials: true }).then((data) => {
             dispatch(setClassCards(data.data));
         }).catch(err => {
             console.log(err);
         })
     }
+
 
     const handleStartTime = () => {
         const startTime = new Date(); // 현재 시각을 가져옵니다.
@@ -63,6 +67,8 @@ function MySideNav() {
 
 
 
+
+
     useEffect(() => {
         getClassData();
     }, [])
@@ -84,6 +90,7 @@ function MySideNav() {
                             primaryTypographyProps={{ fontSize: '45px' }}
                             primary="00:00:00" />
                         <Stack flexDirection='row'>
+
                             <ListItemButton onClick={() => {
                                 handleStartTime();
                                 setStartClicked(true);
@@ -100,6 +107,7 @@ function MySideNav() {
                                 disabled={stopDisabled}
 
                             >Stop</ListItemButton>
+
                         </Stack>
                     </ListItem>
                 </List>

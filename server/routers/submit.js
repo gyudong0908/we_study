@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models');
 const upload = require('../config/multerConfig.js');
+const fs = require('fs');
 
 router.use(express.json());
 
@@ -66,10 +67,19 @@ router.get('/submit', function(req,res){
     })
 })
 
-router.put('/submit', function (req, res) {
+router.put('/submit',upload.single('file'), function (req, res) {
     const submitId = req.query.submitId;
-    models.Submit.update(req.body, { where: { id: submitId } }).then(() => {
-        res.sendStatus(200);
+    const userId = req.session.passport.user;
+    let fileData = {}
+    if (req.file) {
+        console.log()
+        const fileName = req.file.filename;
+        const downloadPath = `${req.protocol}://${req.hostname}:${8081}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
+        const filePath = req.file.path;        
+        fileData = { filePath: filePath, downloadPath: downloadPath, fileName: fileName };
+    }
+    models.Submit.update({...req.body, ...fileData}, { where: { id: submitId } }).then(() => {
+        res.status(200).send(fileData);
     }).catch(err => {
         console.log(err);
         res.status(500).send('submit 변경 에러 발생');
@@ -78,15 +88,20 @@ router.put('/submit', function (req, res) {
 
 router.delete('/submit', function (req, res) {
     const submitId = req.query.submitId;
-    models.Submit.destroy({
-        where: {
-            id: submitId
+    models.Submit.findByPk(submitId).then(submit=>{
+        submit.destroy();
+        if(submit.filePath){
+            fs.unlink(submit.filePath, (unlinkErr) => {
+                if (unlinkErr && unlinkErr.code !== 'ENOENT') {
+                    console.error('Error deleting previous image:', unlinkErr);
+                    res.status(500).send('제출물 파일 삭제 오류');
+                }
+            });
         }
-    }).then(() => {
         res.sendStatus(200);
-    }).catch(err => {
+    }).catch(err=>{
         console.log(err);
-        res.status(500).send('제출물 삭제 오류');
+        res.status(500).send('submitId가 잘못 되었습니다.');
     })
 })
 

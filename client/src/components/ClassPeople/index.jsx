@@ -9,7 +9,7 @@ export default function ClassPeople() {
     const [teacher, setTeacher] = useState({});
     const { classId } = useParams();
     function getUser() {
-        axios.get(`http://localhost:8081/class/user?classId=${classId}`, { withCredentials: true }).then(response => {
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/user?classId=${classId}`, { withCredentials: true }).then(response => {
             let newData = [];
             for (const user of response.data.userData) {
                 if (user.id === response.data.teacherId) {
@@ -52,6 +52,7 @@ export default function ClassPeople() {
                     })
                 }
             </Stack>
+
         </Stack>
     )
 }

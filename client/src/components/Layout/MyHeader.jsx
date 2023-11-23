@@ -126,7 +126,7 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
                       flexGrow: 1,
                       fontFamily: 'lobster',
                       fontWeight: 700,
-                      color: '#0091ea',
+                      color: 'linear-gradient(to bottom, #0091ea 35%, #6200ea)',
                       textDecoration: 'none',
                   }}>WeStudy</Typography>
 
@@ -145,8 +145,8 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
                     </IconButton>
                   </Tooltip>
                   {location.pathname.includes('/classes') ? (
-                    <IconButton aria-label='home' >
-                      <HomeRoundedIcon fontSize='medium'/>
+                    <IconButton aria-label='home' component={Link} to='/mypage' >
+                      <HomeRoundedIcon fontSize='medium' />
                     </IconButton>
                   ) : mypageTool}
                 </Stack>

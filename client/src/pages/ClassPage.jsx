@@ -14,14 +14,14 @@ export default function ClassPage() {
   const { classId } = useParams();
 
   function getClassData() {
-    axios.get(`http://localhost:8081/class?classId=${classId}`, { withCredentials: true }).then(data => {
+    axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class?classId=${classId}`, { withCredentials: true }).then(data => {
       setClassData(data.data);
-      if(user.userData){
+      if (user.userData) {
         if (data.data.teacher == user.userData.id) {
           setIsTeacher(true);
-        }else{
+        } else {
           setIsTeacher(false);
-        }  
+        }
       }
     });
   }
@@ -42,7 +42,7 @@ export default function ClassPage() {
         marginBottom: '200px',
       }}
     >
-      <ClassCard title={classData.title} section={classData.section} description={classData.description}/>
+      <ClassCard title={classData.title} section={classData.section} description={classData.description} />
       <ClassTabs
         isTeacher={isTeacher}
         classData={classData}

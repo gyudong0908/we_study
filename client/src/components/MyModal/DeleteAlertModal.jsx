@@ -9,7 +9,7 @@ const style = {
 
 };
 
-function DeleteAlertModal({ onClose, deleteNotice, onClickDelete}) {
+function DeleteAlertModal({ onClose, deleteData, onClickDelete}) {
     
 
   return (
@@ -21,14 +21,15 @@ function DeleteAlertModal({ onClose, deleteNotice, onClickDelete}) {
             alignItems:'center',
             width:'100%',
             backgroundColor:'white',
-            padding:'50px'
+            padding:'50px',
+            borderRadius:'15px'
             }}>
-            <Stack direction='row' sx={{alignItems:'center',}}>
+            <Stack direction='row' spacing={4} sx={{alignItems:'center',}}>
               <Stack marginRight={'20px'}>
-                <Typography>삭제하시겠습니까?</Typography>
+                <Typography variant='h6'>삭제하시겠습니까?</Typography>
               </Stack>
               <Stack direction='row' spacing={1} >
-                <Button variant="outlined" color='warning' onClick={()=>{onClickDelete(deleteNotice); onClose()}}>확인</Button>
+                <Button variant="outlined" color='warning' onClick={()=>{onClickDelete(deleteData); onClose()}}>확인</Button>
                 <Button variant="outlined" color='warning' 
                   onClick={()=>{onClose(); }}>취소</Button>
               </Stack>
