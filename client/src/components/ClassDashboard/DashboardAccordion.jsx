@@ -40,7 +40,7 @@ export default function DashboardAccordion({ isTeacher, curriculums, setCurricul
             </Stack>
             {isTeacher && (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop: '15px' }}>
-                <Button variant="outlined" onClick={() => { setDeleteNotice(curriculum); setAlertOpen(true) }} sx={{ width: '10%' }}>삭제</Button>
+                <Button variant="outlined" onClick={() => { setDeleteData(curriculum); setAlertOpen(true) }} sx={{ width: '10%' }}>삭제</Button>
                 <Button variant="outlined" onClick={() => { setModalOpen(true); setTarget(curriculum); }} sx={{ width: '10%' }}>수정</Button>
 
               </Stack>

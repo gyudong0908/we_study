@@ -12,10 +12,10 @@ export default function ClassDashboard({ isTeacher }) {
   const [isLoading, setIsLoading] = useState(false);
   const { classId } = useParams();
 
-  const [progress, setProgress] = useState([]);
+  const [progress, setProgress] = useState();
 
   function getProgress() {
-    axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/submits?classId=${classId}`, { withCredentials: true }).then(data => {
+    axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/progress?classId=${classId}`, { withCredentials: true }).then(data => {
       setProgress(data.data);
     }).catch(err => {
       console.log(err);
@@ -63,7 +63,7 @@ export default function ClassDashboard({ isTeacher }) {
           }
           {
             isTeacher && (
-              <StudyProgress />
+              <StudyProgress progress={progress}/>
             )
           }
           <Stack sx={{ borderBottom: '1.5px solid black', mb: 2, mt: 5 }}>
