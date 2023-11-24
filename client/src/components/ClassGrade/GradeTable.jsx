@@ -28,7 +28,9 @@ export default function GradeTable({ curriculums, setCurriculums }) {
   const [selectedCurriculum, setSelectedCurriculum] = useState(null);
   const [selectedWork, setSelectedWork] = useState(null);
   const [sumGrade, setSumgrade] = useState();
+  const [count, setCount] = useState();
 
+  
   const uniqueUsers = new Set(
     curriculums.flatMap((curriculum) =>
       curriculum.Works.flatMap((work) =>
@@ -36,6 +38,51 @@ export default function GradeTable({ curriculums, setCurriculums }) {
       )
     )
   );
+
+  React.useEffect(() => {
+    // 여기서 selectedUser 또는 selectedCurriculum이 변경될 때 성적의 합계를 계산합니다.
+    let sum = 0;
+    let count = 0;
+
+    curriculums.map((curriculum) => {
+      if (selectedCurriculum && curriculum.title !== selectedCurriculum) {
+        return null;
+      }
+      return curriculum.Works.map((work) =>
+        work.Submits.map((submit) => {
+          if (!selectedUser) {
+            sum += submit.grade;
+            count +=1
+            return (
+              <TableRow key={submit.id}>
+                <TableCell>{submit.User.nickName}</TableCell>
+                <TableCell>{curriculum.title}</TableCell>
+                <TableCell>{work.title}</TableCell>
+                <TableCell>{submit.updatedAt}</TableCell>
+                <TableCell>{submit.grade}</TableCell>
+              </TableRow>
+            )
+          } else if (selectedUser === submit.User.nickName) {
+            sum += submit.grade;
+            count +=1
+            return (
+              <TableRow key={submit.id}>
+                <TableCell>{submit.User.nickName}</TableCell>
+                <TableCell>{curriculum.title}</TableCell>
+                <TableCell>{work.title}</TableCell>
+                <TableCell>{submit.updatedAt}</TableCell>
+                <TableCell>{submit.grade}</TableCell>
+              </TableRow>)
+          }
+        }
+        )
+      )
+    }
+    )
+
+    setSumgrade(sum);
+    setCount(count);
+  }, [[],selectedUser, selectedCurriculum]);
 
   return (
     <Paper sx={{ width: '90%', overflow: 'hidden' }}>
@@ -116,7 +163,7 @@ export default function GradeTable({ curriculums, setCurriculums }) {
       </TableContainer>
       <Stack direction='row' justifyContent='space-between' sx={{ marginLeft: '10px', marginTop: '10px' }}>
         <Typography variant='h5'>평균</Typography>
-        <Typography sx={{ float: 'right', marginRight: '30px' }}>{sumGrade}</Typography>
+        <Typography sx={{ float: 'right', marginRight: '30px' }}>{sumGrade/count}</Typography>
       </Stack>
     </Paper>
   );

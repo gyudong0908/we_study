@@ -23,12 +23,15 @@ module.exports = (sequelize, DataTypes) => {
         },
         chatId: {
             type: DataTypes.INTEGER,
+            allowNull: false,
         },
         chatUserId: {
             type: DataTypes.INTEGER,
+            allowNull: false,
         },
         message: {
             type: DataTypes.STRING,
+            allowNull: false,
         }
     }, {
         sequelize,

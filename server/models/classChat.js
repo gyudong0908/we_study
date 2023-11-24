@@ -25,9 +25,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         title: {
             type: DataTypes.STRING,
+            allowNull: false,
         },
         classId: {
             type: DataTypes.INTEGER,
+            allowNull: false,
         },
 
     }, {
