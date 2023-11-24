@@ -30,10 +30,13 @@ function LandingPage() {
                         mr: 2,
                         display: { xs: 'none', md: 'flex' },
                         fontFamily: 'lobster',
-                        fontWeight: 700,
-                        color: '#0091ea',
                         textDecoration: 'none',
                         justifyContent: 'center',
+                        fontWeight: 700,
+                        background : 'linear-gradient(to bottom, #0091ea 35%, #6200ea)',
+                        WebkitBackgroundClip: 'text',
+                        color: 'transparent', 
+
                     }}>WeStudy</Typography>
 
                     <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: 'black' }} />
@@ -42,9 +45,11 @@ function LandingPage() {
                         display: { xs: 'flex', md: 'none' },
                         flexGrow: 1,
                         fontFamily: 'lobster',
-                        fontWeight: 700,
-                        color: '#0091ea',
                         textDecoration: 'none',
+                        fontWeight: 700,
+                        background : 'linear-gradient(to bottom, #0091ea 35%, #6200ea)',
+                        WebkitBackgroundClip: 'text',
+                        color: 'transparent', 
                     }}>WeStudy</Typography>
 
                     <Stack

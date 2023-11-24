@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models');
 const uuid = require('uuid');
+const sequelize = require('sequelize');
 router.use(express.json());
+const {Op} = require('sequelize');
 
 router.post('/class', function (req, res) {
     const userId = req.session.passport.user;
@@ -88,7 +90,7 @@ router.get('/class/submits', function (req, res) {
                 include: [{
                     model: models.Submit,
                     include:[{
-                        model: models.User
+                        model: models.User,
                     }]
                 }]
             }]
@@ -116,6 +118,42 @@ router.get('/class/user', function (req, res) {
     }).catch(err => {
         console.log(err);
         res.status(500).send('Class 유저 조회 에러 발생');
+    })
+})
+
+router.get('/class/progress', function (req, res) {
+    const classId = req.query.classId;
+    models.Class.findAll( {
+        attributes:[[sequelize.fn('count', sequelize.col('Curriculums.Works.Submits.User.id')), 'count']],
+        where:{
+            id:classId,
+        },
+        raw:true,
+
+        include: [{
+            model: models.Curriculum,
+            attributes:[],
+            include: [{
+                model: models.Work,
+                attributes:['id'],
+                include: [{
+                    model: models.Submit,
+                    // required: true,
+                    attributes:[],                  
+                    include:[{
+                        model: models.User,
+                        attributes:['nickName']                        
+                    }],
+                }]
+            }]
+        }], 
+        group:['Curriculums.Works.id','Curriculums.Works.Submits.User.id'],
+        
+    }).then(data => {
+        res.status(200).send(data);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send("클래스 조회 에러 발생");
     })
 })
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Stack, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, CssBaseline } from '@mui/material';
+import { Stack, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, CssBaseline, Typography } from '@mui/material';
 import axios from 'axios';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
@@ -65,10 +65,6 @@ function MySideNav() {
             });
     };
 
-
-
-
-
     useEffect(() => {
         getClassData();
     }, [])
@@ -89,8 +85,8 @@ function MySideNav() {
                         <ListItemText
                             primaryTypographyProps={{ fontSize: '45px' }}
                             primary="00:00:00" />
-                        <Stack flexDirection='row'>
 
+                        <Stack flexDirection='row'>
                             <ListItemButton onClick={() => {
                                 handleStartTime();
                                 setStartClicked(true);
@@ -107,12 +103,11 @@ function MySideNav() {
                                 disabled={stopDisabled}
 
                             >Stop</ListItemButton>
-
                         </Stack>
                     </ListItem>
                 </List>
                 <Divider />
-                <Stack spacing={45}>
+                <Stack>
                     <List>
                         {['누적 학습 시간 랭킹', '캘린더'].map((text, index) => (
                             <ListItem key={index} disablePadding>
@@ -136,7 +131,7 @@ function MySideNav() {
                             </ListItem>
                         ))}
                     </List>
-                    <List>
+                    <List sx={{position:'absolute', bottom:0, width:'100%'}}>
                         {['Setting'].map((text, index) => (
                             <ListItem key={index} disablePadding>
                                 <ListItemButton component={Link} to='/mypage/setting'>

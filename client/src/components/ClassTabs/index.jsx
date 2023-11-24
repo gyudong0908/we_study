@@ -63,7 +63,7 @@ export default function ClassTabs({ isTeacher, classData, setClassData }) {
       content: <ClassNotice isTeacher={isTeacher} />,
     },
     {
-      title: '할일목록',
+      title: '과제',
       content: <ClassWork isTeacher={isTeacher} />,
     },
     {

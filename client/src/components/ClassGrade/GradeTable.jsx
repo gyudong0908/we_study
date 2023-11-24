@@ -102,7 +102,7 @@ export default function GradeTable({ curriculums, setCurriculums }) {
                   }
                 </select>
               </TableCell>
-              <TableCell sx={{ width: 700 }}>
+              <TableCell sx={{ width: 150 }}>
                 <select value={selectedCurriculum} onChange={(e) => { setSelectedCurriculum(e.target.value) }}>
                   <option value="">Select a Curriculum</option>
                   {curriculums.map((curriculum) => (curriculum.Works.length !== 0 ?
@@ -112,7 +112,7 @@ export default function GradeTable({ curriculums, setCurriculums }) {
                   ))}
                 </select>
               </TableCell>
-              <TableCell sx={{ width: 100 }}>
+              <TableCell sx={{ width: 700 }}>
                 과제명
               </TableCell>
               <TableCell sx={{ width: 100 }}>
