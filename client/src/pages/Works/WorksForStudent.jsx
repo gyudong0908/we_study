@@ -8,11 +8,14 @@ import {
     Table, TableContainer, TableCell, TableBody, TableHead, TableRow, TextField,
     Grid, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Button
 } from '@mui/material';
+import {useSelector} from 'react-redux';
 
 export default function WorksForStudent() {
     const [submitData, setSubmitData] = useState([]);
     const [workData, setWorkData] = useState({});
+    const [isSubmit, setIsSubmit] = useState(false);
     const { workId } = useParams();
+    const user = useSelector(state=>state.userData);
 
     const navigate = useNavigate();
     const handleGoBack = () => {
@@ -22,23 +25,30 @@ export default function WorksForStudent() {
 
     function getSubmits() {
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/submits?workId=${workId}`, { withCredentials: true }).then((response) => {
-            setSubmitData(response.data)
+            for (const item of response.data) {
+                if(item.userId === user.userData.id){
+                    setIsSubmit(true);
+                    break;
+                }                
+            }
+            setSubmitData(response.data);
         }).catch(err => {
             console.log(err);
         })
     }
     function getWork() {
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/work?workId=${workId}`, { withCredentials: true }).then(response => {
-            console.log(response.data)
             setWorkData(response.data);
         }).catch(err => {
             console.log(err);
         })
     }
     useEffect(() => {
-        getSubmits();
-        getWork()
-    }, [])
+        if(user.userData){
+            getSubmits();
+            getWork()    
+        }
+    }, [user.userData])
 
     return (
         <Stack
@@ -83,10 +93,11 @@ export default function WorksForStudent() {
                     </AccordionDetails>
                 </Accordion>
             </Stack>
-            <Stack sx={{ mb: 5 }}>
-                <SubmitWork submitData={submitData} setSubmitData={setSubmitData} workId={workId} />
-            </Stack>
-
+            {!isSubmit &&(
+                <Stack sx={{ mb: 5 }}>
+                    <SubmitWork submitData={submitData} setSubmitData={setSubmitData} workId={workId} />
+                </Stack>)
+            }
             <TableContainer sx={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}>
                 <Table sx={{ width: '100%' }} aria-label='works table'>
                     <TableHead>
@@ -112,7 +123,7 @@ export default function WorksForStudent() {
                                     <TableCell component="th" scope="row" align="center">{item.User.nickName}</TableCell>
                                     <TableCell align="center"
                                         onClick={() => {
-                                            navigate(`/mypage/classes/${item.id}/workdetail`);
+                                            navigate(`/mypage/classes/${item.id}/workdetail/student`);
                                         }}
                                         sx={{
                                             align: 'center',

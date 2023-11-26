@@ -20,6 +20,8 @@ import RankPage from './pages/RankPage.jsx';
 import CalenderPage from './pages/CalenderPage.jsx';
 import WorksForTeacher from './pages/Works/WorksForTeacher.jsx';
 import WorksForStudent from './pages/Works/WorksForStudent.jsx';
+import WorkDetailForStudent from './pages/Works/WorkDetailForStudent.jsx';
+import WorkDetailForTeacher from './pages/Works/WorkDetailForTeacher.jsx';
 import WorkDetail from './pages/Works/WorkDetail.jsx';
 
 import { initializeUserData } from './reducer/userdata.js';
@@ -50,8 +52,12 @@ const router = createBrowserRouter([
         element: <WorksForStudent />,
       },
       {
-        path: 'classes/:submitId/workdetail',
-        element: <WorkDetail />,
+        path: 'classes/:submitId/workdetail/student',
+        element: <WorkDetailForStudent />,
+      },
+      {
+        path: 'classes/:submitId/workdetail/teacher',
+        element: <WorkDetailForTeacher />,
       },
       {
         path: 'setting',
