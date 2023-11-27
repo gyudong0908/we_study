@@ -1,17 +1,31 @@
 import { Stack, TextField, Button } from "@mui/material"
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useState } from "react";
-export default function AddChoiceQuiz({close}){
+export default function AddChoiceQuiz({close, save}){
     const [choiceCount, setCoiceCount] = useState(1);
     const [title, setTitle] = useState('');
     const [grade, setGrade] = useState('');
     const [answer, setAnswer] = useState('');
     const [choiceList, setChoiceList] = useState([]);
 
-    function pushChoiceList(value){
+    function addChoiceArray(){
         const newChoiceList= [...choiceList];
-        newChoiceList.push(value);
+        newChoiceList.push(null);
         setChoiceList(newChoiceList);
+    }
+    function modifyChoiceList(idx, value){
+        const newChoiceList = [...choiceList];
+        newChoiceList[idx] = {content: value};
+        setChoiceList(newChoiceList);
+    }
+    function onSave(){
+        const saveData = {
+            title: title,
+            grade: grade,
+            answer: answer,
+            choiceList: choiceList
+        }
+        save(saveData);
     }
 
     return(
@@ -38,13 +52,13 @@ export default function AddChoiceQuiz({close}){
                 label={`선택지 ${index + 1}`}
                 variant="filled"
                 placeholder={`선택지를 입력하세요`}
-                onChange={(e)=>{setChoice(e.target.value)}}
+                onChange={(e)=>{modifyChoiceList(index, e.target.value)}}
                 />
             ))}
             <Stack alignItems={'center'}>
-            <AddCircleRoundedIcon sx={{cursor: 'pointer'}} onClick={()=>{setCoiceCount(()=>(choiceCount+1))}}></AddCircleRoundedIcon>
+            <AddCircleRoundedIcon sx={{cursor: 'pointer'}} onClick={()=>{setCoiceCount(()=>(choiceCount+1)); addChoiceArray();}}></AddCircleRoundedIcon>
             </Stack>
-            <Button onClick={()=>{close()}}>확인</Button>
+            <Button onClick={()=>{close(); onSave();}}>확인</Button>
         </Stack>
     )
 }

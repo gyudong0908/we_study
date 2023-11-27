@@ -1,4 +1,4 @@
-import { Card, CardContent, Stack, Typography, Grid, Button, Menu, MenuItem } from '@mui/material';
+import { Card, CardContent, Stack, Typography, Grid, Button, Menu, MenuItem, FormControlLabel, FormControl, RadioGroup, Radio, FormLabel } from '@mui/material';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useState } from 'react';
 import AddChoiceQuiz from '../components/Quiz/AddChoiceQuiz';
@@ -21,9 +21,11 @@ export default function QuizPage(){
 
     function saveChoiceQuiz(choiceQuiz){
         // axios 요청 자리
-        setChoiceQuizs([...choiceQuiz]);
+        setChoiceQuizs([...choiceQuizs, choiceQuiz]);
     }
-
+    function saveOpenEndedQuiz(OpenEndedQuiz){
+        setOpenEndedQuizs([...OpenEndedQuizs, OpenEndedQuiz]);
+    }
     return (
         <Stack
             sx={{
@@ -50,19 +52,48 @@ export default function QuizPage(){
             </Menu>
             {
                 choiceQuizs.map((data,idx)=>{
-                    return (<div></div>)
+                    return (
+                        <Stack marginBottom={'10px'}>
+                        <div>제목: {data.title}</div>
+                        <div>점수: {data.grade}점</div>
+                        <div>정답: {data.answer}번</div>
+                        <FormControl>
+                            <FormLabel id="demo-controlled-radio-buttons-group">문제</FormLabel>
+                            <RadioGroup
+                                aria-labelledby="demo-controlled-radio-buttons-group"
+                                name="controlled-radio-buttons-group"
+                            >
+                                {
+                                    data.choiceList.map((choice, idx)=>{
+                                        return(
+                                            <FormControlLabel value={idx+1} control={<Radio />} label={choice.content} />
+                                        )
+                                    })
+                                }
+                            </RadioGroup>
+                            </FormControl>
+                        </Stack>
+                    )
                 })
             }
             {
-
+                OpenEndedQuizs.map((data,idx)=>{
+                    return (
+                        <Stack marginBottom={'10px'}>
+                        <div>제목: {data.title}</div>
+                        <div>점수: {data.grade}점</div>
+                        <div>정답: {data.answer}</div>
+                        </Stack>
+                    )
+                })
             }
             {isChoiceQuizOpen && (
-                <AddChoiceQuiz close={()=>{setIsChoiceQuizOpen(false)}}></AddChoiceQuiz>
+                <AddChoiceQuiz close={()=>{setIsChoiceQuizOpen(false)}} save={saveChoiceQuiz}></AddChoiceQuiz>
                 )
 
             }
             {isOpenEndedQuizOpen && (
-                <AddOpenEndedQuiz close={()=>{setOpenEndedQuizs(false)}}></AddOpenEndedQuiz>
+                <AddOpenEndedQuiz close={()=>{setIsOpenEndedQuizOpen(false)}} save={saveOpenEndedQuiz}></AddOpenEndedQuiz>
                 )
             }
             <Stack alignItems={'center'}>
