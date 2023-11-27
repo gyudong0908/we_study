@@ -73,14 +73,34 @@ export default function ProfileCardModal({ open, handleClose, userId }) {
                                                 <Avatar alt="Travis Howard" src={userData.downloadPath} sx={{ width: 100, height: 100 }} />
                                                 <Stack direction={'column'} spacing={2.5}>
                                                     <Stack direction='row' spacing={10}>
-                                                        <Typography variant="h5">이름 _ {userData.nickName}</Typography>
-                                                        <Typography variant="h5">성별 _ {userData.gender}</Typography>
+                                                        <Stack direction='row' spacing={2}>
+                                                            <Typography variant="h5">이름</Typography>
+                                                            <Divider orientation='vertical' flexItem />
+                                                            <Typography variant='h5'>{userData.nickName}</Typography>
+                                                        </Stack>
+                                                        <Stack direction='row' spacing={2}>
+                                                            <Typography variant="h5">성별</Typography>
+                                                            <Divider orientation='vertical' flexItem />
+                                                            <Typography variant='h5'>{userData.gender}</Typography>
+                                                        </Stack>
                                                     </Stack>
                                                     <Stack direction='row' spacing={10}>
-                                                        <Typography variant="h5">직업 _ {userData.job}</Typography>
-                                                        <Typography variant="h5">생년월일 _ {dayjs(userData.birthDay).format('YYYY/MM/DD')}</Typography>
+                                                        <Stack direction='row' spacing={2}>
+                                                            <Typography variant="h5">직업</Typography>
+                                                            <Divider orientation='vertical' flexItem />
+                                                            <Typography variant='h5'>{userData.job}</Typography>
+                                                        </Stack>
+                                                        <Stack direction='row' spacing={2}>
+                                                            <Typography variant="h5">생년월일</Typography>
+                                                            <Divider orientation='vertical' flexItem />
+                                                            <Typography variant='h5'>{dayjs(userData.birthDay).format('YYYY/MM/DD')}</Typography>
+                                                        </Stack>
                                                     </Stack>
-                                                    <Typography variant="h5">이메일 _ {userData.email}</Typography>
+                                                    <Stack direction='row' spacing={2}>
+                                                        <Typography variant="h5">이메일</Typography>
+                                                        <Divider orientation='vertical' flexItem />
+                                                        <Typography variant='h5'>{userData.email}</Typography>
+                                                    </Stack>
                                                 </Stack>
                                             </Stack>
                                             <Divider variant="middle" />

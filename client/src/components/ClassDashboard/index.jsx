@@ -12,8 +12,7 @@ export default function ClassDashboard({ isTeacher }) {
   const [isLoading, setIsLoading] = useState(false);
   const { classId } = useParams();
 
-  const [progress, setProgress] = useState();
-
+  const [progress, setProgress] = useState([]);
   function getProgress() {
     axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/progress?classId=${classId}`, { withCredentials: true }).then(data => {
       setProgress(data.data);
@@ -21,12 +20,12 @@ export default function ClassDashboard({ isTeacher }) {
       console.log(err);
     })
   }
-  console.log(progress);
+  console.log('progress:',progress);
 
   useEffect(() => {
-    getProgress();
+    getProgress(); 
   }, [classId])
-  
+
 
   async function getCurriculums() {
     try {
@@ -46,6 +45,7 @@ export default function ClassDashboard({ isTeacher }) {
     getCurriculums()
     return setIsLoading(false);
   }, [classId])
+  console.log('curriculums:',curriculums);
 
   return (
     <>
@@ -63,7 +63,7 @@ export default function ClassDashboard({ isTeacher }) {
           }
           {
             isTeacher && (
-              <StudyProgress progress={progress}/>
+              <StudyProgress progress={progress} setProgress={setProgress}/>
             )
           }
           <Stack sx={{ borderBottom: '1.5px solid black', mb: 2, mt: 5 }}>

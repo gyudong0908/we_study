@@ -43,12 +43,17 @@ export default function WorksForStudent() {
     return (
         <Stack
             sx={{
+                // direction: 'column',
+                // spacing: '10px',
+                // marginTop: '100px',
+                // marginLeft: '270px',
+                // marginRight: '70px',
+                // marginBottom: '200px'
                 direction: 'column',
-                spacing: '10px',
-                marginTop: '100px',
-                marginLeft: '270px',
-                marginRight: '70px',
-                marginBottom: '200px'
+                marginTop: '115px',
+                marginLeft: '320px',
+                marginRight: '50px',
+                marginBottom: '150px',
             }}>
             <Stack sx={{ borderBottom: '1.5px solid black', mb: 2 }}>
                 <Typography variant="h4" component="span" sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea' }}>📑 과제 제출하기</Typography>

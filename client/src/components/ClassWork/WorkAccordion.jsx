@@ -12,6 +12,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
   const [target, setTarget] = useState('');
   const [isAlertOpen, setAlertOpen] = useState(false);
   const [deleteData, setDeleteData] = useState({});
+  console.log('topicId: ',topicId);
 
   useEffect(() => {
     // filteredAssignments 배열 내의 모든 객체의 topicId를 출력
@@ -37,11 +38,11 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
             sx={{ margin: '5px' }}
           >
             <Grid container spacing={0} sx={{ alignItems: 'center' }}>
-              <Grid item xs={10}>
+              <Grid item xs={9}>
                 <Typography variant='h6' sx={{ wordBreak: 'keep-all', wordWrap: 'break-word' }}>{assignment.title}</Typography>
               </Grid>
-              <Grid item xs={2} sx={{ paddingRight: '5px' }}>
-                <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end' }}>{dayjs(assignment.createdAt).format('YYYY년MM월DD일 hh:mm A')}</Typography>
+              <Grid item xs={3} sx={{ paddingRight: '5px' }}>
+                <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end', whiteSpace: 'pre'  }}>{dayjs(assignment.createdAt).format('YYYY-MM-DD hh:mm A')}</Typography>
               </Grid>
             </Grid>
           </AccordionSummary>
