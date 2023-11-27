@@ -84,10 +84,9 @@ function StudentTable({progress}){
                         combinedArray.map((data, index) => (
                             data.users.map((user, userIndex) => {
                             const countTotalWorks = data.totalWorks.length;
-
                             const matchingSubmits = data.totalSubmits.find(submit => submit.nickName === user);
-                            const countTotalSubmits = matchingSubmits.count;
-                            
+                            // 이 부분 바꿨습니다
+                            // const countTotalSubmits = matchingSubmits.count;                            
                             
                             return(
                                 <TableRow key={`${index}-${userIndex}`} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
@@ -95,7 +94,8 @@ function StudentTable({progress}){
                                     <TableCell align="center">
                                         {matchingSubmits ? (
                                             <>
-                                                {countTotalSubmits}/{countTotalWorks} ({(countTotalSubmits / countTotalWorks * 100).toFixed(1)}%)
+                                            {/* 밑의  countTotalSubmits를 matchingSubmits.count로 바꿨습니다*/}
+                                                {matchingSubmits.count}/{countTotalWorks} ({(matchingSubmits.count / countTotalWorks * 100).toFixed(1)}%)
                                             </>
                                         ) : (
                                             0
