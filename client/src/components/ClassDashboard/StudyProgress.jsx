@@ -41,7 +41,6 @@ function StudentTable({progress}){
     console.log('users:', users);
     console.log('totalWorksId:', totalWorks);
     console.log('combined:', combinedArray);
-
     
     useEffect(()=>{
         const submitsCounts = {};
@@ -83,6 +82,11 @@ function StudentTable({progress}){
                     {
                         combinedArray.map((data, index) => (
                             data.users.map((user, userIndex) => {
+                                // 이 부분 추가 했습니다.
+                                // user가 '' 일때도 들어가 있으니까 만약 user가 ''이면 바로 return을 시켜서 다음 map으로 돌아가게 했습니다!
+                            if(user === ''){
+                                return
+                            }
                             const countTotalWorks = data.totalWorks.length;
                             const matchingSubmits = data.totalSubmits.find(submit => submit.nickName === user);
                             // 이 부분 바꿨습니다

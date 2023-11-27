@@ -61,7 +61,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
                 }}>
                   <Button variant="outlined" size='large'>📑 제출된 과제 확인하기</Button>
                 </Link>
-                <Button variant="outlined" sx={{ width: '10%' }}>삭제</Button>
+                <Button variant="outlined" sx={{ width: '10%' }} onClick={()=>{setDeleteData(assignment); setAlertOpen(true)}}>삭제</Button>
                 <Button variant="outlined" onClick={() => { setModalOpen(true); setTarget(assignment); }} sx={{ width: '10%' }}>수정</Button>
 
               </Stack>
