@@ -140,17 +140,21 @@ router.get('/class/progress', function (req, res) {
                 attributes:['id'],
                 include: [{
                     model: models.Submit,
-              
+                    attributes:['id'],
                     // required: true,
                     attributes:[],                  
                     include:[{
                         model: models.User,
                         attributes:['nickName']                        
                     }],
-                }]
-            }]
+                }],
+                where: {
+                    id: {
+                        [Op.not]: null, // Curriculums.Works.id가 null이 아닌 경우
+                    },
+                },
+            }],
         }], 
-        // group:['Curriculums.Works.id','Curriculums.Works.Submits.User.id'],
         group:['Curriculums.Works.id','Curriculums.Works.Submits.User.id'],
     }).then(data => {
         res.status(200).send(data);
