@@ -18,11 +18,10 @@ const style = {
   p: 4,
 };
 
-function EditWorkModal({ onClose, target, works, setWorks }) {
+function EditWorkModal({ onClose, target, works, setWorks}) {
   const [editTitle, setEditTitle] = useState(target.title);
   const [editDescription, setEditDescription] = useState(target.description);
   const [editDueDateTime, setEditDueDateTime] = useState();
-  console.log(target);
 
   const UpdateWork = () => {
     const updateData = {
@@ -49,13 +48,17 @@ function EditWorkModal({ onClose, target, works, setWorks }) {
     <div>
       <Modal open={true} onClose={onClose}>
         <Stack sx={style}>
-          <Typography id="modal-modal-title" variant="h4" component="h2" textAlign={'center'}>
+          <Typography id="modal-modal-title" variant="h4" component="h2" sx={{textAlign:'center',}}>
             과제 수정
           </Typography>
           <Stack id="modal-modal-description">
             <Stack sx={{ flexDirection: 'row', mb: 2, mt: 3 }}>
               <Stack sx={{ mr: 2, minWidth: 140 }}>
-                <Typography variant='h4'>{target.curriculumId}</Typography>
+                <Typography variant='h5' sx={{textAlign:'center'}}>
+                  {works.map(work => (
+                    target.curriculumId === work.id ?  work.title : null
+                  ))}
+                </Typography>
               </Stack>
               <Picker editDueDateTime={editDueDateTime} setEditDueDateTime={setEditDueDateTime} />
             </Stack>

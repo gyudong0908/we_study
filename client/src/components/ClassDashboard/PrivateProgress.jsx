@@ -8,6 +8,9 @@ import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import 'react-circular-progressbar/dist/styles.css';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 
 const ServerDay = (props) => {
@@ -25,31 +28,47 @@ const ServerDay = (props) => {
   );
 };
 
-function CircularProgressWithLabel(props) {
+// function CircularProgressWithLabel(props) {
+//   return (
+//     <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center', marginBottom: '40px' }}>
+//       <CircularProgress variant="determinate" {...props} size={300} />
+//       <Box
+//         sx={{
+//           top: 0,
+//           left: 0,
+//           bottom: 0,
+//           right: 0,
+//           display: 'flex',
+//           alignItems: 'center',
+//           justifyContent: 'center',
+//           position: 'absolute',
+//         }}
+//       >
+//         <Typography variant="h4" component="div" color="text.secondary" fontWeight='bold'>
+//           {props.value}%
+//         </Typography>
+//       </Box>
+//     </Box>
+//   );
+// }
+
+const CircularProgressBar = ({ percentage }) => {
   return (
-    <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center', marginBottom: '40px' }}>
-      <CircularProgress variant="determinate" {...props} size={300} />
-      <Box
-        sx={{
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          position: 'absolute',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography variant="h4" component="div" color="text.secondary" fontWeight='bold'>
-          {props.value}%
-        </Typography>
-      </Box>
-    </Box>
+    <div style={{ width: '15vw', height: '15vh' }}>
+      <CircularProgressbar
+        value={percentage}
+        text={`${percentage}%`}
+        strokeWidth={13}
+        styles={buildStyles({
+          textColor: '#757575',
+          pathColor: '#3F51B5',
+          trailColor: 'rgba(255,255,255,0.2)',
+          textSize: '15px'
+        })}
+      />
+    </div>
   );
-}
-
-
+};
 
 export default function PrivateProgress() {
   const [highlightedDays, setHighlightedDays] = useState([]);
@@ -79,14 +98,14 @@ export default function PrivateProgress() {
   }, [])
 
   return (
-    <Stack spacing={4} justifyContent='center'>
+    <Stack justifyContent='center'>
       <Stack sx={{ borderBottom: '1.5px solid black', mb: 2 }}>
         <Typography variant='h4' sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea' }} >나의 학습 진행 상황</Typography>
       </Stack>
-      <Stack direction='row' spacing={30}>
-        <Stack textAlign='center'>
+      <Stack direction='row' spacing={5}>
+        <Stack direction='column' spacing={5} sx={{textAlign:'center',}}>
           <Typography variant='h4' fontWeight='bold'>출석</Typography>
-          <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ marginBottom: '10px' }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} sx={{}}>
             <DemoContainer components={['DateCalendar', 'DateCalendar']}>
               <DateCalendar value={dayjs()} readOnly
                 slots={{
@@ -97,18 +116,19 @@ export default function PrivateProgress() {
                     highlightedDays,
                   },
                 }}
+                sx={{marginRight:'0px'}}
               />
             </DemoContainer>
           </LocalizationProvider>
           <Button onClick={attendance}>출석</Button>
         </Stack >
-        <Stack textAlign='center'>
+        <Stack textAlign='center' direction='column' spacing={5} alignItems='center'>
           <Typography variant='h4' fontWeight='bold'>과제</Typography>
-          <CircularProgressWithLabel value={30} />
+          <CircularProgressBar percentage={30}/>
         </Stack>
-        <Stack textAlign='center'>
+        <Stack textAlign='center' direction='column' spacing={5} alignItems='center'>
           <Typography variant='h4' fontWeight='bold'>퀴즈</Typography>
-          <CircularProgressWithLabel value={50} />
+          <CircularProgressBar percentage={80}/>
         </Stack>
       </Stack>
     </Stack>

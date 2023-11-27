@@ -18,9 +18,11 @@ export default function ClassGrade({ isTeacher }) {
   }, [])
   return (
     <Stack isTeacher={isTeacher}>
-      <Typography variant="h4" component="span" sx={{ mb: 2, fontWeight: 'bold', color: '#0091ea' }}>
-        학생 성적 관리
-      </Typography>
+      <Stack sx={{ borderBottom: '1.5px solid black', mb: 3,}}>
+        <Typography variant="h4" component="span" sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea' }}>
+          학생 성적 관리
+        </Typography>
+      </Stack>
       <GradeTable curriculums={curriculums} setCurriculums={setCurriculums} />
     </Stack>
   );

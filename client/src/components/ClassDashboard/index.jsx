@@ -21,7 +21,7 @@ export default function ClassDashboard({ isTeacher }) {
       console.log(err);
     })
   }
-  console.log(progress);
+  console.log('progress:',progress);
 
   useEffect(() => {
     getProgress();
@@ -46,6 +46,7 @@ export default function ClassDashboard({ isTeacher }) {
     getCurriculums()
     return setIsLoading(false);
   }, [classId])
+  console.log('curriculums:',curriculums);
 
   return (
     <>
