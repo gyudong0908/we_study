@@ -118,9 +118,13 @@ export default function CalenderPage() {
 
     return (
         <Box sx={{
-            marginTop: '70px',
-            marginLeft: '270px',
-            marginRight: '70px',
+            // marginTop: '70px',
+            // marginLeft: '270px',
+            // marginRight: '70px',
+            marginTop: '100px',
+            marginLeft: '320px',
+            marginRight: '50px',
+            marginBottom: '150px',
         }}
         >
             <Stack direction='row' alignItems='center' justifyContent='space-between'>

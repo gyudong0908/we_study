@@ -35,12 +35,17 @@ export default function MyPage() {
   return (
     <Stack
       sx={{
+        // direction: 'column',
+        // spacing: 'px',
+        // marginTop: '100px',
+        // marginLeft: '270px',
+        // marginRight: '270px',
+        // marginBottom: '200px',
         direction: 'column',
-        spacing: '10px',
-        marginTop: '100px',
-        marginLeft: '270px',
-        marginRight: '70px',
-        marginBottom: '200px',
+        marginTop: '115px',
+        marginLeft: '320px',
+        marginRight: '50px',
+        marginBottom: '150px',
       }}>
       <Stack direction='column' spacing={10}>
         <Stack direction="column" spacing={1}>

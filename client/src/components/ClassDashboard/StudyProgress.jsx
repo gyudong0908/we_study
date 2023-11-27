@@ -1,20 +1,64 @@
-import React from 'react';
+import {React, useState, useEffect} from 'react';
 import { Stack, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
-function StudyProgress({progress}){
-    const students = ['이동규', '조정석', '최혜린'];
+function StudyProgress({progress, setProgress}){
 
     return(
         <>
         <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
             <Typography variant='h4' sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}} >학습 진행 상황</Typography>
         </Stack>
-        {StudentTable(students)}
+        <StudentTable progress = {progress} />
         </>
     );
 }
 
-function StudentTable(students){
+function StudentTable({progress}){
+    const [users, setUsers] = useState([]);
+    const [totalWorks, setTotalWorks] = useState([]);
+    const [totalSubmits, setTotalSubmits] = useState([]);
+    const combinedArray = [{
+        users: users, 
+        totalWorks: totalWorks,
+        totalSubmits: totalSubmits,
+    }];
+
+    useEffect(() => {
+        // progress가 변경될 때마다 nickNames를 업데이트
+        const nickNames = progress.map((data) => (
+            data['Curriculums.Works.Submits.User.nickName'] || ''
+        ));
+        const countWorks = progress.map((data)=>(
+            data['Curriculums.Works.id'] || ''
+        ));
+
+       // 중복값 제거
+        const uniqueNickNames = Array.from(new Set(nickNames));
+        setUsers(uniqueNickNames);
+        const uniqueCountWorks = Array.from(new Set(countWorks));
+        setTotalWorks(uniqueCountWorks);
+    }, [progress]);
+    console.log('users:', users);
+    console.log('totalWorksId:', totalWorks);
+    console.log('combined:', combinedArray);
+
+    
+    useEffect(()=>{
+        const submitsCounts = {};
+        progress.forEach((item) => {
+        const nickName = item['Curriculums.Works.Submits.User.nickName'];
+          if (submitsCounts[nickName]) {
+            submitsCounts[nickName] += item.countSubmits;
+          } else {
+            submitsCounts[nickName] = item.countSubmits;
+          }
+        });
+        setTotalSubmits(
+            Object.entries(submitsCounts).map(([nickName, count]) => ({ nickName, count }))
+          );
+    }, [progress]);
+    console.log('nickNameCounts:', totalSubmits);
+    
 
     return(
         <TableContainer sx={{marginBottom:'30px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius:'10px'}}>
@@ -25,34 +69,46 @@ function StudentTable(students){
                             <Typography variant='subtitle1'>학생명</Typography>
                         </TableCell>
                         <TableCell align="center" sx={{ borderBottom: '0.5px solid #333' }}>
-                            <Typography variant='subtitle1'>출결</Typography>
+                            <Typography variant='subtitle1'>과제 제출</Typography>
                         </TableCell>
                         <TableCell align="center" sx={{ borderBottom: '0.5px solid #333' }}>
-                            <Typography variant='subtitle1'>제출된 과제 수</Typography>
+                            <Typography variant='subtitle1'>출석률</Typography>
                         </TableCell>
                         <TableCell align="center" sx={{ borderBottom: '0.5px solid #333' }}>
-                            <Typography variant='subtitle1'>미제출 과제 수</Typography>
-                        </TableCell>
-                        <TableCell align="center" sx={{ borderBottom: '0.5px solid #333' }}>
-                            <Typography variant='subtitle1'>퀴즈 제출률</Typography>
+                            <Typography variant='subtitle1'>퀴즈 제출</Typography>
                         </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                {students.map((data) => (
-                    <TableRow
-                    key={data.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                    <TableCell component="th" scope="row" align="center">
-                    {data}
-                    </TableCell>
-                    <TableCell align="center">{data}</TableCell>
-                    <TableCell align="center">{data}</TableCell>
-                    <TableCell align="center">{data}</TableCell>
-                    <TableCell align="center">{data}</TableCell>
-                    </TableRow>
-                ))}
+                    {
+                        combinedArray.map((data, index) => (
+                            data.users.map((user, userIndex) => {
+                            const countTotalWorks = data.totalWorks.length;
+
+                            const matchingSubmits = data.totalSubmits.find(submit => submit.nickName === user);
+                            const countTotalSubmits = matchingSubmits.count;
+                            
+                            
+                            return(
+                                <TableRow key={`${index}-${userIndex}`} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                    <TableCell component="th" scope="row" align="center">{user}</TableCell>
+                                    <TableCell align="center">
+                                        {matchingSubmits ? (
+                                            <>
+                                                {countTotalSubmits}/{countTotalWorks} ({(countTotalSubmits / countTotalWorks * 100).toFixed(1)}%)
+                                            </>
+                                        ) : (
+                                            0
+                                        )}
+                                    </TableCell>
+                                    <TableCell align="center">ㅇㅇㅇ</TableCell>
+                                    <TableCell align="center">ㅇㅇㅇ</TableCell>
+                                </TableRow>
+                            )
+                            })
+                        ))
+                    }
+                    
                 </TableBody>
             </Table>
         </TableContainer>

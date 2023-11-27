@@ -35,11 +35,19 @@ export default function ClassPage() {
     <Stack
       sx={{
         direction: 'column',
-        spacing: '10px',
-        marginTop: '100px',
-        marginLeft: '270px',
-        marginRight: '70px',
-        marginBottom: '200px',
+        marginTop: '115px',
+        marginLeft: '320px',
+        marginRight: '50px',
+        marginBottom: '150px',
+
+          // marginTop:'120px',
+          // marginLeft:'300px',
+          // marginBottom:'200px',
+          // display:'flex',
+          // flexDirection:'column',
+          // width:'cal(100% - 3rem)',
+          // maxWidth: '55rem',
+
       }}
     >
       <ClassCard title={classData.title} section={classData.section} description={classData.description} />

@@ -124,7 +124,9 @@ router.get('/class/user', function (req, res) {
 router.get('/class/progress', function (req, res) {
     const classId = req.query.classId;
     models.Class.findAll( {
-        attributes:[[sequelize.fn('count', sequelize.col('Curriculums.Works.Submits.User.id')), 'count']],
+        attributes:[
+            [sequelize.fn('count', sequelize.col('Curriculums.Works.Submits.User.id')), 'countSubmits'],
+        ],
         where:{
             id:classId,
         },
@@ -138,17 +140,22 @@ router.get('/class/progress', function (req, res) {
                 attributes:['id'],
                 include: [{
                     model: models.Submit,
+                    attributes:['id'],
                     // required: true,
                     attributes:[],                  
                     include:[{
                         model: models.User,
                         attributes:['nickName']                        
                     }],
-                }]
-            }]
+                }],
+                where: {
+                    id: {
+                        [Op.not]: null, // Curriculums.Works.id가 null이 아닌 경우
+                    },
+                },
+            }],
         }], 
         group:['Curriculums.Works.id','Curriculums.Works.Submits.User.id'],
-        
     }).then(data => {
         res.status(200).send(data);
     }).catch(err => {

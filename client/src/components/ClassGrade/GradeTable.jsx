@@ -1,16 +1,11 @@
 // import { React, useState } from 'react';
 // import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination,
+  Paper, Divider } from '@mui/material';
 import { Typography, Stack, Box } from '@mui/material';
 import { useState } from 'react';
+import dayjs from 'dayjs';
 
 const columns = [
   { id: "topic", label: '단원명', width: 150 },
@@ -58,7 +53,7 @@ export default function GradeTable({ curriculums, setCurriculums }) {
                 <TableCell>{submit.User.nickName}</TableCell>
                 <TableCell>{curriculum.title}</TableCell>
                 <TableCell>{work.title}</TableCell>
-                <TableCell>{submit.updatedAt}</TableCell>
+                <TableCell>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mm A')}</TableCell>
                 <TableCell>{submit.grade}</TableCell>
               </TableRow>
             )
@@ -70,8 +65,12 @@ export default function GradeTable({ curriculums, setCurriculums }) {
                 <TableCell>{submit.User.nickName}</TableCell>
                 <TableCell>{curriculum.title}</TableCell>
                 <TableCell>{work.title}</TableCell>
-                <TableCell>{submit.updatedAt}</TableCell>
-                <TableCell>{submit.grade}</TableCell>
+                <TableCell>
+                  <Typography sx={{textAlign:'center'}}>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography sx={{textAlign:'center'}}>{submit.grade}</Typography>
+                </TableCell>
               </TableRow>)
           }
         }
@@ -85,8 +84,8 @@ export default function GradeTable({ curriculums, setCurriculums }) {
   }, [[],selectedUser, selectedCurriculum]);
 
   return (
-    <Paper sx={{ width: '90%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden',}}>
+      <TableContainer sx={{ maxHeight: 440, }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -112,13 +111,13 @@ export default function GradeTable({ curriculums, setCurriculums }) {
                   ))}
                 </select>
               </TableCell>
-              <TableCell sx={{ width: 700 }}>
+              <TableCell sx={{ width: 700, textAlign:'center' }}>
                 과제명
               </TableCell>
-              <TableCell sx={{ width: 100 }}>
+              <TableCell sx={{ width: 200, textAlign:'center' }}>
                 제출시간
               </TableCell>
-              <TableCell sx={{ width: 100 }}>
+              <TableCell sx={{ width: 100, textAlign:'center' }}>
                 성적
               </TableCell>
             </TableRow>
@@ -138,8 +137,12 @@ export default function GradeTable({ curriculums, setCurriculums }) {
                           <TableCell>{submit.User.nickName}</TableCell>
                           <TableCell>{curriculum.title}</TableCell>
                           <TableCell>{work.title}</TableCell>
-                          <TableCell>{submit.updatedAt}</TableCell>
-                          <TableCell>{submit.grade}</TableCell>
+                          <TableCell>
+                            <Typography sx={{textAlign:'center', wordBreak:'keep-all'}}>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mmA')}</Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography sx={{textAlign:'center'}}>{submit.grade}</Typography>
+                          </TableCell>
                         </TableRow>
                       )
                     } else if (selectedUser === submit.User.nickName) {
@@ -148,8 +151,12 @@ export default function GradeTable({ curriculums, setCurriculums }) {
                           <TableCell>{submit.User.nickName}</TableCell>
                           <TableCell>{curriculum.title}</TableCell>
                           <TableCell>{work.title}</TableCell>
-                          <TableCell>{submit.updatedAt}</TableCell>
-                          <TableCell>{submit.grade}</TableCell>
+                          <TableCell>
+                            <Typography sx={{textAlign:'center', wordBreak:'keep-all'}}>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mmA')}</Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography sx={{textAlign:'center'}}>{submit.grade}</Typography>
+                          </TableCell>
                         </TableRow>)
                     }
                   }
@@ -161,9 +168,10 @@ export default function GradeTable({ curriculums, setCurriculums }) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack direction='row' justifyContent='space-between' sx={{ marginLeft: '10px', marginTop: '10px' }}>
-        <Typography variant='h5'>평균</Typography>
-        <Typography sx={{ float: 'right', marginRight: '30px' }}>{sumGrade/count}</Typography>
+      <Divider variant='large' />
+      <Stack direction='row' sx={{alignItems:'center', justifyContent:'space-between', padding:'15px'}}>
+        <Typography sx={{ml:1, fontWeight:'bold'}}>Average</Typography>
+        <Typography sx={{mr:1, fontWeight:'bold'}}>{(sumGrade/count).toFixed(1)} 점</Typography>
       </Stack>
     </Paper>
   );
