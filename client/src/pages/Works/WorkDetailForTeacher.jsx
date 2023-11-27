@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Card, CardActions, CardContent, Button, Typography, Stack, Grid, TextField, Avatar } from '@mui/material';
+import { Card, CardActions, CardContent, Button, Typography, Stack, Grid, TextField, Avatar, Checkbox } from '@mui/material';
+import DeleteAlertModal from '../../components/MyModal/DeleteAlertModal';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
@@ -8,11 +9,28 @@ import dayjs from 'dayjs';
 export default function WorkDetailForTeacher() {
     const { submitId } = useParams();
     const [submitData, setsubmitData] = useState([]);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [isPrivate, setIsPrivate] = useState()
 
     function getSubmitData() {
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, { withCredentials: true }).then(response => {
             console.log(response.data)
             setsubmitData(response.data);
+            setIsPrivate(response.data.private);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+    function onClickDelete(target) {
+        axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${target.id}`, { withCredentials: true }).then(response => {
+            navigate(-1);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+    function changePrivate(value) {
+        axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, {private: value}, { withCredentials: true }).then(() => {
+            setIsPrivate(value);
         }).catch(err => {
             console.log(err);
         })
@@ -52,7 +70,13 @@ export default function WorkDetailForTeacher() {
                                     <Grid item><Typography variant='caption'>{dayjs(submitData.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography></Grid>
                                 </Grid>
                                 <Stack sx={{ mt: 3, mb: 5 }}>
+                                    <Stack direction={'row'} justifyContent={'space-between'}>
                                     <Typography variant='h5'>{submitData.title}</Typography>
+                                        <Stack direction={'row'} alignItems={'center'}>
+                                            <label htmlFor="checkBox">private</label>
+                                            <Checkbox id = "checkBox" onChange={(e)=>{changePrivate(e.target.checked)}} checked={isPrivate}/>
+                                        </Stack>
+                                    </Stack>
                                     <Typography variant='body1' sx={{
                                         mt: 3,
                                         whiteSpace: 'pre-line'
@@ -63,12 +87,23 @@ export default function WorkDetailForTeacher() {
                                 <CardActions sx={{ justifyContent: 'flex-end', mb: 3 }}>
                                     <Button size="medium" href={submitData.downloadPath}>{submitData.fileName}</Button>
                                 </CardActions>
+                                <Stack direction={'row'} justifyContent={'flex-end'}>
+                                    <Button variant='outlined' sx={{ width: '10%' }} onClick={() => { setAlertOpen(true) }}>삭제</Button>
+                                </Stack>
                             </CardContent>
                         </Card>
                     </Stack>
                     <InputGrade submitData={submitData} setsubmitData={setsubmitData} submitId={submitId} />
                     <CheckGrade submitData={submitData} submitId={submitId} setsubmitData={setsubmitData} />
                 </Stack> : null}
+                {
+                    alertOpen && (
+                        <DeleteAlertModal
+                            onClose={() => { setAlertOpen(); }}
+                            deleteData={submitData}
+                            onClickDelete={onClickDelete}/>
+                    )
+            }
         </>
     );
 }
