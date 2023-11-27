@@ -123,7 +123,7 @@ export default function WorksForTeacher() {
                                     <TableCell component="th" scope="row" align="center">{item.User.nickName}</TableCell>
                                     <TableCell align="center"
                                         onClick={() => {
-                                            navigate(`/mypage/classes/${item.id}/workdetail`);
+                                            navigate(`/mypage/classes/${item.id}/workdetail/teacher`);
                                         }}
                                         sx={{
                                             align: 'center',

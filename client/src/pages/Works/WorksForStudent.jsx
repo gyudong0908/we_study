@@ -6,13 +6,16 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import {
     Table, TableContainer, TableCell, TableBody, TableHead, TableRow, TextField,
-    Grid, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Button
+    Grid, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Button, Checkbox
 } from '@mui/material';
+import {useSelector} from 'react-redux';
 
 export default function WorksForStudent() {
     const [submitData, setSubmitData] = useState([]);
     const [workData, setWorkData] = useState({});
+    const [isSubmit, setIsSubmit] = useState(false);
     const { workId } = useParams();
+    const user = useSelector(state=>state.userData);
 
     const navigate = useNavigate();
     const handleGoBack = () => {
@@ -22,23 +25,30 @@ export default function WorksForStudent() {
 
     function getSubmits() {
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/submits?workId=${workId}`, { withCredentials: true }).then((response) => {
-            setSubmitData(response.data)
+            for (const item of response.data) {
+                if(item.userId === user.userData.id){
+                    setIsSubmit(true);
+                    break;
+                }                
+            }
+            setSubmitData(response.data);
         }).catch(err => {
             console.log(err);
         })
     }
     function getWork() {
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/work?workId=${workId}`, { withCredentials: true }).then(response => {
-            console.log(response.data)
             setWorkData(response.data);
         }).catch(err => {
             console.log(err);
         })
     }
     useEffect(() => {
-        getSubmits();
-        getWork()
-    }, [])
+        if(user.userData){
+            getSubmits();
+            getWork()    
+        }
+    }, [user.userData])
 
     return (
         <Stack
@@ -88,10 +98,11 @@ export default function WorksForStudent() {
                     </AccordionDetails>
                 </Accordion>
             </Stack>
-            <Stack sx={{ mb: 5 }}>
-                <SubmitWork submitData={submitData} setSubmitData={setSubmitData} workId={workId} />
-            </Stack>
-
+            {!isSubmit &&(
+                <Stack sx={{ mb: 5 }}>
+                    <SubmitWork close={()=>{setIsSubmit(true)}} submitData={submitData} setSubmitData={setSubmitData} workId={workId} />
+                </Stack>)
+            }
             <TableContainer sx={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}>
                 <Table sx={{ width: '100%' }} aria-label='works table'>
                     <TableHead>
@@ -117,7 +128,10 @@ export default function WorksForStudent() {
                                     <TableCell component="th" scope="row" align="center">{item.User.nickName}</TableCell>
                                     <TableCell align="center"
                                         onClick={() => {
-                                            navigate(`/mypage/classes/${item.id}/workdetail`);
+                                            if(item.userId !== user.userData.id && item.private === true){
+                                                return;
+                                            }
+                                            navigate(`/mypage/classes/${item.id}/workdetail/student`);
                                         }}
                                         sx={{
                                             align: 'center',
@@ -126,7 +140,7 @@ export default function WorksForStudent() {
                                                 backgroundColor: 'rgba(0, 0, 0, 0.1)', // 변경하고자 하는 배경 색상
                                             },
                                         }}>
-                                        {item.title}
+                                        { (item.userId !== user.userData.id) && (item.private === true)? '🔒 '+ item.title: item.title}
                                     </TableCell>
                                     <TableCell align="center">{dayjs(item.createdAt).format('YYYY-DD-MM hh:mm A')}</TableCell>
                                 </TableRow>
@@ -139,18 +153,19 @@ export default function WorksForStudent() {
     );
 }
 
-function SubmitWork({ submitData, setSubmitData, workId }) {
+function SubmitWork({ submitData, setSubmitData, workId, close }) {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [file, setFile] = useState('');
     const [expanded, setExpanded] = useState(false);
+    const [isprivate, setIsPrivate] = useState(false);
 
     const inputToggleChange = () => {
         setExpanded((prevExpanded) => !prevExpanded);
     };
 
     function submit() {
-        axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/create/submit?workId=${workId}`, { title: title, content: content, file: file }, {
+        axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/create/submit?workId=${workId}`, { title: title, content: content, file: file, private: isprivate }, {
             withCredentials: true,
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -161,6 +176,7 @@ function SubmitWork({ submitData, setSubmitData, workId }) {
             setContent('');
             setFile('');
             setExpanded(false);
+            close();
         }).catch(err => {
             console.log(err);
         })
@@ -178,16 +194,20 @@ function SubmitWork({ submitData, setSubmitData, workId }) {
                 ✍️ 과제를 제출하세요.
             </AccordionSummary>
             <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-                <TextField
-                    id="inputAssignmentTitle"
-                    label="제목을 입력하세요."
-                    variant="outlined"
-                    fullWidth
-                    sx={{ mb: 2 }}
-                    required
-                    value={title}
-                    onChange={(e) => { setTitle(e.target.value) }}
-                />
+                <Stack direction={'row'} alignItems={'center'}>
+                    <TextField
+                        id="inputAssignmentTitle"
+                        label="제목을 입력하세요."
+                        variant="outlined"
+                        fullWidth
+                        sx={{ mb: 2 }}
+                        required
+                        value={title}
+                        onChange={(e) => { setTitle(e.target.value) }}
+                    />
+                    <label htmlFor="checkBox">private</label>
+                    <Checkbox id = "checkBox" onChange={(e)=>{setIsPrivate(e.target.checked)}}/>
+                </Stack>
                 <TextField
                     id="inputAssignmentContent"
                     label="세부 내용을 입력하세요."

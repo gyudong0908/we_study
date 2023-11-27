@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, Typography, Modal, Button, TextField } from '@mui/material';
+import { Stack, Typography, Modal, Button, TextField, Checkbox } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -19,20 +19,24 @@ function EditSubmitModal({ onClose, submitData, setsubmitData }) {
   const [editTitle, setEditTitle] = useState(submitData.title);
   const [editContent, setEditContent] = useState(submitData.content);
   const [file, setFile] = useState('');
+  const [isPrivate, setIsPrivate] = useState(submitData.private);
+  console.log(isPrivate)
 
   const updateSubmit = () => {
     const updateData = {
       title: editTitle,
       content: editContent,
       updatedAt: new Date(),
-      file: file
+      file: file,
+      private: isPrivate
     }
     const newSetData = {
       title: editTitle,
       content: editContent,
       updatedAt: new Date(),
       downloadPath: submitData.downloadPath,
-      fileName: submitData.fileName
+      fileName: submitData.fileName,
+      private: isPrivate
     }
 
     axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitData.id}`, updateData, {
@@ -59,17 +63,21 @@ function EditSubmitModal({ onClose, submitData, setsubmitData }) {
             제출과제 수정
           </Typography>
           <Stack id="modal-modal-description">
-            <TextField
-              id="inputNoticeTitle"
-              label='제목을 입력하세요.'
-              variant="outlined"
-              fullWidth
-              rows={8}
-              sx={{ mt: 3 }}
-              required
-              onChange={(e) => { setEditTitle(e.target.value); }}
-              value={editTitle}
-            />
+            <Stack direction={'row'} alignItems={'center'}>
+              <TextField
+                id="inputNoticeTitle"
+                label='제목을 입력하세요.'
+                variant="outlined"
+                fullWidth
+                rows={8}
+                sx={{ mt: 3 }}
+                required
+                onChange={(e) => { setEditTitle(e.target.value); }}
+                value={editTitle}
+              />
+              <label htmlFor="checkBox">private</label>
+              <Checkbox id = "checkBox" onChange={(e)=>{setIsPrivate(e.target.checked)}} checked={isPrivate}/>
+            </Stack>
             <TextField
               id="teacherName"
               label='세부 내용을 입력하세요.'

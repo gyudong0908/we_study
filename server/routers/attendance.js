@@ -36,10 +36,12 @@ router.post('/attendance', async function (req, res) {
 
 router.get('/attendances', function (req, res) {
     const classId = req.query.classId;
+    const userId = req.session.passport.user;
     models.Attendance.findAll({
         raw: true,
         where: {
-            classId: classId
+            classId: classId,
+            userId: userId
         }
     }).then(attendances => {
         res.status(200).send(attendances.map(attendance => attendance.createdAt))
