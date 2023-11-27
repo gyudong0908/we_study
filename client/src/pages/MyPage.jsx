@@ -36,7 +36,7 @@ export default function MyPage() {
     <Stack
       sx={{
         direction: 'column',
-        spacing: 'px',
+        spacing: '10px',
         marginTop: '100px',
         marginLeft: '270px',
         marginRight: '70px',
