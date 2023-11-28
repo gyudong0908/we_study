@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     birthDay: {
       type: DataTypes.DATE,
-      defaultValue: '1999-01-01',
+      defaultValue: '1900-01-01',
     },
     gender: {
       type: DataTypes.STRING,

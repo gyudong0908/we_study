@@ -164,6 +164,36 @@ router.get('/class/progress', function (req, res) {
     })
 })
 
+router.get('/class/attendances', function(req,res){
+    const classId = req.query.classId;
+    models.Class.findAll({
+        attributes:[[sequelize.fn('count', sequelize.col('Users.Attendances.id')), 'totalAttendance']],
+        raw:true,
+        where:{
+            id: classId,
+            teacher: {
+                [Op.not]: sequelize.col('Users.id'), // 선생님인 경우 제외
+            },
+        },
+        include:[
+            {
+                model: models.User,
+                through: 'classUser',
+                attributes:['id','nickName'],
+                include:[{
+                    model: models.Attendance,
+                    attributes:[]
+                }]
+            },
+        ],
+        group:['Users.id']
+    }).then((data)=>{
+        res.status(200).send(data);
+    }).catch(err=>{
+        console.log(err);
+    })
+})
+
 router.post('/class/join', function (req, res) {
     const code = req.query.code;
     const userId = req.session.passport.user;

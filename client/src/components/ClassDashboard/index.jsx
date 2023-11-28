@@ -10,36 +10,50 @@ import { useParams } from 'react-router-dom';
 export default function ClassDashboard({ isTeacher }) {
   const [curriculums, setCurriculums] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { classId, userId } = useParams();
+  const { classId} = useParams();
 
   const [attendances, setAttendances] = useState([]);
-  function getAttendances() {
-    axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/attendances?classId=${classId}&userId=${userId}`, { withCredentials: true 
-    }).then(data => {
-      setAttendances(data.data);
-    }).catch(err => {
-      console.log(err);
-    })
-  }
+  // function getAttendances() {
+  //   console.log(777777777777777)
+  //   axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/attendances?classId=${classId}`, { withCredentials: true 
+  //   }).then(data => {            
+  //     setAttendances(data.data);
+  //   }).catch(err => {
+  //     console.log(777777777777777)
+  //     console.log(err);
+  //   })
+  // }
   console.log('attendances:',attendances);
 
-  useEffect(() => {
-    getAttendances(); 
-  }, [classId, userId])
 
 
   const [progress, setProgress] = useState([]);
-  function getProgress() {
-    axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/progress?classId=${classId}`, { withCredentials: true }).then(data => {
-      setProgress(data.data);
-    }).catch(err => {
-      console.log(err);
-    })
+  // function getProgress() {
+  //   axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/progress?classId=${classId}`, { withCredentials: true }).then(data => {
+  //     setProgress(data.data);
+  //   }).catch(err => {
+  //     console.log(err);
+  //   })
+  // }
+  async function fetchData() {
+    try {
+      const progressData = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/progress?classId=${classId}`, { withCredentials: true });
+      setProgress(progressData.data);
+
+      const attendanceData = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/attendances?classId=${classId}`, { withCredentials: true });
+      setAttendances(attendanceData.data);
+    } catch (err) {
+      console.error(err);
+    }
   }
+
+
   console.log('progress:',progress);
 
   useEffect(() => {
-    getProgress(); 
+    // getProgress(); 
+    // getAttendances(); 
+    fetchData();
   }, [classId])
 
 
@@ -79,7 +93,7 @@ export default function ClassDashboard({ isTeacher }) {
           }
           {
             isTeacher && (
-              <StudyProgress progress={progress} setProgress={setProgress}/>
+              <StudyProgress progress={progress} setProgress={setProgress} attendances={attendances}/>
             )
           }
           <Stack sx={{ borderBottom: '1.5px solid black', mb: 2, mt: 5 }}>

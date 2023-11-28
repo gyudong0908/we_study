@@ -83,6 +83,7 @@ export default function QuizPage(){
                         <div>제목: {data.title}</div>
                         <div>점수: {data.grade}점</div>
                         <div>정답: {data.answer}</div>
+                        <div>수정</div>
                         </Stack>
                     )
                 })
