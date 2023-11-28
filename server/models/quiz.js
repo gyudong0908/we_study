@@ -11,8 +11,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            // Quiz.belongsTo(models.ClassChat, { foreignKey: 'chatId', onDelete: 'CASCADE' });
-            // Quiz.belongsTo(models.ChatUser, { foreignKey: 'chatUserId' });
+            Quiz.belongsTo(models.Class, { foreignKey: 'classId' , onDelete: 'CASCADE'});
+            Quiz.hasMany(models.Question, { foreignKey: 'quizId' });
+
         }
     }
     Quiz.init({
@@ -21,22 +22,21 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        question: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        quizType: {
-            type: DataTypes.ENUM('객관식', '서술형'),
-            allowNull: false,
-        },
-        score: {
+        classId:{
             type: DataTypes.INTEGER,
-            allowNull: false,
         },
-        answer: {
+        dueDateTime: {
+            type: DataTypes.DATE,
+        },
+        title:{
             type: DataTypes.STRING,
-            allowNull: true, //객관식 퀴즈의 경우 null 값
-        }
+        },
+        description:{
+            type: DataTypes.TEXT,
+        },
+        depoly:{
+            type: DataTypes.BOOLEAN,
+        },
     }, {
         sequelize,
         modelName: 'Quiz', // 모델 이름 바꿔줘야함

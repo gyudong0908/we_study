@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Choice extends Model { // 클래스 이름 모델 이름으로 바꿔 줘야함
+    class StudentAnswer extends Model { // 클래스 이름 모델 이름으로 바꿔 줘야함
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,10 +11,11 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Choice.belongsTo(models.Question, { foreignKey: 'questionId' , onDelete: 'CASCADE'});
+            StudentAnswer.belongsTo(models.Question, { foreignKey: 'questionId' , onDelete: 'CASCADE'});
+            StudentAnswer.belongsTo(models.User, { foreignKey: 'userId' , onDelete: 'CASCADE'});
         }
     }
-    Choice.init({
+    StudentAnswer.init({
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -23,16 +24,21 @@ module.exports = (sequelize, DataTypes) => {
         questionId:{
             type: DataTypes.INTEGER,
         },
-        optionText: {
+        userId:{
+            type: DataTypes.INTEGER,
+        },
+        answer: {
             type: DataTypes.STRING,
-            allowNull: false,
+        },
+        check: {
+            type: DataTypes.BOOLEAN,
         },
     }, {
         sequelize,
-        modelName: 'Choice', // 모델 이름 바꿔줘야함
+        modelName: 'StudentAnswer', // 모델 이름 바꿔줘야함
         timestamps: true,
         underscored: true,
-        tableName: 'choices', // 테이블 이름 바꿔줘야함
+        tableName: 'studentAnswers', // 테이블 이름 바꿔줘야함
     });
-    return Choice; // return 할때 모델 이름으로 바꿔줘야함
+    return StudentAnswer; // return 할때 모델 이름으로 바꿔줘야함
 };
