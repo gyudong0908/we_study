@@ -25,27 +25,30 @@ function createData(name, code, population) {
   return { name, code, population };
 }
 
-const rows = [
-  createData('unlucky8', 'IN', 1324171354),
-  createData('China', 'CN', 1403500365),
-  createData('Italy', 'IT', 60483973),
-  createData('United States', 'US', 327167434),
-  createData('Canada', 'CA', 37602103),
-  createData('Australia', 'AU', 25475400),
-  createData('Germany', 'DE', 83019200),
-  createData('Ireland', 'IE', 4857000),
-  createData('Mexico', 'MX', 12657769),
-  createData('Japan', 'JP', 126317000),
-  createData('France', 'FR', 67022000),
-  createData('United Kingdom', 'GB', 67545757),
-  createData('Russia', 'RU', 146793744),
-  createData('Nigeria', 'NG', 200962417),
-  createData('Brazil', 'BR', 210147125),
-];
+// const rows = [
+// createData('unlucky8', 'IN', 1324171354),
+// createData('China', 'CN', 1403500365),
+// createData('Italy', 'IT', 60483973),
+// createData('United States', 'US', 327167434),
+// createData('Canada', 'CA', 37602103),
+// createData('Australia', 'AU', 25475400),
+// createData('Germany', 'DE', 83019200),
+// createData('Ireland', 'IE', 4857000),
+// createData('Mexico', 'MX', 12657769),
+// createData('Japan', 'JP', 126317000),
+// createData('France', 'FR', 67022000),
+// createData('United Kingdom', 'GB', 67545757),
+// createData('Russia', 'RU', 146793744),
+// createData('Nigeria', 'NG', 200962417),
+// createData('Brazil', 'BR', 210147125),
+// ];
 
-export default function StickyHeadTable() {
+export default function StickyHeadTable({ data }) {
+  console.log("왜 없는거야", data);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  // const rows = data;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -58,7 +61,7 @@ export default function StickyHeadTable() {
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440, width: '100%'}}>
+      <TableContainer sx={{ maxHeight: 440, width: '100%' }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -67,28 +70,21 @@ export default function StickyHeadTable() {
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
-                 >
+                >
                   {column.label}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
+            {data
+              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
+                  <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{row.nickName}</TableCell>
+                    <TableCell align="right">{row.totalStudyTime}</TableCell>
                   </TableRow>
                 );
               })}
@@ -98,7 +94,7 @@ export default function StickyHeadTable() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        // count={data.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
