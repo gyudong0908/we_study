@@ -1,7 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
+const sequelize = require('sequelize');  // 이거 추가해줌
 router.use(express.json());
+
+
+router.get('/rank', async (req, res) => {
+    try {
+        const results = await models.Rank.findAll({
+            attributes: [
+                'userId',
+                [sequelize.fn('SUM', sequelize.col('study_time')), 'totalStudyTime'],
+            ],
+            include: [{ model: models.User, attributes: ['nickName'] }],
+            group: ['userId'],
+            order: [['totalStudyTime', 'DESC']],
+            limit: 20,
+        });
+
+        res.json(results);
+        console.log(results);
+    } catch (error) {
+        console.error(err);  //임시로 추가해줌
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
 
 router.post('/rank', function (req, res) {
     const userId = req.session.passport.user;
@@ -70,6 +96,7 @@ router.post('/rank/stop', async (req, res) => {
         res.status(500).json({ message: '시간 업데이트 중 오류가 발생했습니다.' });
     }
 });
+
 
 
 

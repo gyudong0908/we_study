@@ -14,8 +14,59 @@ function MySideNav() {
     const classDatas = useSelector((state) => state.classCards);
     const user = useSelector((state) => state.userData);
 
+    const [timer, setTimer] = useState(0);
+    const [timerRunning, setTimerRunning] = useState(false); // 타이머가 실행 중인지 여부
+
     const [startClicked, setStartClicked] = useState(false);
     const [stopDisabled, setStopDisabled] = useState(true);
+
+    const formatTime = (timeInSeconds) => {
+        const hours = Math.floor(timeInSeconds / 3600);
+        const minutes = Math.floor((timeInSeconds % 3600) / 60);
+        const seconds = timeInSeconds % 60;
+
+        const formattedHours = String(hours).padStart(2, '0');
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = String(seconds).padStart(2, '0');
+
+        return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    };
+
+
+    useEffect(() => {
+        const startTimeFromStorage = sessionStorage.getItem('startTime');
+        const storedTimer = sessionStorage.getItem('timer');
+
+        if (startTimeFromStorage !== null) {
+            const currentTime = new Date().getTime(); // 현재 시간을 가져옵니다.
+            const timeDifferenceInSeconds = Math.floor((currentTime - startTimeFromStorage) / 1000);
+
+            setStartClicked(true);
+            setStopDisabled(false);
+            setTimer(timeDifferenceInSeconds);
+            setTimerRunning(true);
+        } else if (storedTimer !== null) {
+            setStartClicked(false);  //임시로 false로 바꿈
+            setStopDisabled(true);    //임시로 true로 바꿈
+            setTimer(parseInt(storedTimer, 10));
+            setTimerRunning(false);  //임시로 false로 바꿈
+        }
+    }, []);
+
+    useEffect(() => {
+        let intervalId;
+
+        if (timerRunning) {
+            intervalId = setInterval(() => {
+                setTimer((prevTimer) => prevTimer + 1);
+            }, 1000);
+        }
+        else {
+            clearInterval(intervalId); // 타이머가 멈추면 interval을 지웁니다.
+        }
+
+        return () => clearInterval(intervalId);
+    }, [timerRunning]);
 
 
     const dispatch = useDispatch();
@@ -34,14 +85,20 @@ function MySideNav() {
 
 
     const handleStartTime = () => {
+        const storedTimer = sessionStorage.getItem('timer');
         const startTime = new Date(); // 현재 시각을 가져옵니다.
-        const class_Id = 1; // 예시로 클래스 ID를 1로 가정합니다. 실제 ID에 맞게 변경해주세요.
-        console.log('왜 안나와')
+
+        const timeDifference = storedTimer !== null ? parseInt(storedTimer, 10) : 0;
+        sessionStorage.setItem('startTime', startTime.getTime() - (timeDifference * 1000));
+
+        setStartClicked(true);
+        setStopDisabled(false);
+        setTimerRunning(true);
+
         // 서버에 데이터를 업데이트하는 요청을 보냅니다.
         axios.post(`http://localhost:8081/rank`, { startTime: startTime }, { withCredentials: true })
             .then((response) => {
                 // 업데이트 성공 시 처리 로직
-
                 console.log('시작 시간이 업데이트되었습니다.');
             })
             .catch((error) => {
@@ -53,6 +110,12 @@ function MySideNav() {
 
     const handleStopTime = () => {
         const stopTime = new Date(); // Stop 버튼을 눌렀을 때의 현재 시각을 가져옵니다.
+        sessionStorage.removeItem('startTime');
+        sessionStorage.setItem('timer', timer);
+
+        setStartClicked(false);
+        setStopDisabled(true);
+        setTimerRunning(false);
 
         // 서버에 데이터를 업데이트하는 요청을 보냅니다.
         axios.post(`http://localhost:8081/rank/stop`, { stopTime: stopTime }, { withCredentials: true })
@@ -88,21 +151,19 @@ function MySideNav() {
                         sx={{ textAlign: 'center', flexDirection: 'column' }}>
                         <ListItemText
                             primaryTypographyProps={{ fontSize: '45px' }}
-                            primary="00:00:00" />
+                            // primary="00:00:00" />
+                            primary={formatTime(timer)} />
                         <Stack flexDirection='row'>
-
                             <ListItemButton onClick={() => {
                                 handleStartTime();
-                                setStartClicked(true);
-                                setStopDisabled(false);
+
                             }}
                                 disabled={startClicked}
                             >Start</ListItemButton>
                             <ListItemButton
                                 onClick={() => {
                                     handleStopTime();
-                                    setStartClicked(false);
-                                    setStopDisabled(true);
+
                                 }}
                                 disabled={stopDisabled}
 
