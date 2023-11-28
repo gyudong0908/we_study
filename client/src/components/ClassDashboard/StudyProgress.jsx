@@ -1,19 +1,20 @@
 import {React, useState, useEffect} from 'react';
 import { Stack, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import dayjs from 'dayjs';
 
-function StudyProgress({progress, setProgress}){
+function StudyProgress({progress, setProgress, attendances}){
 
     return(
         <>
         <Stack sx={{borderBottom:'1.5px solid black', mb:2}}>
             <Typography variant='h4' sx={{mb:1, fontWeight: 'bold', color:'#0091ea'}} >학습 진행 상황</Typography>
         </Stack>
-        <StudentTable progress = {progress} />
+        <StudentTable progress = {progress} attendances={attendances}/>
         </>
     );
 }
 
-function StudentTable({progress}){
+function StudentTable({progress, attendances}){
     const [users, setUsers] = useState([]);
     const [totalWorks, setTotalWorks] = useState([]);
     const [totalSubmits, setTotalSubmits] = useState([]);
@@ -89,6 +90,7 @@ function StudentTable({progress}){
                             }
                             const countTotalWorks = data.totalWorks.length;
                             const matchingSubmits = data.totalSubmits.find(submit => submit.nickName === user);
+                            const totalAttendance = attendances.find(attendance => attendance['Users.nickName'] === user);
                             // 이 부분 바꿨습니다
                             // const countTotalSubmits = matchingSubmits.count;                            
                             
@@ -105,7 +107,11 @@ function StudentTable({progress}){
                                             0
                                         )}
                                     </TableCell>
-                                    <TableCell align="center">ㅇㅇㅇ</TableCell>
+                                    {
+                                        totalAttendance &&(
+                                            <TableCell align="center">{totalAttendance.totalAttendance} / {dayjs().daysInMonth()}</TableCell>
+                                            )
+                                    }
                                     <TableCell align="center">ㅇㅇㅇ</TableCell>
                                 </TableRow>
                             )
