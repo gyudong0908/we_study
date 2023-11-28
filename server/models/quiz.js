@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class ClassChat extends Model { // 클래스 이름 모델 이름으로 바꿔 줘야함
+    class Quiz extends Model { // 클래스 이름 모델 이름으로 바꿔 줘야함
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,33 +11,38 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            ClassChat.hasMany(models.ChatMessage, { foreignKey: 'chatId' });
-            ClassChat.belongsTo(models.Class, { foreignKey: 'classId' , onDelete: 'CASCADE'});
-            ClassChat.hasMany(models.ChatUser, { foreignKey: 'chatId' });
-
+            // Quiz.belongsTo(models.ClassChat, { foreignKey: 'chatId', onDelete: 'CASCADE' });
+            // Quiz.belongsTo(models.ChatUser, { foreignKey: 'chatUserId' });
         }
     }
-    ClassChat.init({
+    Quiz.init({
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        title: {
+        question: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        classId: {
+        quizType: {
+            type: DataTypes.ENUM('객관식', '서술형'),
+            allowNull: false,
+        },
+        score: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-
+        answer: {
+            type: DataTypes.STRING,
+            allowNull: true, //객관식 퀴즈의 경우 null 값
+        }
     }, {
         sequelize,
-        modelName: 'ClassChat', // 모델 이름 바꿔줘야함
+        modelName: 'Quiz', // 모델 이름 바꿔줘야함
         timestamps: true,
         underscored: true,
-        tableName: 'classchats', // 테이블 이름 바꿔줘야함
+        tableName: 'quizzes', // 테이블 이름 바꿔줘야함
     });
-    return ClassChat; // return 할때 모델 이름으로 바꿔줘야함
+    return Quiz; // return 할때 모델 이름으로 바꿔줘야함
 };

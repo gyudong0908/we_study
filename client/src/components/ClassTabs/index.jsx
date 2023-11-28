@@ -9,6 +9,7 @@ import ClassPeople from '../ClassPeople';
 import ClassWork from '../ClassWork';
 import ClassSetting from '../ClassSetting';
 import ClassGrade from '../ClassGrade';
+import ClassQuiz from '../ClassQuiz';
 import { useParams } from 'react-router-dom';
 
 function CustomTabPanel(props) {
@@ -63,8 +64,12 @@ export default function ClassTabs({ isTeacher, classData, setClassData }) {
       content: <ClassNotice isTeacher={isTeacher} />,
     },
     {
-      title: '할일목록',
+      title: '과제',
       content: <ClassWork isTeacher={isTeacher} />,
+    },
+    {
+      title: '퀴즈',
+      content: <ClassQuiz isTeacher={isTeacher} />,
     },
     {
       title: '참여자',

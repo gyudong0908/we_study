@@ -1,35 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import { Card, CardActions, CardContent, Button, Typography, Stack, Grid, TextField, Avatar } from '@mui/material';
-import EditSubmitModal from '../../components/MyModal/EditSubmitModal';
+import { Card, CardActions, CardContent, Button, Typography, Stack, Grid, TextField, Avatar, Checkbox } from '@mui/material';
+import DeleteAlertModal from '../../components/MyModal/DeleteAlertModal';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import DeleteAlertModal from '../../components/MyModal/DeleteAlertModal';
 
 
-export default function WorkDetail() {
+export default function WorkDetailForTeacher() {
     const { submitId } = useParams();
     const [submitData, setsubmitData] = useState([]);
-    const [open, setOpen] = useState(false);
     const [alertOpen, setAlertOpen] = useState(false);
+    const [isPrivate, setIsPrivate] = useState()
 
     function getSubmitData() {
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, { withCredentials: true }).then(response => {
             console.log(response.data)
             setsubmitData(response.data);
+            setIsPrivate(response.data.private);
         }).catch(err => {
             console.log(err);
         })
     }
-
-    function onClose() {
-        setOpen(false);
-    }
-
-    useEffect(() => {
-        getSubmitData();
-    }, [])
     function onClickDelete(target) {
         axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${target.id}`, { withCredentials: true }).then(response => {
             navigate(-1);
@@ -37,6 +28,18 @@ export default function WorkDetail() {
             console.log(err);
         })
     }
+    function changePrivate(value) {
+        axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, {private: value}, { withCredentials: true }).then(() => {
+            setIsPrivate(value);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    useEffect(() => {
+        getSubmitData();
+    }, [])
+
     const navigate = useNavigate();
     const handleGoBack = () => {
         // 이전 페이지로 이동
@@ -48,17 +51,12 @@ export default function WorkDetail() {
             {submitData.length !== 0 ?
                 <Stack
                     sx={{
-                        // direction: 'column',
-                        // spacing: '10px',
-                        // marginTop: '100px',
-                        // marginLeft: '270px',
-                        // marginRight: '70px',
-                        // marginBottom: '200px'
                         direction: 'column',
-                        marginTop: '115px',
-                        marginLeft: '320px',
-                        marginRight: '50px',
-                        marginBottom: '150px',
+                        spacing: '10px',
+                        marginTop: '100px',
+                        marginLeft: '270px',
+                        marginRight: '70px',
+                        marginBottom: '200px'
                     }}>
                     <Stack sx={{ mb: 2, alignItems: 'flex-end' }}>
                         <Button variant='outlined' sx={{ width: '20%' }} onClick={handleGoBack}>목록</Button>
@@ -72,7 +70,13 @@ export default function WorkDetail() {
                                     <Grid item><Typography variant='caption'>{dayjs(submitData.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography></Grid>
                                 </Grid>
                                 <Stack sx={{ mt: 3, mb: 5 }}>
+                                    <Stack direction={'row'} justifyContent={'space-between'}>
                                     <Typography variant='h5'>{submitData.title}</Typography>
+                                        <Stack direction={'row'} alignItems={'center'}>
+                                            <label htmlFor="checkBox">private</label>
+                                            <Checkbox id = "checkBox" onChange={(e)=>{changePrivate(e.target.checked)}} checked={isPrivate}/>
+                                        </Stack>
+                                    </Stack>
                                     <Typography variant='body1' sx={{
                                         mt: 3,
                                         whiteSpace: 'pre-line'
@@ -83,32 +87,22 @@ export default function WorkDetail() {
                                 <CardActions sx={{ justifyContent: 'flex-end', mb: 3 }}>
                                     <Button size="medium" href={submitData.downloadPath}>{submitData.fileName}</Button>
                                 </CardActions>
-                                {submitData.grade ? null :
-                                    <Stack direction='row' spacing={1} sx={{ justifyContent: 'flex-end', alignItems: 'center', }}>
-                                        <Button variant='outlined' sx={{ width: '10%' }} onClick={() => { setAlertOpen(true) }}>삭제</Button>
-                                        <Button variant='outlined' sx={{ width: '10%' }} onClick={() => { setOpen(true) }}>수정</Button>
-                                    </Stack>
-                                }
+                                <Stack direction={'row'} justifyContent={'flex-end'}>
+                                    <Button variant='outlined' sx={{ width: '10%' }} onClick={() => { setAlertOpen(true) }}>삭제</Button>
+                                </Stack>
                             </CardContent>
                         </Card>
                     </Stack>
                     <InputGrade submitData={submitData} setsubmitData={setsubmitData} submitId={submitId} />
                     <CheckGrade submitData={submitData} submitId={submitId} setsubmitData={setsubmitData} />
                 </Stack> : null}
-            {
-                open ? <EditSubmitModal
-                    submitData={submitData}
-                    setsubmitData={setsubmitData}
-                    onClose={onClose}
-                ></EditSubmitModal> : null
-            }
-            {
-                alertOpen && (
-                    <DeleteAlertModal
-                        onClose={() => { setAlertOpen(); }}
-                        deleteData={submitData}
-                        onClickDelete={onClickDelete}
-                    />)
+                {
+                    alertOpen && (
+                        <DeleteAlertModal
+                            onClose={() => { setAlertOpen(); }}
+                            deleteData={submitData}
+                            onClickDelete={onClickDelete}/>
+                    )
             }
         </>
     );

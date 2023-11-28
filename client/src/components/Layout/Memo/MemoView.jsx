@@ -9,7 +9,7 @@ export default function MemoView({ selectMemo, moveList, moveEdit }) {
             <ArrowBackRoundedIcon onClick={moveList} sx={{ cursor: 'pointer' }} />
             <Stack direction='row' justifyContent='space-between'>
                 <Typography sx={{ marginBottom: 2 }}>제목: {selectMemo.title}</Typography>
-                <Typography>{dayjs(selectMemo.updateAt).format('YYYY-MM-DD hh:mm A')}</Typography>
+                <Typography>{dayjs(selectMemo.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
             </Stack>
             <TextField
                 multiline

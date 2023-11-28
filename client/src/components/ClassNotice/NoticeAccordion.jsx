@@ -33,11 +33,11 @@ export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
             sx={{ margin: '5px' }}
           >
             <Grid container spacing={0} sx={{ alignItems: 'center' }}>
-              <Grid item xs={10}>
+              <Grid item xs={9}>
                 <Typography variant='h6' sx={{ wordBreak: 'keep-all', wordWrap: 'break-word' }}>{notice.title}</Typography>
               </Grid>
-              <Grid item xs={2} sx={{ paddingRight: '5px' }}>
-                <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end' }}>{dayjs(notice.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
+              <Grid item xs={3} sx={{ paddingRight: '5px' }}>
+                <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end', whiteSpace: 'pre'  }}>{dayjs(notice.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
               </Grid>
             </Grid>
           </AccordionSummary>

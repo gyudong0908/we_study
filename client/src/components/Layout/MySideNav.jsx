@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Stack, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, CssBaseline } from '@mui/material';
+import { Stack, Toolbar, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, CssBaseline, Typography } from '@mui/material';
 import axios from 'axios';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
@@ -128,10 +128,6 @@ function MySideNav() {
             });
     };
 
-
-
-
-
     useEffect(() => {
         getClassData();
     }, [])
@@ -139,7 +135,7 @@ function MySideNav() {
     const drawer = (
         <div>
             <Toolbar />
-            <Stack sx={{ overflow: 'auto' }}>
+            <Stack>
                 <List>
                     <ListItem
                         sx={{ textAlign: 'center' }}>
@@ -168,43 +164,35 @@ function MySideNav() {
                                 disabled={stopDisabled}
 
                             >Stop</ListItemButton>
-
                         </Stack>
                     </ListItem>
                 </List>
                 <Divider />
-                <Stack spacing={45}>
+                <Stack>
                     <List>
-                        {['누적 학습 시간 랭킹', '캘린더'].map((text, index) => (
-                            <ListItem key={index} disablePadding>
-                                <ListItemButton component={Link} to={index === 0 ? '/mypage/rank' : index === 1 ? '/mypage/calender' : '/mypage'}>
-                                    <ListItemIcon>
+                        {['누적 학습 시간 랭킹', '캘린더', '프로필 설정'].map((text, index) => (
+                            <ListItem key={index} disablePadding sx={{paddingTop:'0.2rem', paddingBottom:'0.2rem'}} >
+                                <ListItemButton component={Link}
+                                    to={index === 0 ? '/mypage/rank' : 
+                                        index === 1 ? '/mypage/calender' : 
+                                        index === 2 ? '/mypage/setting' : '/mypage'}>
+                                    <ListItemIcon sx={{paddingLeft:'0.5rem'}}>
                                         {index === 0 ? <MilitaryTechRoundedIcon /> :
-                                            index === 1 ? <CalendarMonthRoundedIcon /> : <SchoolRoundedIcon />}
+                                            index === 1 ? <CalendarMonthRoundedIcon /> : 
+                                            <SettingsRoundedIcon />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
                             </ListItem>
                         ))}
+                        <Divider sx={{marginTop:'0.5rem', marginBottom:'0.5rem'}}/>
                         {classDatas.map((classData, index) => (
-                            <ListItem key={index} disablePadding>
+                            <ListItem key={index} disablePadding sx={{paddingTop:'0.2rem', paddingBottom:'0.2rem'}}>
                                 <ListItemButton onClick={() => { navigate(`/mypage/classes/${classData.id}`) }}>
-                                    <ListItemIcon>
+                                    <ListItemIcon sx={{paddingLeft:'0.5rem'}}>
                                         <SchoolRoundedIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={classData.title} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <List>
-                        {['Setting'].map((text, index) => (
-                            <ListItem key={index} disablePadding>
-                                <ListItemButton component={Link} to='/mypage/setting'>
-                                    <ListItemIcon>
-                                        <SettingsRoundedIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
+                                    <ListItemText sx={{wordBreak:'keep-all'}} primary={classData.title} />
                                 </ListItemButton>
                             </ListItem>
                         ))}
@@ -221,7 +209,17 @@ function MySideNav() {
                     variant="permanent"
                     open
                     PaperProps={{
-                        sx: { width: "240px" },
+                        sx:{ 
+                            width: "270px",
+                            backgroundColor:'#fff',
+                            zIndex: '1',
+                            overflowX:'hidden',
+                            overflowY:'auto',
+                            paddingBottom:'1.5rem',
+                            paddingTop:'1rem',
+                            // paddingRight:'0.3rem',
+                            // paddingLeft: '0.5rem',
+                        },
                     }}
                     sx={{
                         position: 'fixed',

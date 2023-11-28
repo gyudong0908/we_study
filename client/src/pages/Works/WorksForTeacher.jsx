@@ -49,12 +49,17 @@ export default function WorksForTeacher() {
     return (
         <Stack
             sx={{
+                // direction: 'column',
+                // spacing: '10px',
+                // marginTop: '100px',
+                // marginLeft: '270px',
+                // marginRight: '70px',
+                // marginBottom: '200px'
                 direction: 'column',
-                spacing: '10px',
-                marginTop: '100px',
-                marginLeft: '270px',
-                marginRight: '70px',
-                marginBottom: '200px'
+                marginTop: '115px',
+                marginLeft: '320px',
+                marginRight: '50px',
+                marginBottom: '150px',
             }}>
 
             <Stack sx={{ borderBottom: '1.5px solid black', mb: 2 }}>
@@ -118,7 +123,7 @@ export default function WorksForTeacher() {
                                     <TableCell component="th" scope="row" align="center">{item.User.nickName}</TableCell>
                                     <TableCell align="center"
                                         onClick={() => {
-                                            navigate(`/mypage/classes/${item.id}/workdetail`);
+                                            navigate(`/mypage/classes/${item.id}/workdetail/teacher`);
                                         }}
                                         sx={{
                                             align: 'center',

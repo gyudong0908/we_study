@@ -31,10 +31,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     birthDay: {
       type: DataTypes.DATE,
+      defaultValue: '1900-01-01',
     },
     gender: {
       type: DataTypes.STRING,

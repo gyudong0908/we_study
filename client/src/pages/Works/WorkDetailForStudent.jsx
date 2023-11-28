@@ -6,17 +6,22 @@ import EditSubmitModal from '../../components/MyModal/EditSubmitModal';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import DeleteAlertModal from '../../components/MyModal/DeleteAlertModal';
+import { useSelector } from 'react-redux';
 
 
-export default function WorkDetail() {
+export default function WorkDetailForStudent() {
     const { submitId } = useParams();
+    const user = useSelector(state=>state.userData);
     const [submitData, setsubmitData] = useState([]);
     const [open, setOpen] = useState(false);
     const [alertOpen, setAlertOpen] = useState(false);
+    const [isMine, setIsMine] = useState(false);
 
     function getSubmitData() {
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, { withCredentials: true }).then(response => {
-            console.log(response.data)
+            if(response.data.userId === user.userData.id ){
+                setIsMine(true);
+            }
             setsubmitData(response.data);
         }).catch(err => {
             console.log(err);
@@ -28,8 +33,11 @@ export default function WorkDetail() {
     }
 
     useEffect(() => {
-        getSubmitData();
-    }, [])
+        if(user.userData){
+            getSubmitData();
+        }
+    }, [user.userData])
+
     function onClickDelete(target) {
         axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${target.id}`, { withCredentials: true }).then(response => {
             navigate(-1);
@@ -48,17 +56,12 @@ export default function WorkDetail() {
             {submitData.length !== 0 ?
                 <Stack
                     sx={{
-                        // direction: 'column',
-                        // spacing: '10px',
-                        // marginTop: '100px',
-                        // marginLeft: '270px',
-                        // marginRight: '70px',
-                        // marginBottom: '200px'
                         direction: 'column',
-                        marginTop: '115px',
-                        marginLeft: '320px',
-                        marginRight: '50px',
-                        marginBottom: '150px',
+                        spacing: '10px',
+                        marginTop: '100px',
+                        marginLeft: '270px',
+                        marginRight: '70px',
+                        marginBottom: '200px'
                     }}>
                     <Stack sx={{ mb: 2, alignItems: 'flex-end' }}>
                         <Button variant='outlined' sx={{ width: '20%' }} onClick={handleGoBack}>목록</Button>
@@ -83,7 +86,7 @@ export default function WorkDetail() {
                                 <CardActions sx={{ justifyContent: 'flex-end', mb: 3 }}>
                                     <Button size="medium" href={submitData.downloadPath}>{submitData.fileName}</Button>
                                 </CardActions>
-                                {submitData.grade ? null :
+                                {submitData.grade || !isMine ? null :
                                     <Stack direction='row' spacing={1} sx={{ justifyContent: 'flex-end', alignItems: 'center', }}>
                                         <Button variant='outlined' sx={{ width: '10%' }} onClick={() => { setAlertOpen(true) }}>삭제</Button>
                                         <Button variant='outlined' sx={{ width: '10%' }} onClick={() => { setOpen(true) }}>수정</Button>
@@ -92,8 +95,7 @@ export default function WorkDetail() {
                             </CardContent>
                         </Card>
                     </Stack>
-                    <InputGrade submitData={submitData} setsubmitData={setsubmitData} submitId={submitId} />
-                    <CheckGrade submitData={submitData} submitId={submitId} setsubmitData={setsubmitData} />
+                    <CheckGrade submitData={submitData} />
                 </Stack> : null}
             {
                 open ? <EditSubmitModal
@@ -114,69 +116,7 @@ export default function WorkDetail() {
     );
 }
 
-function InputGrade({ submitData, setsubmitData, submitId }) {
-    const [grade, setGrade] = useState();
-    const [feedback, setFeedback] = useState('');
-    function onSave(editData) {
-        axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, editData, { withCredentials: true }).then(() => {
-            if (editData.feedback) {
-                setFeedback('');
-            } else if (editData.grade) {
-                setGrade('');
-            }
-            setsubmitData({ ...submitData, ...editData });
-        }).catch(err => {
-            console.log(err);
-        })
-    }
-    return (
-        <Stack sx={{ mb: 5 }}>
-            <Card>
-                <CardContent sx={{ padding: '30px' }}>
-                    <Stack sx={{ mb: 2 }}>
-                        <Typography variant='h4' sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea' }}>성적 입력하기</Typography>
-                    </Stack>
-                    <Stack direction='row' spacing={3} sx={{ justifyContent: 'center', alignItems: 'center', mb: 5 }}>
-                        <TextField
-                            id="outlined-number"
-                            label="점수를 입력하세요."
-                            type="number"
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            onChange={(e) => { setGrade(e.target.value) }}
-                            value={grade}
-                            sx={{ width: '35%' }}
-                        />
-                        <TextField
-                            id="outlined-multiline"
-                            label="피드백을 입력하세요."
-                            multiline
-                            rows={5}
-                            placeholder="학생 과제의 잘한 점, 보완해야할 점 등"
-                            onChange={(e) => { setFeedback(e.target.value) }}
-                            value={feedback}
-                            sx={{ width: '65%' }}
-                        />
-                    </Stack>
-                    <Stack direction='row' spacing={1} sx={{ justifyContent: 'flex-end', alignItems: 'center', }}>
-                        <Button variant='outlined' sx={{ width: '20%' }} onClick={() => { onSave({ grade: grade }) }}>성적 저장</Button>
-                        <Button variant='outlined' sx={{ width: '20%' }} onClick={() => { onSave({ feedback: feedback }) }}>피드백 저장</Button>
-                    </Stack>
-                </CardContent>
-            </Card>
-        </Stack>
-    );
-}
-
-function CheckGrade({ submitData, submitId, setsubmitData }) {
-    function initData(initData) {
-        axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, initData, { withCredentials: true }).then(() => {
-            setsubmitData({ ...submitData, ...initData });
-        }).catch(err => {
-            console.log(err);
-        })
-    }
+function CheckGrade({ submitData}) {
     return (
         <Stack>
             <Card >
@@ -197,11 +137,6 @@ function CheckGrade({ submitData, submitId, setsubmitData }) {
                                 <Typography>{submitData.feedback}</Typography>
                             </Stack>
                         </Stack>
-                    </Stack>
-                    <Stack direction='row' spacing={1} sx={{ justifyContent: 'flex-end', alignItems: 'center', }}>
-                        <Button variant='outlined' sx={{ width: '20%' }} onClick={() => { initData({ grade: null }) }}>성적 초기화</Button>
-                        <Button variant='outlined' sx={{ width: '20%' }} onClick={() => { initData({ feedback: '' }) }}>피드백 초기화</Button>
-
                     </Stack>
                 </CardContent>
             </Card>
