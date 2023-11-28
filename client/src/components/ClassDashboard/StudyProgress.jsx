@@ -38,9 +38,9 @@ function StudentTable({progress}){
         const uniqueCountWorks = Array.from(new Set(countWorks));
         setTotalWorks(uniqueCountWorks);
     }, [progress]);
-    console.log('users:', users);
-    console.log('totalWorksId:', totalWorks);
-    console.log('combined:', combinedArray);
+    // console.log('users:', users);
+    // console.log('totalWorksId:', totalWorks);
+    // console.log('combined:', combinedArray);
     
     useEffect(()=>{
         const submitsCounts = {};
@@ -56,7 +56,7 @@ function StudentTable({progress}){
             Object.entries(submitsCounts).map(([nickName, count]) => ({ nickName, count }))
           );
     }, [progress]);
-    console.log('nickNameCounts:', totalSubmits);
+    // console.log('nickNameCounts:', totalSubmits);
     
 
     return(

@@ -10,7 +10,23 @@ import { useParams } from 'react-router-dom';
 export default function ClassDashboard({ isTeacher }) {
   const [curriculums, setCurriculums] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { classId } = useParams();
+  const { classId, userId } = useParams();
+
+  const [attendances, setAttendances] = useState([]);
+  function getAttendances() {
+    axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/attendances?classId=${classId}&userId=${userId}`, { withCredentials: true 
+    }).then(data => {
+      setAttendances(data.data);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+  console.log('attendances:',attendances);
+
+  useEffect(() => {
+    getAttendances(); 
+  }, [classId, userId])
+
 
   const [progress, setProgress] = useState([]);
   function getProgress() {
