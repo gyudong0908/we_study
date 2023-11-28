@@ -37,7 +37,7 @@ export default function QuizPage(){
             marginBottom: '200px',  
             }}
             >
-                <Typography variant='h2' fontWeight={'bold'}>Qize 생성</Typography>
+                <Typography variant='h2' fontWeight={'bold'}>Quiz 생성</Typography>
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
@@ -54,8 +54,8 @@ export default function QuizPage(){
                 choiceQuizs.map((data,idx)=>{
                     return (
                         <Stack marginBottom={'10px'}>
-                        <div>제목: {data.title}</div>
-                        <div>점수: {data.grade}점</div>
+                        <div>문제: {data.question}</div>
+                        <div>배점: {data.score}점</div>
                         <div>정답: {data.answer}번</div>
                         <FormControl>
                             <FormLabel id="demo-controlled-radio-buttons-group">문제</FormLabel>
@@ -80,8 +80,8 @@ export default function QuizPage(){
                 OpenEndedQuizs.map((data,idx)=>{
                     return (
                         <Stack marginBottom={'10px'}>
-                        <div>제목: {data.title}</div>
-                        <div>점수: {data.grade}점</div>
+                        <div>제목: {data.question}</div>
+                        <div>점수: {data.score}점</div>
                         <div>정답: {data.answer}</div>
                         </Stack>
                     )

@@ -3,27 +3,27 @@ import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useState } from "react";
 export default function AddChoiceQuiz({close, save}){
     const [choiceCount, setCoiceCount] = useState(1);
-    const [title, setTitle] = useState('');
-    const [grade, setGrade] = useState('');
+    const [question, setQuestion] = useState('');
+    const [score, setScore] = useState('');
     const [answer, setAnswer] = useState('');
-    const [choiceList, setChoiceList] = useState([]);
+    const [optionList, setOptionList] = useState([]);
 
-    function addChoiceArray(){
-        const newChoiceList= [...choiceList];
+    function addOptionArray(){
+        const newOptionList= [...optionList];
         newChoiceList.push(null);
-        setChoiceList(newChoiceList);
+        setChoiceList(newOptionList);
     }
-    function modifyChoiceList(idx, value){
-        const newChoiceList = [...choiceList];
-        newChoiceList[idx] = {content: value};
-        setChoiceList(newChoiceList);
+    function modifyOptionList(idx, value){
+        const newOptionList = [...optionList];
+        newOptionList[idx] = {content: value};
+        setOptionList(newOptionList);
     }
     function onSave(){
         const saveData = {
-            title: title,
-            grade: grade,
+            question: question,
+            score: score,
             answer: answer,
-            choiceList: choiceList
+            optionText: optionList,
         }
         save(saveData);
     }
@@ -33,12 +33,12 @@ export default function AddChoiceQuiz({close, save}){
             <Stack direction={'row'}>
                 
                 <TextField id="filled-basic" label="제목" variant="filled" placeholder="제목을 입력하세요"
-                    onChange={(e)=>{setTitle(e.target.value)}} 
-                    value={title}
+                    onChange={(e)=>{setQuestion(e.target.value)}} 
+                    value={question}
                  />
-                <TextField id="filled-basic" label="점수" variant="filled" placeholder="점수를 입력하세요" 
-                    onChange={(e)=>{setGrade(e.target.value)}}
-                    value={grade}
+                <TextField id="filled-basic" label="점수" variant="filled" placeholder="배점을 입력하세요" 
+                    onChange={(e)=>{setScore(e.target.value)}}
+                    value={score}
                 />
                 <TextField id="filled-basic" label="정답" variant="filled" placeholder="정답을 입력하세요" 
                     onChange={(e)=>{setAnswer(e.target.value)}}
@@ -52,11 +52,11 @@ export default function AddChoiceQuiz({close, save}){
                 label={`선택지 ${index + 1}`}
                 variant="filled"
                 placeholder={`선택지를 입력하세요`}
-                onChange={(e)=>{modifyChoiceList(index, e.target.value)}}
+                onChange={(e)=>{modifyOptionList(index, e.target.value)}}
                 />
             ))}
             <Stack alignItems={'center'}>
-            <AddCircleRoundedIcon sx={{cursor: 'pointer'}} onClick={()=>{setCoiceCount(()=>(choiceCount+1)); addChoiceArray();}}></AddCircleRoundedIcon>
+            <AddCircleRoundedIcon sx={{cursor: 'pointer'}} onClick={()=>{setChoiceCount(()=>(choiceCount+1)); addOptionArray();}}></AddCircleRoundedIcon>
             </Stack>
             <Button onClick={()=>{close(); onSave();}}>확인</Button>
         </Stack>
