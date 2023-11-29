@@ -1,7 +1,6 @@
 import React from 'react';
 import { Stack, Typography, Modal, Button, TextField } from '@mui/material';
 import { useState } from 'react';
-import axios from 'axios';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -18,13 +17,12 @@ const style = {
   p: 4,
 };
 
-function CreateQuizModal({open, handleClose, createQuiz}) {
+function EditQuizModal({open, handleClose, quiz, editQuiz}) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDateTime, setDueDateTime] = useState();
   const [startDateTime, setStartDateTime] = useState();
-
-  function onCreate() {
+  function onEdit() {
     if (title !== '' && dueDateTime !== '') {
       const data = {
         title: title,
@@ -32,7 +30,7 @@ function CreateQuizModal({open, handleClose, createQuiz}) {
         dueDateTime: dueDateTime.toISOString(),
         startDateTime: startDateTime.toISOString(),
       }
-      createQuiz(data);
+      editQuiz(quiz.id, data);
 
     }
   }
@@ -54,7 +52,8 @@ function CreateQuizModal({open, handleClose, createQuiz}) {
               sx={{ mt: 3 }}
               required
               onChange={(e) => { setTitle(e.target.value); }}
-              value={title}
+              defaultValue={quiz.title}
+            //   value={title}
             />
             <TextField
               id="inputWorkDescription"
@@ -66,7 +65,8 @@ function CreateQuizModal({open, handleClose, createQuiz}) {
               sx={{ mt: 2 }}
               required
               onChange={(e) => { setDescription(e.target.value); }}
-              value={description}
+              defaultValue={quiz.description}
+            //   value={description}
             />
           </Stack>
           <Stack sx={{ mt: 2, alignItems:'center' }}>
@@ -74,7 +74,7 @@ function CreateQuizModal({open, handleClose, createQuiz}) {
           </Stack>
           <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 5 }}>
             <Button variant="outlined" type="reset" sx={{width:'20%'}} onClick={handleClose}>취소</Button>
-            <Button variant="outlined" sx={{width:'20%'}} onClick={() => { onCreate();}}>생성</Button>
+            <Button variant="outlined" sx={{width:'20%'}} onClick={() => { onEdit(); handleClose();}}>변경</Button>
           </Stack>
         </Stack>
       </Modal>
@@ -101,4 +101,4 @@ function Picker({ startDateTime, dueDateTime, setStartDateTime, setDueDateTime }
   );
 }
 
-export default CreateQuizModal;
+export default EditQuizModal;

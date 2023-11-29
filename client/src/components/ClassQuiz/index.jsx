@@ -8,38 +8,9 @@ import { useParams } from 'react-router-dom';
 
 export default function ClassQuiz({ isTeacher }) {
   const [quizzes, setQuizzes] = useState([]);
-  const dummyData = [
-    {
-      id: 1,
-      title: 'Quiz 1',
-      createdAt: '2023-01-01T12:00:00Z',
-      dueDateTime: '2023-01-10T23:59:59Z',
-      description: 'This is the description for Quiz 1',
-    },
-    {
-      id: 2,
-      title: 'Quiz 2',
-      createdAt: '2023-02-01T12:00:00Z',
-      dueDateTime: '2023-02-10T23:59:59Z',
-      description: 'This is the description for Quiz 2',
-    },
-  ];
-
-  // const { classId } = useParams();
-
-  // function getQuizzes() {
-  //   axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/curriculums/work?classId=${classId}`, { withCredentials: true }).then(data => {
-  //     setQuizzes(data.data);
-  //   }).catch(err => {
-  //     console.log(err);
-  //   })
-  // }
-  // console.log(works);
-
-  // useEffect(() => {
-  //   getQuizzes();
-  // }, [classId])
+  const {classId} = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -47,6 +18,52 @@ export default function ClassQuiz({ isTeacher }) {
     setIsModalOpen(false);
   };
 
+  function createQuiz(target){
+    axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/quiz?classId=${classId}`,target ,{ withCredentials: true }).then((response)=>{
+      setQuizzes([...quizzes, response.data]);
+           // 새 창 열기
+     const newWindow = window.open(`http://localhost:5173/mypage/quiz/${response.data.id}`, '_blank');
+     if (newWindow) {
+       // 새 창이 정상적으로 열렸을 때 처리
+       // 모달 닫기
+       handleCloseModal();
+     } else {
+       // 새 창이 차단되거나 열리지 않았을 때 처리
+       console.error('새 창 열기 실패');
+     }
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+
+  function getQuizzes(){
+    axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/quizs?classId=${classId}`, { withCredentials: true }).then(response=>{
+      setQuizzes(response.data);
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+
+  function editQuiz(quizId, target){
+    axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/quiz?quizId=${quizId}`, target,{ withCredentials: true }).then(()=>{
+       const newQuizzes = quizzes.map(quiz=>(quiz.id === quizId? {...quiz, ...target}: quiz));
+       setQuizzes(newQuizzes);
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+
+  function onDelete(target){
+    axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/quiz?quizId=${target.id}`,{ withCredentials: true }).then(()=>{
+      setQuizzes(quizzes.filter(quiz=>quiz.id !== target.id));
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+
+  useEffect(()=>{
+    getQuizzes();
+  },[])
   return (
     <>
       {
@@ -60,7 +77,7 @@ export default function ClassQuiz({ isTeacher }) {
         )
       }
       {
-        isModalOpen && <QuizModal open={isModalOpen} handleClose={handleCloseModal} />
+        isModalOpen && <QuizModal open={isModalOpen} handleClose={handleCloseModal} createQuiz={createQuiz}/>
       }
         <Stack sx={{ mb: 5 }}>
           <Stack sx={{ borderBottom: '1.5px solid black', mb: 2 }}>
@@ -69,8 +86,8 @@ export default function ClassQuiz({ isTeacher }) {
             </Typography>
           </Stack>
           {
-            dummyData.map((quiz, index)=>(
-              <QuizAccordion key={quiz.id} isTeacher={isTeacher} quizzes={dummyData} setQuizzes={() => {}} />
+            quizzes.map((quiz, index)=>(
+              <QuizAccordion key={quiz.id} isTeacher={isTeacher} quiz={quiz}  editQuiz={editQuiz} onDelete={onDelete} />
             ))
           }
         </Stack>

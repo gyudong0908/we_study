@@ -54,7 +54,7 @@ router.put('/quiz',function(req,res){
 
 router.delete('/quiz',function(req,res){
     const quizId = req.query.quizId;
-    models.Quiz.destroy({where:{quizId: quizId}}).then(()=>{
+    models.Quiz.destroy({where:{id: quizId}}).then(()=>{
         res.sendStatus(200);
     }).catch(err=>{
         console.log(err);
