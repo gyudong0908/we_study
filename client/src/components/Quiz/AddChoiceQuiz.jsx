@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 export default function AddChoiceQuiz({close, save}){
     const [choiceCount, setChoiceCount] = useState(1);
-    const [question, setQuestion] = useState('');
+    const [title, setTitle] = useState('');
     const [score, setScore] = useState('');
     const [answer, setAnswer] = useState('');
     const [optionList, setOptionList] = useState([]);
@@ -17,7 +17,7 @@ export default function AddChoiceQuiz({close, save}){
     }
     function modifyOptionList(idx, value){
         const newOptionList = [...optionList];
-        newOptionList[idx] = {content: value};
+        newOptionList[idx] = {optionText: value};
         setOptionList(newOptionList);
     }
 
@@ -33,10 +33,11 @@ export default function AddChoiceQuiz({close, save}){
 
     function onSave(){
         const saveData = {
-            question: question,
+            title: title,
             score: score,
             answer: answer,
             optionText: optionList,
+            questionType: "객관식",
         }
         save(saveData);
     }
@@ -67,8 +68,8 @@ export default function AddChoiceQuiz({close, save}){
                 />
             </Stack>
             <TextField id="questionField" label="문제" variant="outlined" placeholder="제목을 입력하세요"
-                    onChange={(e)=>{setQuestion(e.target.value)}} 
-                    value={question}
+                    onChange={(e)=>{setTitle(e.target.value)}} 
+                    value={title}
                     sx={{wordBreak:'keep-all',}}
                  />
             <Stack direction={'column'} spacing={2}>

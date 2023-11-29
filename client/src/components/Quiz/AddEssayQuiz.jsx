@@ -3,14 +3,15 @@ import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useState } from "react";
 
 export default function AddEssayQuiz({close, save}){
-    const [question, setQuestion] = useState('');
+    const [title, setTitle] = useState('');
     const [score, setScore] = useState('');
     const [answer, setAnswer] = useState('');
     function onSave(){
         const saveData = {
-            question: question,
+            title: title,
             score: score,
-            answer: answer
+            answer: answer,
+            questionType: "단답형"
         };
         save(saveData);
     }
@@ -34,8 +35,8 @@ export default function AddEssayQuiz({close, save}){
                 />
             </Stack>
             <TextField id="questionField" label="문제" variant="outlined" placeholder="제목을 입력하세요"
-                    onChange={(e)=>{setQuestion(e.target.value)}} 
-                    value={question}
+                    onChange={(e)=>{setTitle(e.target.value)}} 
+                    value={title}
                     sx={{wordBreak:'keep-all',}}
                  />
              <TextField id="outlined-basic" label="정답" variant="outlined"  placeholder="정답을 입력하세요" 

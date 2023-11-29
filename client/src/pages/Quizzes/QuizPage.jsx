@@ -1,20 +1,22 @@
 import { Card, CardContent, Stack, Typography, Grid, IconButton, Button, Menu, MenuItem, FormControlLabel, FormControl, RadioGroup, Radio, FormLabel } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddChoiceQuiz from '../../components/Quiz/AddChoiceQuiz';
 import AddOpenEndedQuiz from '../../components/Quiz/AddOpenEndedQuiz';
 import AddEssayQuiz from '../../components/Quiz/AddEssayQuiz';
 import dayjs from 'dayjs';
+import {useParams} from 'react-router-dom';
+import axios from 'axios';
 
 export default function QuizPage(){
     const [anchorEl, setAnchorEl] = useState(null);
     const [isChoiceQuizOpen, setIsChoiceQuizOpen] = useState(false);
     const [isOpenEndedQuizOpen, setIsOpenEndedQuizOpen] = useState(false);
     const [isEssayQuizOpen, setIsEssayQuizOpen] = useState(false);
-    const [choiceQuizs, setChoiceQuizs] = useState([]);
-    const [openEndedQuizs, setOpenEndedQuizs] = useState([]);
-    const [essayQuizs, setEssayQuizs] = useState([]);
+    const [questions, setQuestions] = useState([]);
+    const [quiz, setQuiz] = useState({});
     const open = Boolean(anchorEl);
+    const {quizId} = useParams()
 
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -24,23 +26,53 @@ export default function QuizPage(){
       setAnchorEl(null);
     };
 
-    function saveChoiceQuiz(choiceQuiz){
-        // axios 요청 자리
-        setChoiceQuizs([...choiceQuizs, choiceQuizs]);
-    }
-    function saveOpenEndedQuiz(OpenEndedQuiz){
-        setOpenEndedQuizs([...openEndedQuizs, openEndedQuizs]);
-    }
-    function saveEssayQuiz(OpenEndedQuiz){
-        setEssayQuizs([...essayQuizs, essayQuizs]);
+    function saveQuestion(saveData){
+        if(saveData.questionType === '객관식'){
+            axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/question/choice?quizId=${quizId}`,saveData ,{ withCredentials: true }).then((response)=>{
+                setQuestions([...questions, response.data]);
+            }).catch(err=>{
+                console.log(err);
+            })
+        }else{
+            axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/question?quizId=${quizId}`,saveData ,{ withCredentials: true }).then((response)=>{
+                setQuestions([...questions, response.data]);
+            }).catch(err=>{
+                console.log(err);
+            })
+        }
     }
 
-    const dummyData = {
-        title: 'Sample Quiz',
-        description: '샘플 퀴즈에 대한 간단 설명입니다.',
-        dueDateTime: dayjs().format('YYYY-MM-DD hh:mm A'),  
-        startDateTime: dayjs().format('YYYY-MM-DD hh:mm A'), 
-      };
+    function getQuizData(){
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/quiz?quizId=${quizId}`, { withCredentials: true }).then((response)=>{
+            console.log(response.data);
+            setQuiz(response.data);
+            setQuestions(response.data.Questions);
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
+
+    function onDelete(target){
+        axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/question?questionId=${target.id}`, { withCredentials: true }).then(()=>{
+            setQuestions(questions.filter(question=>question.id !== target.id));
+        }).catch(err=>{
+            console.log(err);
+        })
+
+    }
+    // 아직 밑에 있는 수정은 단답형이랑 서술형만 가능함
+    function editQuestion(questionId, target){
+        axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/question?questionId=${questionId}`,target, { withCredentials: true }).then(()=>{
+            setQuestions(questions.map(question=>(question.id === questionId? {...question, ...target}: question)));
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
+
+    useEffect(()=>{
+        getQuizData()
+        console.log(questions)
+    },[])
 
     return (
         <Stack
@@ -53,16 +85,16 @@ export default function QuizPage(){
             }}
             >
                 <Stack>
-                    <Typography variant='h2' fontWeight={'bold'}>{dummyData.title}</Typography>
+                    <Typography variant='h2' fontWeight={'bold'}>{quiz.title}</Typography>
                     <Stack direction={'row'} sx={{mt:5, alignItems:'center'}}>
-                        <Typography variant='h6' width={'50%'}>퀴즈 시작일 : {dummyData.startDateTime}</Typography>
-                        <Typography variant='h6' width={'50%'}>퀴즈 마감일 : {dummyData.dueDateTime}</Typography>
+                        <Typography variant='h6' width={'50%'}>퀴즈 시작일 : {quiz.startDateTime}</Typography>
+                        <Typography variant='h6' width={'50%'}>퀴즈 마감일 : {quiz.dueDateTime}</Typography>
                     </Stack>
                     <Typography variant='subtitle1' sx={{
                         mt:1,
                         wordBreak:'keep-all',
                         }}>
-                        {dummyData.description}
+                        {quiz.description}
                     </Typography>
                 </Stack>
                 
@@ -80,54 +112,46 @@ export default function QuizPage(){
                 <MenuItem onClick={()=>{setIsEssayQuizOpen(true); handleClose();}}>서술형</MenuItem>
             </Menu>
             {
-                choiceQuizs.map((data,idx)=>{
+                questions.map((data,idx)=>{
                     return (
                         <Stack marginBottom={'10px'}>
-                        <div>문제: {data.question}</div>
+                            <Button onClick={()=>{onDelete(data)}}>삭제</Button>
+                        <div>문제: {data.title}</div>
                         <div>배점: {data.score}점</div>
-                        <div>정답: {data.answer}번</div>
-                        <FormControl>
-                            <FormLabel id="demo-controlled-radio-buttons-group">문제</FormLabel>
-                            <RadioGroup
-                                aria-labelledby="demo-controlled-radio-buttons-group"
-                                name="controlled-radio-buttons-group"
-                            >
-                                {
-                                    data.choiceList.map((choice, idx)=>{
-                                        return(
-                                            <FormControlLabel value={idx+1} control={<Radio />} label={choice.content} />
-                                        )
-                                    })
-                                }
-                            </RadioGroup>
-                            </FormControl>
-                        </Stack>
-                    )
-                })
-            }
-            {
-                openEndedQuizs.map((data,idx)=>{
-                    return (
-                        <Stack marginBottom={'10px'}>
-                        <div>제목: {data.question}</div>
-                        <div>점수: {data.score}점</div>
                         <div>정답: {data.answer}</div>
-                        <div>수정</div>
+                            {data.Choices &&(
+                                <FormControl>
+                                    <FormLabel id="demo-controlled-radio-buttons-group">문제</FormLabel>
+                                    <RadioGroup
+                                        aria-labelledby="demo-controlled-radio-buttons-group"
+                                        name="controlled-radio-buttons-group"
+                                    >
+                                        {
+                                            data.Choices.map((choice, idx)=>{
+                                                return(
+                                                    <FormControlLabel value={idx+1} control={<Radio />} label={choice.optionText} />
+                                                )
+                                            })
+                                        }
+                                    </RadioGroup>
+                                </FormControl>
+                            )}
+
                         </Stack>
                     )
                 })
             }
             {isChoiceQuizOpen && (
-                <AddChoiceQuiz close={()=>{setIsChoiceQuizOpen(false)}} save={saveChoiceQuiz}></AddChoiceQuiz>
+                <AddChoiceQuiz close={()=>{setIsChoiceQuizOpen(false)}} save={saveQuestion}></AddChoiceQuiz>
                 )
 
             }
             {isOpenEndedQuizOpen && (
-                <AddOpenEndedQuiz close={()=>{setIsOpenEndedQuizOpen(false)}} save={saveOpenEndedQuiz}></AddOpenEndedQuiz>
+                <AddOpenEndedQuiz close={()=>{setIsOpenEndedQuizOpen(false)}} save={saveQuestion}></AddOpenEndedQuiz>
                 )
             }
              {isEssayQuizOpen && (
-                <AddEssayQuiz close={()=>{setIsEssayQuizOpen(false)}} save={saveEssayQuiz}></AddEssayQuiz>
+                <AddEssayQuiz close={()=>{setIsEssayQuizOpen(false)}} save={saveQuestion}></AddEssayQuiz>
                 )
             }
             <Stack sx={{alignItems:'center', mt:4,}}>

@@ -33,7 +33,8 @@ router.get('/quiz',function(req,res){
                     model: models.Choice
                 }]
             },
-        ]
+        ],
+        order: [[models.Question, 'createdAt', 'ASC']],
     }).then(quiz=>{
         res.status(200).send(quiz);
     }).catch(err=>{
