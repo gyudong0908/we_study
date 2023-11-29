@@ -5,7 +5,7 @@ router.use(express.json());
 
 router.post('/quiz',function(req,res){
     const classId = req.query.classId;
-    models.Quiz.create(req.body).then((quiz)=>{
+    models.Quiz.create({...req.body, classId: classId}).then((quiz)=>{
         res.status(200).send(quiz);
     }).catch(err=>{
         console.log(err);
@@ -44,7 +44,7 @@ router.get('/quiz',function(req,res){
 
 router.put('/quiz',function(req,res){
     const quizId = req.query.quizId;
-    models.Quiz.update(req.body).then(()=>{
+    models.Quiz.update(req.body, {where:{id: quizId}}).then(()=>{
         res.sendStatus(200);
     }).catch(err=>{
         console.log(err);
@@ -72,11 +72,63 @@ router.post('/question',function(req,res){
     })
 })
 
-// router.post('/question/choice',function(req,res){
-//     const quizId = req.query.quizId;
-//     models.Question.create(req.body).
-// })
+router.put('/question',function(req,res){
+    const questionId = req.query.questionId;
+    models.Question.update(req.body,{where:{id:questionId}}).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('퀴즈 수정 에러 발생');
+    })
+})
 
+router.delete('/question',function(req,res){
+    const questionId = req.query.questionId;
+    models.Question.destroy({where:{id:questionId}}).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('Question 삭제 에러');
+    })
+})
 
+router.post('/question/choice',function(req,res){
+    const quizId = req.query.quizId;
+    const optionText  = req.body.optionText;
+    models.Question.create({...req.body, quizId: quizId}).then((question)=>{
+        const modifiedOptions = optionText.map(option => ({ ...option, questionId: question.id }));
+        models.Choice.bulkCreate(modifiedOptions).then((choice)=>{
+            res.status(200).send({...question.dataValues,optionText:choice });
+        }).catch(err=>{
+            console.log(err);
+            res.status(500).send('선택지 생성 에러');
+        })
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('퀴즈 생성 에러');
+    })
+})
+
+router.put('/choice',function(req,res){
+    const choiceId = req.query.choiceId;
+    models.Choice.update(req.body,{where:{id:choiceId}}).then(()=>{
+        res.sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('Choice 수정 에러');
+    })
+})
+
+router.delete('/choice',function(req,res){
+    const choiceId = req.query.choiceId;
+    models.Choice.destroy({where:{id:choiceId}}).then(()=>{
+        res,sendStatus(200);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).send('Choice 삭제 에러');
+    })
+})
+
+router.post('')
 
 module.exports = router;
