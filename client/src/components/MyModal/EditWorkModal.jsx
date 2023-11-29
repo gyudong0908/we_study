@@ -86,9 +86,9 @@ function EditWorkModal({ onClose, target, works, setWorks}) {
               value={editDescription}
             />
           </Stack>
-          <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 2 }}>
-            <Button variant="outlined" type="reset" onClick={onClose}>취소</Button>
-            <Button variant="outlined" onClick={() => { UpdateWork(); onClose(); }}>저장</Button>
+          <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 5 }}>
+            <Button variant="outlined" type="reset" sx={{width:'20%'}} onClick={onClose}>취소</Button>
+            <Button variant="outlined" sx={{width:'20%'}} onClick={() => { UpdateWork(); onClose(); }}>저장</Button>
           </Stack>
         </Stack>
       </Modal>

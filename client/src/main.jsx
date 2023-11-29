@@ -22,7 +22,7 @@ import WorksForTeacher from './pages/Works/WorksForTeacher.jsx';
 import WorksForStudent from './pages/Works/WorksForStudent.jsx';
 import WorkDetailForStudent from './pages/Works/WorkDetailForStudent.jsx';
 import WorkDetailForTeacher from './pages/Works/WorkDetailForTeacher.jsx';
-import QuizPage from './pages/QuizPage.jsx';
+import QuizPage from './pages/Quizzes/QuizPage.jsx';
 
 import { initializeUserData } from './reducer/userdata.js';
 

@@ -17,7 +17,7 @@ export default function InputWork({ isTeacher, works, setWorks }) {
   const [inputTitle, setInputTitle] = useState('');
   const [inputDescription, setInputDescription] = useState('');
   const [inputTopicId, setInputTopicId] = useState('');
-  const [inputDueDateTime, setInputDueDateTime] = useState('');
+  const [inputDueDateTime, setInputDueDateTime] = useState();
   const [topicId, setTopicId] = useState('');
 
   const [expanded, setExpanded] = useState(false);
