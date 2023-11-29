@@ -21,7 +21,8 @@ const style = {
 function CreateQuizModal({open, handleClose}) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [dueDateTime, setDueDateTime] = useState('');
+  const [dueDateTime, setDueDateTime] = useState();
+  const [startDateTime, setStartDateTime] = useState();
 
   function createQuiz() {
     if (title !== '' && dueDateTime !== '') {
@@ -29,6 +30,7 @@ function CreateQuizModal({open, handleClose}) {
         title: title,
         description: description,
         dueDateTime: dueDateTime.toISOString(),
+        startDateTime: startDateTime.toISOString(),
       }
 
     //   axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/class`, data, { withCredentials: true }).then((response) => {
@@ -83,12 +85,12 @@ function CreateQuizModal({open, handleClose}) {
               value={description}
             />
           </Stack>
-          <Stack sx={{ mt: 2 }}>
-              <Picker dueDateTime={dueDateTime} setDueDateTime={setDueDateTime} />
+          <Stack sx={{ mt: 2, alignItems:'center' }}>
+              <Picker dueDateTime={dueDateTime} setDueDateTime={setDueDateTime} startDateTime={startDateTime} setStartDateTime={setStartDateTime}/>
           </Stack>
-          <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 3 }}>
-            <Button variant="outlined" type="reset" onClick={handleClose}>취소</Button>
-            <Button variant="outlined" onClick={() => { createQuiz();}}>생성</Button>
+          <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 5 }}>
+            <Button variant="outlined" type="reset" sx={{width:'20%'}} onClick={handleClose}>취소</Button>
+            <Button variant="outlined" sx={{width:'20%'}} onClick={() => { createQuiz();}}>생성</Button>
           </Stack>
         </Stack>
       </Modal>
@@ -96,11 +98,20 @@ function CreateQuizModal({open, handleClose}) {
   );
 }
 
-function Picker({ dueDateTime, setDueDateTime }) {
+function Picker({ startDateTime, dueDateTime, setStartDateTime, setDueDateTime }) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Stack components='DateTimePicker'>
-        <DateTimePicker onChange={(value) => { setDueDateTime(value) }} value={dueDateTime} />
+      <Stack direction="row" spacing={2}>
+        <DateTimePicker
+          label="Start Time"
+          value={startDateTime}
+          onChange={(value) => setStartDateTime(value)}
+        />
+        <DateTimePicker
+          label="End Time"
+          value={dueDateTime}
+          onChange={(value) => setDueDateTime(value)}
+        />
       </Stack>
     </LocalizationProvider>
   );

@@ -2,7 +2,7 @@ import { Stack, TextField, Button } from "@mui/material"
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useState } from "react";
 
-export default function AddOpenEndedQuiz({close, save}){
+export default function AddEssayQuiz({close, save}){
     const [question, setQuestion] = useState('');
     const [score, setScore] = useState('');
     const [answer, setAnswer] = useState('');
@@ -41,6 +41,8 @@ export default function AddOpenEndedQuiz({close, save}){
              <TextField id="outlined-basic" label="정답" variant="outlined"  placeholder="정답을 입력하세요" 
                 onChange={(e)=>{setAnswer(e.target.value)}}
                 value={answer}
+                multiline
+                rows={5}
             />
             <Button onClick={()=>{close(); onSave();}}>확인</Button>
         </Stack>

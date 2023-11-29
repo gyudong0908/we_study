@@ -1,14 +1,19 @@
-import { Card, CardContent, Stack, Typography, Grid, Button, Menu, MenuItem, FormControlLabel, FormControl, RadioGroup, Radio, FormLabel } from '@mui/material';
-import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import { Card, CardContent, Stack, Typography, Grid, IconButton, Button, Menu, MenuItem, FormControlLabel, FormControl, RadioGroup, Radio, FormLabel } from '@mui/material';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { useState } from 'react';
-import AddChoiceQuiz from '../components/Quiz/AddChoiceQuiz';
-import AddOpenEndedQuiz from '../components/Quiz/AddOpenEndedQuiz';
+import AddChoiceQuiz from '../../components/Quiz/AddChoiceQuiz';
+import AddOpenEndedQuiz from '../../components/Quiz/AddOpenEndedQuiz';
+import AddEssayQuiz from '../../components/Quiz/AddEssayQuiz';
+import dayjs from 'dayjs';
+
 export default function QuizPage(){
     const [anchorEl, setAnchorEl] = useState(null);
     const [isChoiceQuizOpen, setIsChoiceQuizOpen] = useState(false);
     const [isOpenEndedQuizOpen, setIsOpenEndedQuizOpen] = useState(false);
+    const [isEssayQuizOpen, setIsEssayQuizOpen] = useState(false);
     const [choiceQuizs, setChoiceQuizs] = useState([]);
-    const [OpenEndedQuizs, setOpenEndedQuizs] = useState([]);
+    const [openEndedQuizs, setOpenEndedQuizs] = useState([]);
+    const [essayQuizs, setEssayQuizs] = useState([]);
     const open = Boolean(anchorEl);
 
     const handleClick = (event) => {
@@ -21,23 +26,46 @@ export default function QuizPage(){
 
     function saveChoiceQuiz(choiceQuiz){
         // axios 요청 자리
-        setChoiceQuizs([...choiceQuizs, choiceQuiz]);
+        setChoiceQuizs([...choiceQuizs, choiceQuizs]);
     }
     function saveOpenEndedQuiz(OpenEndedQuiz){
-        setOpenEndedQuizs([...OpenEndedQuizs, OpenEndedQuiz]);
+        setOpenEndedQuizs([...openEndedQuizs, openEndedQuizs]);
     }
+    function saveEssayQuiz(OpenEndedQuiz){
+        setEssayQuizs([...essayQuizs, essayQuizs]);
+    }
+
+    const dummyData = {
+        title: 'Sample Quiz',
+        description: '샘플 퀴즈에 대한 간단 설명입니다.',
+        dueDateTime: dayjs().format('YYYY-MM-DD hh:mm A'),  
+        startDateTime: dayjs().format('YYYY-MM-DD hh:mm A'), 
+      };
+
     return (
         <Stack
             sx={{
-            direction: 'column',
-            spacing: '10px',
-            marginTop: '100px',
-            marginLeft: '270px',
-            marginRight: '70px',
-            marginBottom: '200px',  
+                direction: 'column',
+                marginTop: '115px',
+                marginLeft: '320px',
+                marginRight: '50px',
+                marginBottom: '150px', 
             }}
             >
-                <Typography variant='h2' fontWeight={'bold'}>Quiz 생성</Typography>
+                <Stack>
+                    <Typography variant='h2' fontWeight={'bold'}>{dummyData.title}</Typography>
+                    <Stack direction={'row'} sx={{mt:5, alignItems:'center'}}>
+                        <Typography variant='h6' width={'50%'}>퀴즈 시작일 : {dummyData.startDateTime}</Typography>
+                        <Typography variant='h6' width={'50%'}>퀴즈 마감일 : {dummyData.dueDateTime}</Typography>
+                    </Stack>
+                    <Typography variant='subtitle1' sx={{
+                        mt:1,
+                        wordBreak:'keep-all',
+                        }}>
+                        {dummyData.description}
+                    </Typography>
+                </Stack>
+                
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
@@ -48,7 +76,8 @@ export default function QuizPage(){
                 }}
              >
                 <MenuItem onClick={()=>{setIsChoiceQuizOpen(true); handleClose();}}>객관식</MenuItem>
-                <MenuItem onClick={()=>{setIsOpenEndedQuizOpen(true); handleClose();}}>서술형</MenuItem>
+                <MenuItem onClick={()=>{setIsOpenEndedQuizOpen(true); handleClose();}}>단답형</MenuItem>
+                <MenuItem onClick={()=>{setIsEssayQuizOpen(true); handleClose();}}>서술형</MenuItem>
             </Menu>
             {
                 choiceQuizs.map((data,idx)=>{
@@ -77,7 +106,7 @@ export default function QuizPage(){
                 })
             }
             {
-                OpenEndedQuizs.map((data,idx)=>{
+                openEndedQuizs.map((data,idx)=>{
                     return (
                         <Stack marginBottom={'10px'}>
                         <div>제목: {data.question}</div>
@@ -97,11 +126,16 @@ export default function QuizPage(){
                 <AddOpenEndedQuiz close={()=>{setIsOpenEndedQuizOpen(false)}} save={saveOpenEndedQuiz}></AddOpenEndedQuiz>
                 )
             }
-            <Stack alignItems={'center'}>
-                <AddCircleRoundedIcon sx={{cursor: 'pointer'}} onClick={handleClick}></AddCircleRoundedIcon>
+             {isEssayQuizOpen && (
+                <AddEssayQuiz close={()=>{setIsEssayQuizOpen(false)}} save={saveEssayQuiz}></AddEssayQuiz>
+                )
+            }
+            <Stack sx={{alignItems:'center', mt:4,}}>
+                <Button onClick={handleClick} sx={{cursor:'pointer', width:'50%'}}>
+                    <AddCircleOutlineOutlinedIcon fontSize='large'/>
+                    <Typography variant='h6' ml={1}>문항 생성</Typography>
+                </Button>
             </Stack>
-
-            <Button>저장</Button>
         </Stack>
     )
 }
