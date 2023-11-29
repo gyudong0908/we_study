@@ -37,6 +37,9 @@ module.exports = (sequelize, DataTypes) => {
         depoly:{
             type: DataTypes.BOOLEAN,
         },
+        startDateTime:{
+            type: DataTypes.DATE,
+        }
     }, {
         sequelize,
         modelName: 'Quiz', // 모델 이름 바꿔줘야함
