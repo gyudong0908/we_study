@@ -3,39 +3,19 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Typography, Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button } from '@mui/material';
-// import EditWorkModal from '../MyModal/EditWorkModal';
 import DeleteAlertModal from '../MyModal/DeleteAlertModal';
-import axios from 'axios';
+import EditQuizModal from '../MyModal/EditQuizModal';
 
-export default function QuizAccordion({ isTeacher, quizzes, setQuizzes }) {
+export default function QuizAccordion({ isTeacher, quiz, editQuiz, onDelete}) {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [target, setTarget] = useState('');
   const [isAlertOpen, setAlertOpen] = useState(false);
-  const [deleteData, setDeleteData] = useState({});
-  // console.log('topicId: ',topicId);
-
-  // useEffect(() => {
-
-  //   console.log('assignments:', assignments);
-  // }, [assignments]);
-
-  // function onClickDelete(target) {
-  //   axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/work?workId=${target.id}`, { withCredentials: true }).then(() => {
-  //     const newWorks = works.map(curriculum => { return { ...curriculum, Works: curriculum.Works.filter(work => work.id !== target.id) } });
-  //     setWorks(newWorks);
-  //   }).catch(err => {
-  //     console.log(err);
-  //   })
-  // }
 
   return (
     <>
-      {quizzes && quizzes.map((quiz, index) => (
-        <Accordion key={index}>
+        <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
-            id={`work-header-${index}`}
             sx={{ margin: '5px' }}
           >
             <Grid container spacing={0} sx={{ alignItems: 'center' }}>
@@ -60,10 +40,13 @@ export default function QuizAccordion({ isTeacher, quizzes, setQuizzes }) {
                 {/* <Link to={{
                   pathname: `/mypage/classes/${assignment.id}/worksforteacher`,
                 }}> */}
-                  <Button variant="outlined" size='large'>📝 퀴즈 수정하기</Button>
+                  <Button variant="outlined" size='large' onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/${quiz.id}`, '_blank');}}>📝 퀴즈 수정하기</Button>
                 {/* </Link> */}
-                <Button variant="outlined" sx={{ width: '10%' }} onClick={()=>{setDeleteData(quizzes); setAlertOpen(true)}}>삭제</Button>
-                <Button variant="outlined" onClick={() => { setModalOpen(true); setTarget(quiz); }} sx={{ width: '10%' }}>배포</Button>
+                <Button variant="outlined" sx={{ width: '10%' }} onClick={()=>{setAlertOpen(true)}}>삭제</Button>
+                <Button variant="outlined" sx={{ width: '10%' }} onClick={()=>{setModalOpen(true)}}>진짜 퀴즈 수정</Button>
+                { !quiz.depoly &&(
+                  <Button variant="outlined" onClick={() => { editQuiz(quiz.id, {depoly: true});}} sx={{ width: '10%' }}>배포</Button>
+                )}
 
               </Stack>
             )}
@@ -73,28 +56,28 @@ export default function QuizAccordion({ isTeacher, quizzes, setQuizzes }) {
                   <Button variant="outlined" size='large'>📝 퀴즈 응시하기</Button>
                 {/* </Link> */}
               </Stack>
-            )}
+            )}            
           </AccordionDetails>
-        </Accordion>
-       ))}
-      {/* {
-        isModalOpen && (
-          <EditWorkModal
-            target={target}
-            works={works}
-            setWorks={setWorks}
-            onClose={() => { setModalOpen(false) }} />
-        )
-      }
-      {
-        isAlertOpen && (
-          <DeleteAlertModal
-            onClose={() => { setAlertOpen(false) }}
-            deleteData={deleteData}
-            onClickDelete={onClickDelete}
-          />
-        )
-      } */}
+        </Accordion>       
+        {
+          isAlertOpen && (
+            <DeleteAlertModal 
+              onClose={()=>{setAlertOpen(false)}}
+              deleteData={quiz}
+              onClickDelete = {onDelete}
+            />
+          )
+        }
+        {
+          isModalOpen &&(
+            <EditQuizModal 
+              open = {isModalOpen}
+              handleClose = {()=>{setModalOpen(false)}}
+              quiz = {quiz}
+              editQuiz= {editQuiz}
+              />
+          )
+        }
     </>
   );
 }

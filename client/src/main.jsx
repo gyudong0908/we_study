@@ -72,7 +72,7 @@ const router = createBrowserRouter([
         element: <CalenderPage />,
       },
       {
-        path: 'quiz',
+        path: 'quiz/:quizId',
         element: <QuizPage />,
       },
     ],
