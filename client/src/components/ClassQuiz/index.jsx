@@ -70,7 +70,7 @@ export default function ClassQuiz({ isTeacher }) {
         isTeacher && (
           <Stack sx={{justifyContent:'center', alignItems:'center', mt:2, mb:5}}>
             <Button size="medium" variant="outlined" onClick={handleOpenModal}
-              sx={{padding:'20px', maxWidth:'20rem', borderRadius:'20px', cursor:'pointer'}}>
+              sx={{padding:'20px', maxWidth:'20rem', borderRadius:'15px', cursor:'pointer'}}>
               <Typography variant='h5'>✍️ 퀴즈 만들기</Typography>
             </Button>
           </Stack>

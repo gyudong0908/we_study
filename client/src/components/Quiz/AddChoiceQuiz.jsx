@@ -8,6 +8,7 @@ export default function AddChoiceQuiz({close, save}){
     const [title, setTitle] = useState('');
     const [score, setScore] = useState('');
     const [answer, setAnswer] = useState('');
+    const [reason, setReason] = useState('');
     const [optionList, setOptionList] = useState([]);
 
     function addOptionArray(){
@@ -38,6 +39,7 @@ export default function AddChoiceQuiz({close, save}){
             answer: answer,
             optionText: optionList,
             questionType: "객관식",
+            reason: reason,
         }
         save(saveData);
     }
@@ -56,21 +58,29 @@ export default function AddChoiceQuiz({close, save}){
                     value={score}
                     InputProps={{
                         endAdornment: '점',
+                        inputMode: 'numeric', // 숫자만 입력 받음
                       }}
+                    sx={{width:'15rem'}}
                 />
-                <TextField id="answerField" label="정답" variant="outlined" placeholder="정답을 입력하세요" 
+                <TextField id="answerField" label="정답" variant="outlined" placeholder="정답 선택지 전체를 입력하세요" 
                     onChange={(e)=>{setAnswer(e.target.value)}}
                     value={answer}
-                    InputProps={{
-                        endAdornment: '번',
-                      }}
-                    sx={{ml:2}}
+                    sx={{ml:2, wordBreak:'keep-all', width:'calc(100% - 15rem)' }}
                 />
             </Stack>
-            <TextField id="questionField" label="문제" variant="outlined" placeholder="제목을 입력하세요"
+            <TextField id="answerReasonField" label="정답의 근거" variant="outlined" placeholder="정답의 근거를 입력하세요"
+                    onChange={(e)=>{setReason(e.target.value)}} 
+                    value={reason}
+                    sx={{wordBreak:'keep-all',}}
+                    multiline
+                    rows={3}
+                 />
+            <TextField id="questionField" label="문제" variant="outlined" placeholder="문제를 입력하세요"
                     onChange={(e)=>{setTitle(e.target.value)}} 
                     value={title}
                     sx={{wordBreak:'keep-all',}}
+                    multiline
+                    rows={3}
                  />
             <Stack direction={'column'} spacing={2}>
                 {[...Array(choiceCount)].map((_, index) => (
@@ -96,9 +106,13 @@ export default function AddChoiceQuiz({close, save}){
                         <Typography ml={1}>선택지 생성</Typography>
                     </Button>
                 </Stack>
+                <Stack direction={'row'} spacing={1} sx={{ justifyContent: 'flex-end' }}>
+                    <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close();}}>취소</Button>
+                    <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close(); onSave();}}>확인</Button>
+                </Stack>
             </Stack>
             
-            <Button onClick={()=>{close(); onSave();}}>확인</Button>
+            
         </Stack>
     )
 }

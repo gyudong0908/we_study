@@ -1,4 +1,4 @@
-import { Card, CardContent, Stack, Typography, Grid, IconButton, Button, Menu, MenuItem, FormControlLabel, FormControl, RadioGroup, Radio, FormLabel } from '@mui/material';
+import { Stack, Typography, Button, Menu, MenuItem, FormControlLabel, FormControl, Checkbox } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { useEffect, useState } from 'react';
 import AddChoiceQuiz from '../../components/Quiz/AddChoiceQuiz';
@@ -7,12 +7,17 @@ import AddEssayQuiz from '../../components/Quiz/AddEssayQuiz';
 import dayjs from 'dayjs';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
+import EditOpenEndedModal from '../../components/MyModal/EditOpenEndedModal';
 
 export default function QuizPage(){
     const [anchorEl, setAnchorEl] = useState(null);
     const [isChoiceQuizOpen, setIsChoiceQuizOpen] = useState(false);
     const [isOpenEndedQuizOpen, setIsOpenEndedQuizOpen] = useState(false);
     const [isEssayQuizOpen, setIsEssayQuizOpen] = useState(false);
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [isChoiceModalOpen, setChoiceModalOpen] = useState(false);
+    const [target, setTarget] = useState('');
+
     const [questions, setQuestions] = useState([]);
     const [quiz, setQuiz] = useState({});
     const open = Boolean(anchorEl);
@@ -71,7 +76,7 @@ export default function QuizPage(){
 
     useEffect(()=>{
         getQuizData()
-        console.log(questions)
+        console.log('questions:',questions)
     },[])
 
     return (
@@ -84,11 +89,11 @@ export default function QuizPage(){
                 marginBottom: '150px', 
             }}
             >
-                <Stack>
-                    <Typography variant='h2' fontWeight={'bold'}>{quiz.title}</Typography>
-                    <Stack direction={'row'} sx={{mt:5, alignItems:'center'}}>
-                        <Typography variant='h6' width={'50%'}>퀴즈 시작일 : {quiz.startDateTime}</Typography>
-                        <Typography variant='h6' width={'50%'}>퀴즈 마감일 : {quiz.dueDateTime}</Typography>
+                <Stack sx={{justifyContent:'center',}}>
+                    <Typography variant='h3' fontWeight={'bold'}>{quiz.title}</Typography>
+                    <Stack direction={'row'} sx={{mt:3, alignItems:'center'}}>
+                        <Typography variant='h6' width={'50%'}>퀴즈 시작일 : {dayjs(quiz.startDateTime).format('YYYY-MM-DD hh:mm A')}</Typography>
+                        <Typography variant='h6' width={'50%'}>퀴즈 마감일 : {dayjs(quiz.dueDateTime).format('YYYY-MM-DD hh:mm A')}</Typography>
                     </Stack>
                     <Typography variant='subtitle1' sx={{
                         mt:1,
@@ -111,38 +116,62 @@ export default function QuizPage(){
                 <MenuItem onClick={()=>{setIsOpenEndedQuizOpen(true); handleClose();}}>단답형</MenuItem>
                 <MenuItem onClick={()=>{setIsEssayQuizOpen(true); handleClose();}}>서술형</MenuItem>
             </Menu>
+            <Stack sx={{justifyContent:'center', alignItems:'center'}}>
             {
                 questions.map((data,idx)=>{
                     return (
-                        <Stack marginBottom={'10px'}>
-                            <Button onClick={()=>{onDelete(data)}}>삭제</Button>
-                        <div>문제: {data.title}</div>
-                        <div>배점: {data.score}점</div>
-                        <div>정답: {data.answer}</div>
-                            {data.Choices &&(
+                        <Stack direction='row' sx={{
+                            mt:5, 
+                            mb:1, 
+                            width:'80%', 
+                            border:'0.5px solid #757575',
+                            borderRadius:'10px',
+                            padding:'1.5rem',
+                            }}>
+                            <Stack direction='column' sx={{width:'60%'}}>
+                                <Typography variant='h6'>[ 문제 {idx+1} ]</Typography>
+                                <Stack sx={{mt:2, mb:2, wordBreak:'keep-all'}}>
+                                    <Typography variant='subtitle1'>{data.title}</Typography>
+                                </Stack>
+                                {data.Choices &&(
                                 <FormControl>
-                                    <FormLabel id="demo-controlled-radio-buttons-group">문제</FormLabel>
-                                    <RadioGroup
-                                        aria-labelledby="demo-controlled-radio-buttons-group"
-                                        name="controlled-radio-buttons-group"
-                                    >
-                                        {
-                                            data.Choices.map((choice, idx)=>{
-                                                return(
-                                                    <FormControlLabel value={idx+1} control={<Radio />} label={choice.optionText} />
-                                                )
-                                            })
-                                        }
-                                    </RadioGroup>
+                                    {
+                                        data.Choices.map((choice, idx)=>{
+                                            return(
+                                                <FormControlLabel value={idx} 
+                                                    control={<Checkbox />} 
+                                                    label={choice.optionText} />
+                                            )
+                                        })
+                                    }
                                 </FormControl>
                             )}
-
+                            </Stack>
+                            <Stack direction='column' spacing={10} sx={{width:'40%', justifyContent:'space-evenly'}}>
+                                <Stack direction='column' spacing={2}>
+                                    <Typography variant='h6'>[ 배점 ]  {data.score}점</Typography>
+                                    <Stack direction='column' spacing={1}>
+                                        <Typography variant='h6'>[ 정답 ]</Typography>
+                                        <Typography variant='subtitle1' sx={{wordBreak:'keep-all'}}>{data.answer}</Typography>
+                                    </Stack>
+                                    <Stack direction='column' spacing={1}>
+                                        <Typography variant='h6'>[ 정답의 근거 ]</Typography>
+                                        <Typography variant='subtitle1' sx={{wordBreak:'keep-all'}}>{data.reason}</Typography>
+                                    </Stack>
+                                </Stack>
+                                <Stack direction='row' spacing={1} sx={{justifyContent:'flex-end'}}>
+                                    <Button variant='outlined' sx={{width:'10rem'}} onClick={()=>{setModalOpen(true); setTarget(data); }}>수정</Button>
+                                    <Button variant='outlined' sx={{width:'10rem'}} onClick={()=>{onDelete(data)}}>삭제</Button>
+                                </Stack>
+                                
+                            </Stack>
                         </Stack>
                     )
                 })
             }
+            </Stack>
             {isChoiceQuizOpen && (
-                <AddChoiceQuiz close={()=>{setIsChoiceQuizOpen(false)}} save={saveQuestion}></AddChoiceQuiz>
+                <AddChoiceQuiz close={()=>{setIsChoiceQuizOpen(false)}} save={saveQuestion} edit={()=>{setIsChoiceQuizOpen(true)}}></AddChoiceQuiz>
                 )
 
             }
@@ -152,6 +181,15 @@ export default function QuizPage(){
             }
              {isEssayQuizOpen && (
                 <AddEssayQuiz close={()=>{setIsEssayQuizOpen(false)}} save={saveQuestion}></AddEssayQuiz>
+                )
+            }
+            {isModalOpen && (
+                <EditOpenEndedModal 
+                    open={isModalOpen}
+                    handleClose = {()=>{setModalOpen(false)}}
+                    target={target}
+                    editQuestion={editQuestion}
+                    />
                 )
             }
             <Stack sx={{alignItems:'center', mt:4,}}>
