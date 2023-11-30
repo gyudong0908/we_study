@@ -37,24 +37,17 @@ export default function QuizAccordion({ isTeacher, quiz, editQuiz, onDelete}) {
 
             {isTeacher && (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop: '15px' }}>
-                {/* <Link to={{
-                  pathname: `/mypage/classes/${assignment.id}/worksforteacher`,
-                }}> */}
-                  <Button variant="outlined" size='large' onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/${quiz.id}`, '_blank');}}>📝 퀴즈 수정하기</Button>
-                {/* </Link> */}
-                <Button variant="outlined" sx={{ width: '10%' }} onClick={()=>{setAlertOpen(true)}}>삭제</Button>
-                <Button variant="outlined" sx={{ width: '10%' }} onClick={()=>{setModalOpen(true)}}>진짜 퀴즈 수정</Button>
+                  <Button variant="outlined" size='large' sx={{borderRadius:'10px',}} onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/${quiz.id}`, '_blank');}}>📝 퀴즈 수정하기</Button>
+                <Button variant="outlined" sx={{ width: '10%',borderRadius:'10px', }} onClick={()=>{setAlertOpen(true)}}>삭제</Button>
+                <Button variant="outlined" sx={{ width: '10%',borderRadius:'10px', }} onClick={()=>{setModalOpen(true)}}>진짜 퀴즈 수정</Button>
                 { !quiz.depoly &&(
-                  <Button variant="outlined" onClick={() => { editQuiz(quiz.id, {depoly: true});}} sx={{ width: '10%' }}>배포</Button>
+                  <Button variant="outlined" onClick={() => { editQuiz(quiz.id, {depoly: true});}} sx={{ width: '10%',borderRadius:'10px', }}>배포</Button>
                 )}
-
               </Stack>
             )}
             {!isTeacher && (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop: '15px' }}>
-                {/* <Link to={`/mypage/classes/${assignment.id}/worksforstudent`}> */}
-                  <Button variant="outlined" size='large'>📝 퀴즈 응시하기</Button>
-                {/* </Link> */}
+                  <Button variant="outlined" size='large' sx={{borderRadius:'10px',}}>📝 퀴즈 응시하기</Button>
               </Stack>
             )}            
           </AccordionDetails>

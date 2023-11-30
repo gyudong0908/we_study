@@ -6,12 +6,14 @@ export default function AddOpenEndedQuiz({close, save}){
     const [title, setTitle] = useState('');
     const [score, setScore] = useState('');
     const [answer, setAnswer] = useState('');
+    const [reason, setReason] = useState('');
     function onSave(){
         const saveData = {
             title: title,
             score: score,
             answer: answer,
-            questionType: "서술형"
+            questionType: "단답형",
+            reason: reason,
         };
         save(saveData);
     }
@@ -34,16 +36,27 @@ export default function AddOpenEndedQuiz({close, save}){
                     sx={{width:'15rem'}}
                 />
             </Stack>
-            <TextField id="questionField" label="문제" variant="outlined" placeholder="제목을 입력하세요"
+            <TextField id="questionField" label="문제" variant="outlined" placeholder="문제를 입력하세요"
                     onChange={(e)=>{setTitle(e.target.value)}} 
                     value={title}
                     sx={{wordBreak:'keep-all',}}
+                    multiline
+                    rows={3}
                  />
              <TextField id="outlined-basic" label="정답" variant="outlined"  placeholder="정답을 입력하세요" 
                 onChange={(e)=>{setAnswer(e.target.value)}}
                 value={answer}
             />
-            <Button onClick={()=>{close(); onSave();}}>확인</Button>
+            <TextField id="outlined-basic" label="정답의 근거" variant="outlined"  placeholder="정답의 근거를 입력하세요" 
+                onChange={(e)=>{setReason(e.target.value)}}
+                value={reason}
+                multiline
+                rows={5}
+            />
+            <Stack direction={'row'} spacing={1} sx={{ justifyContent: 'flex-end' }}>
+                <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close();}}>취소</Button>
+                <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close(); onSave();}}>확인</Button>
+            </Stack>
         </Stack>
            
         </>
