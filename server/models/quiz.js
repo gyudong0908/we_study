@@ -39,7 +39,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         startDateTime:{
             type: DataTypes.DATE,
-        }
+        },
+        reason:{
+            type: DataTypes.TEXT,
+        },
     }, {
         sequelize,
         modelName: 'Quiz', // 모델 이름 바꿔줘야함
