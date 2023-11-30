@@ -29,6 +29,7 @@ export default function QuizPage(){
     function saveQuestion(saveData){
         if(saveData.questionType === '객관식'){
             axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/question/choice?quizId=${quizId}`,saveData ,{ withCredentials: true }).then((response)=>{
+                console.log(response.data)
                 setQuestions([...questions, response.data]);
             }).catch(err=>{
                 console.log(err);
