@@ -117,7 +117,7 @@ export default function RankPage() {
       >
         <StickyHeadTable data={data} />
         {/* StickyHeadTable에 서버에서 가져온 데이터를 전달 */}
-        <StickyHeadTable />
+        <StickyHeadTable data={data} />
       </Stack>
     </Stack>
 

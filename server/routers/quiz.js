@@ -209,21 +209,23 @@ router.get('/studentAnswers',function(req,res){
         where:{
             classId: classId
         },
-        raw: true,
         include:[
             {
                 model: models.Question,                
-                attributes:[],
+                // required: true,
+                // attributes:[],
                 include:[{
                     model: models.StudentAnswer,
-                    attributes:[],
+                    // attributes:[],
+                    // required: true,
                     include:[{
-                        model: models.User
+                        model: models.User,
+                        attributes:['id','nickName']
                     }]
                 }]
             }
         ],
-        group:['Questions.StudentAnswers.userId']
+        group:['id','Questions.StudentAnswers.User.id']
     }).then((quiz)=>{
         res.status(200).send(quiz);
     }).catch(err=>{
