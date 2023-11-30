@@ -4,7 +4,6 @@ import RemoveCircleOutlineRoundedIcon from '@mui/icons-material/RemoveCircleOutl
 import { useState, useEffect } from "react";
 
 export default function AddChoiceQuiz({close, save}){
-    const [choiceCount, setChoiceCount] = useState(1);
     const [title, setTitle] = useState('');
     const [score, setScore] = useState('');
     const [answer, setAnswer] = useState('');
@@ -13,7 +12,7 @@ export default function AddChoiceQuiz({close, save}){
     function addOptionArray(){
         const newOptionList= [...optionList];
         newOptionList.push(null);
-        setChoiceList(newOptionList);
+        setOptionList(newOptionList);
     }
     function modifyOptionList(idx, value){
         const newOptionList = [...optionList];
@@ -73,7 +72,7 @@ export default function AddChoiceQuiz({close, save}){
                     sx={{wordBreak:'keep-all',}}
                  />
             <Stack direction={'column'} spacing={2}>
-                {[...Array(choiceCount)].map((_, index) => (
+                {optionList.map((_, index) => (
                     <Stack direction={'row'} spacing={1} >
                         <TextField
                             key={index}
@@ -82,16 +81,17 @@ export default function AddChoiceQuiz({close, save}){
                             variant="outlined"
                             placeholder={`선택지를 입력하세요`}
                             onChange={(e)=>{modifyOptionList(index, e.target.value)}}
+                            value={optionList[index]?optionList[index].optionText: '' }
                             sx={{wordBreak:'keep-all', width:'100%'}}
                             />
-                        <Button sx={{cursor: 'pointer',color:'#757575'}} onClick={() => { setChoiceCount(()=>(choiceCount-1));removeOption(index) }}>
+                        <Button sx={{cursor: 'pointer',color:'#757575'}} onClick={() => { removeOption(index); }}>
                             <RemoveCircleOutlineRoundedIcon />
                         </Button>
                     </Stack>
                 ))}
                 <Stack direction={'row'} sx={{justifyContent:'center'}}>
                     <Button sx={{cursor:'pointer', width:'50%', color:'#757575'}}
-                        onClick={()=>{setChoiceCount(()=>(choiceCount+1)); addOptionArray();}}>
+                        onClick={()=>{ addOptionArray();}}>
                         <AddCircleRoundedIcon />
                         <Typography ml={1}>선택지 생성</Typography>
                     </Button>
