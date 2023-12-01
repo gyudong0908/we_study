@@ -3,13 +3,14 @@ import QuizAccordion from './QuizAccordion';
 import { Typography, Stack, Button } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 export default function ClassQuiz({ isTeacher }) {
   const [quizzes, setQuizzes] = useState([]);
   const {classId} = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -68,10 +69,14 @@ export default function ClassQuiz({ isTeacher }) {
     <>
       {
         isTeacher && (
-          <Stack sx={{justifyContent:'center', alignItems:'center', mt:2, mb:5}}>
+          <Stack direction={'row'} sx={{justifyContent:'center', alignItems:'center', mt:2, mb:5}} spacing={2}>
             <Button size="medium" variant="outlined" onClick={handleOpenModal}
               sx={{padding:'20px', maxWidth:'20rem', borderRadius:'15px', cursor:'pointer'}}>
               <Typography variant='h5'>✍️ 퀴즈 만들기</Typography>
+            </Button>
+            <Button size="medium" variant="outlined" onClick={()=>{navigate(`../quiz/results/${classId}`)}}
+              sx={{padding:'20px', maxWidth:'20rem', borderRadius:'15px', cursor:'pointer'}}>
+              <Typography variant='h5'>✍️ 퀴즈 목록보기</Typography>
             </Button>
           </Stack>
         )

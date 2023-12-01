@@ -105,6 +105,18 @@ export default function StudentAnswer(){
                             <Typography variant='h6'>[ 정답의 근거 ]</Typography>
                             <Typography variant='subtitle1' sx={{wordBreak:'keep-all'}}>{question.reason}</Typography>
                         </Stack>
+                        <>
+                        <div>문제: {question.title}</div>
+                        <div>배점: {question.score}</div>
+                        <div>정답: {question.answer}</div>
+                        {
+                            question.Choices.length !==0?(
+                                        question.Choices.map((choice, choiceIdx)=>{
+                                            return(
+                                                <div>{choice.optionText}</div>
+                                            )}
+                            )): null
+                        }
                         {
                             question.StudentAnswers.map(studentAnswer=>{
                                 return(
