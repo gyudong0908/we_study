@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from 'react';
+import {useSelector} from 'react-redux';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -9,6 +10,7 @@ import EditQuizModal from '../MyModal/EditQuizModal';
 export default function QuizAccordion({ isTeacher, quiz, editQuiz, onDelete}) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isAlertOpen, setAlertOpen] = useState(false);
+  const user = useSelector(state=>state.userData);
 
   return (
     <>
@@ -37,17 +39,22 @@ export default function QuizAccordion({ isTeacher, quiz, editQuiz, onDelete}) {
 
             {isTeacher && (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop: '15px' }}>
-                  <Button variant="outlined" size='large' sx={{borderRadius:'10px',}} onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/${quiz.id}`, '_blank');}}>📝 퀴즈 수정하기</Button>
-                <Button variant="outlined" sx={{ width: '10%',borderRadius:'10px', }} onClick={()=>{setAlertOpen(true)}}>삭제</Button>
-                <Button variant="outlined" sx={{ width: '10%',borderRadius:'10px', }} onClick={()=>{setModalOpen(true)}}>진짜 퀴즈 수정</Button>
+                  <Button variant="outlined" size='large' onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/${quiz.id}`, '_blank');}}>📝 퀴즈 수정하기</Button>
+                  <Button variant="outlined" size='large' onClick={()=>{setModalOpen(true)}}>퀴즈 정보 수정</Button>
+                  <Button variant="outlined" sx={{ width: '5rem'}} onClick={()=>{setAlertOpen(true)}}>삭제</Button>
                 { !quiz.depoly &&(
-                  <Button variant="outlined" onClick={() => { editQuiz(quiz.id, {depoly: true});}} sx={{ width: '10%',borderRadius:'10px', }}>배포</Button>
+                  <Button variant="outlined" onClick={() => { editQuiz(quiz.id, {depoly: true});}} sx={{ width: '5rem',}}>배포</Button>
                 )}
               </Stack>
             )}
             {!isTeacher && (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop: '15px' }}>
-                  <Button variant="outlined" size='large' sx={{borderRadius:'10px',}}>📝 퀴즈 응시하기</Button>
+                  <Button variant="outlined" size='large'
+                    onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/solve/${quiz.id}`, '_blank');}}
+                  >📝 퀴즈 응시하기</Button>
+                  <Button variant="outlined" size='large'
+                    onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/${quiz.id}/answer/${user.userData.id}`, '_blank');}}
+                  >📝 결과 확인하기</Button>
               </Stack>
             )}            
           </AccordionDetails>
