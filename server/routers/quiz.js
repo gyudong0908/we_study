@@ -246,7 +246,8 @@ router.put('/studentAnswer',function(req,res){
 
 router.get('/student/quiz/grade', function(req,res){
     const classId = req.query.classId;
-    models.sequelize.query(`select users.nick_name, quizzes.title, SUM(CASE WHEN studentAnswers.check=true THEN questions.score ELSE 0 END) AS grade
+    models.sequelize.query(`
+    select users.nick_name, quizzes.title, SUM(CASE WHEN studentAnswers.check=true THEN questions.score ELSE 0 END) AS grade, studentAnswers.updated_at
     from quizzes
     left outer join questions
     on quizzes.id = questions.quiz_id
@@ -254,34 +255,8 @@ router.get('/student/quiz/grade', function(req,res){
     on questions.id = studentAnswers.question_id
     left outer join users
     on studentAnswers.user_id = users.id
-    where quizzes.class_id = 1
+    where quizzes.class_id = ${classId}
     group by quizzes.id, studentAnswers.user_id;`
-    // models.Quiz.findAll({
-    //     attributes:['title',[sequelize.literal('SUM(CASE WHEN studentAnswers.check=true THEN questions.score ELSE 0 END)'),'grade']],
-    //     raw:true,
-    //     where:{
-    //         classId: classId
-    //     },
-    //     include:[
-    //         {
-    //             model: models.Question,                
-    //             // required: true,
-    //             // attributes:[],
-    //             include:[{
-    //                 model: models.StudentAnswer,
-    //                 attributes:['updatedAt','check','id'],
-    //                 // required: true,
-    //                 where:{
-    //                     check: true
-    //                 },
-    //                 include:[{
-    //                     model: models.User,
-    //                     attributes:['id','nickName']
-    //                 }]
-    //             }]
-    //         }
-    //     ],
-    //     group:['id','Questions.StudentAnswers.userId']
     ).then((data)=>{
         res.status(200).send(data[0]);
     }).catch(err=>{
