@@ -28,6 +28,11 @@ export default function QuizSolvePage(){
             alert('제출되었습니다!');
             window.close();
         }).catch(err=>{
+            if(err.status = 527){
+                alert('수정 시간이 초과되었습니다!');
+                window.close();
+                return
+            }
             console.log(err);
         })
     }

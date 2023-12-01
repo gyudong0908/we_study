@@ -31,6 +31,7 @@ export default function QuizAccordion({ isTeacher, quiz, editQuiz, onDelete}) {
           </AccordionSummary>
           <AccordionDetails sx={{ whiteSpace: 'pre-line', margin: '5px' }}>
             <Stack sx={{ mr: 2, ml: 2, mb: 4 }}>
+              <Typography variant='subtitile1' sx={{ fontWeight: 'bold' }}>🔔 퀴즈 시작 시간 : {dayjs(quiz.startDateTime).format('YYYY년 MM월 DD일 hh:mm A')}</Typography>
               <Typography variant='subtitile1' sx={{ fontWeight: 'bold' }}>🔔 퀴즈 마감 기한 : {dayjs(quiz.dueDateTime).format('YYYY년 MM월 DD일 hh:mm A')}</Typography>
             </Stack>
             <Stack sx={{ mt: 2, mr: 2, ml: 2, mb: 6 }}>
@@ -39,19 +40,21 @@ export default function QuizAccordion({ isTeacher, quiz, editQuiz, onDelete}) {
 
             {isTeacher && (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop: '15px' }}>
-                  <Button variant="outlined" size='large' onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/${quiz.id}`, '_blank');}}>📝 퀴즈 수정하기</Button>
-                  <Button variant="outlined" size='large' onClick={()=>{setModalOpen(true)}}>퀴즈 정보 수정</Button>
+                {(new Date(quiz.startDateTime).getTime() > new Date().getTime()) &&
+                  <Button variant="outlined" size='large' onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/${quiz.id}`, '_blank');}}>📝 퀴즈 수정하기</Button>                   
+                }
+                    <Button variant="outlined" size='large' onClick={()=>{setModalOpen(true)}}>퀴즈 정보 수정</Button>
+                  
                   <Button variant="outlined" sx={{ width: '5rem'}} onClick={()=>{setAlertOpen(true)}}>삭제</Button>
-                { !quiz.depoly &&(
-                  <Button variant="outlined" onClick={() => { editQuiz(quiz.id, {depoly: true});}} sx={{ width: '5rem',}}>배포</Button>
-                )}
               </Stack>
             )}
             {!isTeacher && (
               <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop: '15px' }}>
+                {(new Date(quiz.startDateTime).getTime() > new Date().getTime()) &&
                   <Button variant="outlined" size='large'
                     onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/solve/${quiz.id}`, '_blank');}}
                   >📝 퀴즈 응시하기</Button>
+                }
                   <Button variant="outlined" size='large'
                     onClick={()=>{window.open(`http://localhost:5173/mypage/quiz/${quiz.id}/answer/${user.userData.id}`, '_blank');}}
                   >📝 결과 확인하기</Button>

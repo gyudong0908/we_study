@@ -66,49 +66,106 @@ router.delete('/quiz',function(req,res){
 
 router.post('/question',function(req,res){
     const quizId = req.query.quizId;
-    models.Question.create({...req.body, quizId: quizId}).then((question)=>{
-        res.status(200).send(question);
+    models.Quiz.findByPk(quizId).then(quiz=>{
+        if(new Date(quiz.startDateTime).getTime() < new Date().getTime()){
+            res.status(527).send('퀴즈 수정시간이 오버되었습니다');
+            return
+        }
+        models.Question.create({...req.body, quizId: quizId}).then((question)=>{
+            res.status(200).send(question);
+        }).catch(err=>{
+            console.log(err);
+            res.status(500).send('서술형, 단답형 생성 에러');
+        })
+    
     }).catch(err=>{
-        console.log(err);
-        res.status(500).send('서술형, 단답형 생성 에러');
+        console.log(err)
+        res.status(500).send('퀴즈 시작시간 조회 에러')
     })
 })
 
 router.put('/question',function(req,res){
     const questionId = req.query.questionId;
-    models.Question.update(req.body,{where:{id:questionId}}).then(()=>{
-        res.sendStatus(200);
+    models.Question.findByPk(questionId, {
+        include: [{
+            model: models.Quiz,
+            attributes:['startDateTime']
+        }]
+    }).then((question)=>{        
+        if(new Date(question.Quiz.startDateTime).getTime() < new Date().getTime()){
+            res.status(527).send('퀴즈 수정시간이 오버되었습니다');
+            return
+        }
+        models.Question.update(req.body,{where:{id:questionId}}).then(()=>{
+            res.sendStatus(200);
+        }).catch(err=>{
+            console.log(err);
+            res.status(500).send('퀴즈 수정 에러 발생');
+        })
+    
     }).catch(err=>{
         console.log(err);
-        res.status(500).send('퀴즈 수정 에러 발생');
+        res.status(500).send('퀴즈 시작 시간 조회 오류')
     })
 })
 
 router.delete('/question',function(req,res){
     const questionId = req.query.questionId;
-    models.Question.destroy({where:{id:questionId}}).then(()=>{
-        res.sendStatus(200);
+    models.Question.findByPk(questionId, {
+        include: [{
+            model: models.Quiz,
+            attributes:['startDateTime']
+        }]
+    }).then((question)=>{        
+        if(new Date(question.Quiz.startDateTime).getTime() < new Date().getTime()){
+            res.status(527).send('퀴즈 수정시간이 오버되었습니다');
+            return
+        }
+        models.Question.destroy({where:{id:questionId}}).then(()=>{
+            res.sendStatus(200);
+        }).catch(err=>{
+            console.log(err);
+            res.status(500).send('Question 삭제 에러');
+        })
+    
     }).catch(err=>{
         console.log(err);
-        res.status(500).send('Question 삭제 에러');
+        res.status(500).send('퀴즈 시작시간 조회 에러')
     })
 })
 
 router.post('/question/choice',function(req,res){
     const quizId = req.query.quizId;
     const optionText  = req.body.optionText;
-    models.Question.create({...req.body, quizId: quizId}).then((question)=>{
-        const modifiedOptions = optionText.map(option => ({ ...option, questionId: question.id }));
-        models.Choice.bulkCreate(modifiedOptions).then((choice)=>{
-            res.status(200).send({...question.dataValues,Choices:choice });
+    models.Question.findByPk(questionId, {
+        include: [{
+            model: models.Quiz,
+            attributes:['startDateTime']
+        }]
+    }).then((question)=>{     
+
+        if(new Date(question.Quiz.startDateTime).getTime() < new Date().getTime()){
+            res.status(527).send('퀴즈 수정시간이 오버되었습니다');
+            return
+        }
+
+        models.Question.create({...req.body, quizId: quizId}).then((question)=>{
+            const modifiedOptions = optionText.map(option => ({ ...option, questionId: question.id }));
+            models.Choice.bulkCreate(modifiedOptions).then((choice)=>{
+                res.status(200).send({...question.dataValues,Choices:choice });
+            }).catch(err=>{
+                console.log(err);
+                res.status(500).send('선택지 생성 에러');
+            })
         }).catch(err=>{
             console.log(err);
-            res.status(500).send('선택지 생성 에러');
+            res.status(500).send('퀴즈 생성 에러');
         })
     }).catch(err=>{
-        console.log(err);
-        res.status(500).send('퀴즈 생성 에러');
-    })
+            console.log(err);
+            res.status(500).send('퀴즈 시작시간 조회 에러');
+        })
+
 })
 
 router.put('/choice',function(req,res){
@@ -135,46 +192,53 @@ router.post('/studentAnswer',function(req,res){
     const userId = req.session.passport.user;
     const quizId = req.query.quizId;
     const saveData = req.body.map(item => ({ ...item, userId: userId }));
-
-    function zipArrays(arr1, arr2) {
-        return arr1.map((item, index) => [item, arr2[index]]);
-    }
-
-    models.StudentAnswer.bulkCreate(saveData).then((studentAnswers)=>{
-        models.Question.findAll({
-            raw:true,
-            where:{quizId: quizId},
-            order:[['createdAt', 'ASC']]
-        }).then(questions=>{
-        // 이제 여기에 채점 로직을 구현 하면 된다!
-        console.log(questions)
-        for (const [studentAnswer, question] of zipArrays(studentAnswers, questions)) {
-            console.log(studentAnswer)
-            console.log(question)
-            if(question.questionType === "서술형"){
-                break;
-            }
-            if(studentAnswer.answer === question.answer){
-                models.StudentAnswer.update({check: true}, {where:{id: studentAnswer.id}}).catch(err=>{
-                    console.log(err);
-                    res.status(500).send('채점 에러 발생')
-                })
-            }else{
-                models.StudentAnswer.update({check: false}, {where:{id: studentAnswer.id}}).catch(err=>{
-                    console.log(err);
-                    res.status(500).send('채점 에러 발생')
-                })
-            }
+    models.Quiz.findByPk(quizId).then((quiz)=>{
+        if(new Date(quiz.startDateTime).getTime() < new Date().getTime()){
+            res.status(527).send('퀴즈 수정시간이 오버되었습니다');
+            return
         }
-        res.sendStatus(200);
-
+        function zipArrays(arr1, arr2) {
+            return arr1.map((item, index) => [item, arr2[index]]);
+        }
+        models.StudentAnswer.bulkCreate(saveData).then((studentAnswers)=>{
+            models.Question.findAll({
+                raw:true,
+                where:{quizId: quizId},
+                order:[['createdAt', 'ASC']]
+            }).then(questions=>{
+            // 이제 여기에 채점 로직을 구현 하면 된다!
+            console.log(questions)
+            for (const [studentAnswer, question] of zipArrays(studentAnswers, questions)) {
+                console.log(studentAnswer)
+                console.log(question)
+                if(question.questionType === "서술형"){
+                    break;
+                }
+                if(studentAnswer.answer === question.answer){
+                    models.StudentAnswer.update({check: true}, {where:{id: studentAnswer.id}}).catch(err=>{
+                        console.log(err);
+                        res.status(500).send('채점 에러 발생')
+                    })
+                }else{
+                    models.StudentAnswer.update({check: false}, {where:{id: studentAnswer.id}}).catch(err=>{
+                        console.log(err);
+                        res.status(500).send('채점 에러 발생')
+                    })
+                }
+            }
+            res.sendStatus(200);
+    
+            }).catch(err=>{
+                console.log(err);
+                res.status(500).send('채점 에러')
+            })
         }).catch(err=>{
             console.log(err);
-            res.status(500).send('채점 에러')
+            res.status(500).send('학생 정답지 생성 에러');
         })
     }).catch(err=>{
         console.log(err);
-        res.status(500).send('학생 정답지 생성 에러');
+        res.status(500).send('퀴즈 시작시간 조회 에러');
     })
 })
 router.get('/studentAnswer',function(req,res){
