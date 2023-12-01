@@ -12,7 +12,9 @@ export default function QuizResultdAccordion({quiz}){
           sx={{ margin: '5px' }}
         >
           <Stack sx={{ wordBreak: 'keep-all', wordWrap: 'break-word' }}>
-            <Typography variant='h6'>{quiz.title}</Typography>
+            <Typography variant='h6'>퀴즈 제목: {quiz.title}</Typography>
+            <Typography variant='h6'>마감 기한: {quiz.dueDateTime}</Typography>
+
           </Stack>
         </AccordionSummary>
         <AccordionDetails sx={{ whiteSpace: 'pre-line', mr: '5px', ml: '5px', mb: '5px' }}>            

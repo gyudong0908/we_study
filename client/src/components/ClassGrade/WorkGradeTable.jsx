@@ -18,7 +18,7 @@ function createData(name, topic, workTitle, dueDateTime, grade) {
   return { name, topic, workTitle, dueDateTime };
 }
 
-export default function GradeTable({ curriculums, setCurriculums }) {
+export default function WorkGradeTable({ curriculums, setCurriculums }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedCurriculum, setSelectedCurriculum] = useState(null);
   const [selectedWork, setSelectedWork] = useState(null);

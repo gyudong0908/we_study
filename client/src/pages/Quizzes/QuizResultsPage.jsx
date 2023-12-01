@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import QuizResultdAccordion from "../../components/Quiz/QuizResultdAccordion";
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, Button } from "@mui/material";
 
 export default function QuizResultsPage(){
     const {classId} = useParams();
     const [quizs, setQuizs] = useState([]);
+    const navigate = useNavigate();
 
     function getQuizResults(){
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/studentAnswers?classId=${classId}`, { withCredentials: true }).then((response)=>{
@@ -30,6 +31,9 @@ export default function QuizResultsPage(){
             marginBottom: '150px',
           }}
         >
+            <Stack sx={{ mb: 2, alignItems: 'flex-end' }}>
+                <Button variant='outlined' sx={{ width: '20%' }} onClick={()=>(navigate(-1))}>목록</Button>
+            </Stack>
             <Stack sx={{ borderBottom: '1.5px solid black', mb: 2 }}>
                 <Typography variant="h4" component="span" sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea' }}>📑 퀴즈 제출 확인하기</Typography>
             </Stack>

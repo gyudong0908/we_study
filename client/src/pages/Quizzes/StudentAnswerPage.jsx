@@ -62,7 +62,7 @@ export default function StudentAnswer(){
                                             return(
                                                 <div>{choice.optionText}</div>
                                             )}
-                            )): <TextField placeholder="답을 입력해" onChange={(e)=>{onChangeAnswer(e,index, question.id);}}/>
+                            )): null
                         }
                         {
                             question.StudentAnswers.map(studentAnswer=>{

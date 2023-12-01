@@ -152,7 +152,7 @@ router.post('/studentAnswer',function(req,res){
             console.log(studentAnswer)
             console.log(question)
             if(question.questionType === "서술형"){
-                break
+                break;
             }
             if(studentAnswer.answer === question.answer){
                 models.StudentAnswer.update({check: true}, {where:{id: studentAnswer.id}}).catch(err=>{
@@ -241,6 +241,51 @@ router.put('/studentAnswer',function(req,res){
     }).catch(err=>{
         console.log(err);
         res.status(500).send('정답 변경 에러');
+    })
+})
+
+router.get('/student/quiz/grade', function(req,res){
+    const classId = req.query.classId;
+    models.sequelize.query(`select users.nick_name, quizzes.title, SUM(CASE WHEN studentAnswers.check=true THEN questions.score ELSE 0 END) AS grade
+    from quizzes
+    left outer join questions
+    on quizzes.id = questions.quiz_id
+    join studentAnswers
+    on questions.id = studentAnswers.question_id
+    left outer join users
+    on studentAnswers.user_id = users.id
+    where quizzes.class_id = 1
+    group by quizzes.id, studentAnswers.user_id;`
+    // models.Quiz.findAll({
+    //     attributes:['title',[sequelize.literal('SUM(CASE WHEN studentAnswers.check=true THEN questions.score ELSE 0 END)'),'grade']],
+    //     raw:true,
+    //     where:{
+    //         classId: classId
+    //     },
+    //     include:[
+    //         {
+    //             model: models.Question,                
+    //             // required: true,
+    //             // attributes:[],
+    //             include:[{
+    //                 model: models.StudentAnswer,
+    //                 attributes:['updatedAt','check','id'],
+    //                 // required: true,
+    //                 where:{
+    //                     check: true
+    //                 },
+    //                 include:[{
+    //                     model: models.User,
+    //                     attributes:['id','nickName']
+    //                 }]
+    //             }]
+    //         }
+    //     ],
+    //     group:['id','Questions.StudentAnswers.userId']
+    ).then((data)=>{
+        res.status(200).send(data[0]);
+    }).catch(err=>{
+        console.log(err);
     })
 })
 module.exports = router;
