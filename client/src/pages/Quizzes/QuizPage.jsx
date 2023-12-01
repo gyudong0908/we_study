@@ -117,12 +117,12 @@ export default function QuizPage(){
                 <MenuItem onClick={()=>{setIsOpenEndedQuizOpen(true); handleClose();}}>단답형</MenuItem>
                 <MenuItem onClick={()=>{setIsEssayQuizOpen(true); handleClose();}}>서술형</MenuItem>
             </Menu>
-            <Stack sx={{justifyContent:'center', alignItems:'center'}}>
+            <Stack sx={{justifyContent:'center', alignItems:'center', mt:5}}>
             {
                 questions.map((data,idx)=>{
                     return (
                         <Stack direction='row' sx={{
-                            mt:5, 
+                            mt:2, 
                             mb:1, 
                             width:'80%', 
                             border:'0.5px solid #757575',
