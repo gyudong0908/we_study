@@ -1,5 +1,6 @@
 import { Stack, Typography } from '@mui/material';
-import GradeTable from './GradeTable';
+import WorkGradeTable from './WorkGradeTable';
+import QuizGradeTable from './QuizGradeTable';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -13,8 +14,15 @@ export default function ClassGrade({ isTeacher }) {
       setCurriculums(data.data.Curriculums);
     })
   }
+  function getQuizGradeData() {
+    axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/student/quiz/grade?classId=${classId}`, { withCredentials: true }).then(data => {
+      console.log(data.data)
+    })
+  }
+
   useEffect(() => {
     getSubmitData();
+    getQuizGradeData();
   }, [])
   return (
     <Stack isTeacher={isTeacher}>
@@ -23,7 +31,10 @@ export default function ClassGrade({ isTeacher }) {
           학생 성적 관리
         </Typography>
       </Stack>
-      <GradeTable curriculums={curriculums} setCurriculums={setCurriculums} />
+      <Stack direction={'row'} spacing={2}>
+        <WorkGradeTable curriculums={curriculums} setCurriculums={setCurriculums} />
+        <QuizGradeTable curriculums={curriculums} setCurriculums={setCurriculums} />
+      </Stack>
     </Stack>
   );
 }
