@@ -1,4 +1,4 @@
-import { Typography, FormControl, Select, MenuItem, Grid, Card, CardContent, Divider, Stack, Box } from "@mui/material"    //부트스트랩 쓸때처럼 import 해주란듯.
+import { Typography, FormControl, Select, MenuItem, Grid, Card, CardContent, Divider, Stack, Box } from "@mui/material"
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -19,19 +19,28 @@ const card = (
 );
 
 export default function RankPage() {
-  const [age, setAge] = React.useState('');
-
+  const [selectedClass, setSelectedClass] = React.useState(''); // 선택한 클래스 상태 추가
   const [data, setData] = React.useState([]); //임시로 추가해 줌
+  const [dataByClass, setDataByClass] = React.useState([]); // 선택한 클래스의 사용자 랭킹
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+
+  const handleChange = async (event) => {
+    const classId = event.target.value;
+    setSelectedClass(classId);
+
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/rank?classId=${classId}`, { withCredentials: true });
+      setDataByClass(response.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   async function fetchData() {
     try {
       const response = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/rank`, { withCredentials: true });
-      // console.log(response.data);
-      // setData(response.data);
+      console.log(response.data);
+      setData(response.data);
     } catch (err) {
       console.log(err);
     }
@@ -92,19 +101,27 @@ export default function RankPage() {
           <div>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <Select
-                value={age}
+                value={selectedClass}
                 onChange={handleChange}
                 displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
+                inputProps={{ 'aria-label': 'Select a class' }}
                 style={{ fontSize: '18px' }}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value="">Select a class</MenuItem>
+                {/* 여기에 클래스 옵션들을 가져와서 렌더링 */}
+                {/* 예시: */}
+                {/* <MenuItem value="1">Class 1</MenuItem>
+                <MenuItem value="2">Class 2</MenuItem>
+                <MenuItem value="3">Class 3</MenuItem>
+                <MenuItem value="4">Class 4</MenuItem> */}
+                {/* ... */}
+              </Select>
+
+              {/* <MenuItem value={10}>Ten</MenuItem>
                 <MenuItem value={20}>Twenty</MenuItem>
                 <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
+              </Select> */}
+
             </FormControl>
           </div>
         </Grid>
@@ -117,7 +134,7 @@ export default function RankPage() {
       >
         <StickyHeadTable data={data} />
         {/* StickyHeadTable에 서버에서 가져온 데이터를 전달 */}
-        <StickyHeadTable />
+        <StickyHeadTable data={dataByClass} />
       </Stack>
     </Stack>
 

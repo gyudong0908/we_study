@@ -6,22 +6,54 @@ router.use(express.json());
 
 
 router.get('/rank', async (req, res) => {
+    const { classId } = req.query; // 클라이언트에서 전달된 선택한 클래스 ID
     try {
-        const results = await models.Rank.findAll({
-            attributes: [
-                'userId',
-                [sequelize.fn('SUM', sequelize.col('study_time')), 'totalStudyTime'],
-            ],
-            include: [{ model: models.User, attributes: ['nickName'] }],
-            group: ['userId'],
-            order: [['totalStudyTime', 'DESC']],
-            limit: 20,
-        });
+        let results;
+
+        if (classId) {
+            // 만약 클래스 ID가 전달되었다면 해당 클래스에 속한 사용자들의 랭킹을 가져옵니다.
+            results = await models.Rank.findAll({
+                attributes: [
+                    [sequelize.fn('SUM', sequelize.col('study_time')), 'totalStudyTime'],
+                ],
+                include: [
+                    {
+                        model: models.User,
+                        attributes: ['id', 'nickName'],
+                        include: [
+                            {
+                                model: models.Class,
+                                where: { id: classId }
+                            }
+                        ]
+                    }
+                ],
+                group: ['User.id'],
+                order: [[sequelize.literal('totalStudyTime'), 'DESC']],
+                limit: 20,
+            });
+        } else {
+            // 클래스 ID가 전달되지 않았다면 모든 사용자들의 랭킹을 가져옵니다.
+            results = await models.Rank.findAll({
+                attributes: [
+                    [sequelize.fn('SUM', sequelize.col('study_time')), 'totalStudyTime'],
+                ],
+                include: [
+                    {
+                        model: models.User,
+                        attributes: ['id', 'nickName'],
+                    }
+                ],
+                group: ['User.id'],
+                order: [[sequelize.literal('totalStudyTime'), 'DESC']],
+                limit: 20,
+            });
+        }
 
         res.json(results);
         console.log(results);
     } catch (error) {
-        console.error(err);  //임시로 추가해줌
+        console.error(error);  //임시로 추가해줌
         res.status(500).json({ error: error.message });
     }
 });

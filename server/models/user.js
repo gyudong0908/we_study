@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     aboutMe: {
       type: DataTypes.TEXT,
     },
-    
+
 
   }, {
     sequelize,

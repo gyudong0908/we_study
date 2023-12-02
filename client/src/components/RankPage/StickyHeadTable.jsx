@@ -78,12 +78,12 @@ export default function StickyHeadTable({ data }) {
           </TableHead>
           <TableBody>
             {data
-              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{row.nickName}</TableCell>
+                    <TableCell>{row.User.nickName}</TableCell>
                     <TableCell align="right">{row.totalStudyTime}</TableCell>
                   </TableRow>
                 );
@@ -94,7 +94,7 @@ export default function StickyHeadTable({ data }) {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        // count={data.length}
+        count={data.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
