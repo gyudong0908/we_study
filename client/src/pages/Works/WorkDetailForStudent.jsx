@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 
 export default function WorkDetailForStudent() {
     const { submitId } = useParams();
-    const user = useSelector(state=>state.userData);
+    const user = useSelector(state => state.userData);
     const [submitData, setsubmitData] = useState([]);
     const [open, setOpen] = useState(false);
     const [alertOpen, setAlertOpen] = useState(false);
@@ -19,7 +19,7 @@ export default function WorkDetailForStudent() {
 
     function getSubmitData() {
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/submit?submitId=${submitId}`, { withCredentials: true }).then(response => {
-            if(response.data.userId === user.userData.id ){
+            if (response.data.userId === user.userData.id) {
                 setIsMine(true);
             }
             setsubmitData(response.data);
@@ -33,7 +33,7 @@ export default function WorkDetailForStudent() {
     }
 
     useEffect(() => {
-        if(user.userData){
+        if (user.userData) {
             getSubmitData();
         }
     }, [user.userData])
@@ -95,7 +95,10 @@ export default function WorkDetailForStudent() {
                             </CardContent>
                         </Card>
                     </Stack>
-                    <CheckGrade submitData={submitData} />
+                    {
+                        isMine &&
+                        <CheckGrade submitData={submitData} />
+                    }
                 </Stack> : null}
             {
                 open ? <EditSubmitModal
@@ -116,7 +119,7 @@ export default function WorkDetailForStudent() {
     );
 }
 
-function CheckGrade({ submitData}) {
+function CheckGrade({ submitData }) {
     return (
         <Stack>
             <Card >

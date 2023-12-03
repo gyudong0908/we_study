@@ -5,61 +5,81 @@ import { createRef, useEffect, useState } from "react";
 import axios from 'axios';
 export default function CalenderPage() {
     const [calendarDate, setCalendarDate] = useState(new Date());
-    const [workData, setWorkData] = useState([]);
-    const [ClassData, setClassData] = useState([]);
+    const [itemData, setItemData] = useState([]);
+    const [calendarData, setCalendarData] = useState([]);
     const calendarRef = createRef();
 
 
-    function getData(){
-        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/works/user`, { withCredentials: true }).then((response)=>{
-            console.log(response.data)
-            let items = [];
-            let calendars = [];
-            let classIds = [];
-            response.data.map((data, idx) => {
-                let colorCode = "#" + Math.round(Math.random() * 0xffffff).toString(16)
-                    items.push({
-                        id: idx,
-                        calendarId: data.id,
-                        title: data['Curriculums.Works.title'],
-                        start: data['Curriculums.Works.createdAt'],
-                        end: data['Curriculums.Works.dueDateTime'],
-                        isAllday: true,
-                        category: 'allday',
-                        isReadOnly: true,
-                        color: 'white',
-                        // backgroundColor: colorCode,
-                        // borderColor: 'none',
-                        customStyle: {
-                            color: 'white',
-                            // backgroundColor: 'none',
-                            borderRadius: '5px',
-                            marginTop: '10px'
-                        }
-                    })
-                    if( !classIds.find((classId) => classId === data.id)){
-                        calendars.push({
-                            id: data.id,
-                            name: data.title,
-                            color: colorCode,
-                            backgroundColor: colorCode,
-                            dragBackgroundColor: colorCode,
-                            borderColor: colorCode,
-                        })
-                        classIds.push(data.id);
-                    }
-                })
-            setWorkData(items);
-            setClassData(calendars);
+    async function getData() {
+        // async를 사용하여 요청을 2번 해서 받은 다음 어떻게 잘 분류해 보자
+        const workResponse = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/works/user`, { withCredentials: true });
+        const quizResponse = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/quizzes/user`, { withCredentials: true });
+        const classesResponse = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/user/classes`, { withCredentials: true });
+        console.log(workResponse.data)
 
-        }).catch(err=>{
-            console.log(err);
+        let items = [];
+        let calendars = [];
+        // let classIds = [];
+        workResponse.data.map((data, idx) => {
+            items.push({
+                id: idx,
+                calendarId: data.id,
+                title: '과제' + data['Curriculums.Works.title'],
+                start: data['Curriculums.Works.createdAt'],
+                end: data['Curriculums.Works.dueDateTime'],
+                isAllday: true,
+                category: 'allday',
+                isReadOnly: true,
+                color: 'white',
+                // backgroundColor: colorCode,
+                // borderColor: 'none',
+                customStyle: {
+                    color: 'white',
+                    // backgroundColor: 'none',
+                    borderRadius: '5px',
+                    marginTop: '10px'
+                }
+            })
         })
+        quizResponse.data.map((data, idx) => {
+            items.push({
+                id: idx,
+                calendarId: data.id,
+                title: '퀴즈' + data['Quizzes.title'],
+                start: data['Quizzes.startDateTime'],
+                end: data['Quizzes.dueDateTime'],
+                isAllday: true,
+                category: 'allday',
+                isReadOnly: true,
+                color: 'white',
+                // backgroundColor: colorCode,
+                // borderColor: 'none',
+                customStyle: {
+                    color: 'white',
+                    // backgroundColor: 'none',
+                    borderRadius: '5px',
+                    marginTop: '10px'
+                }
+            })
+        })
+        classesResponse.data.map(data => {
+            let colorCode = "#" + Math.round(Math.random() * 0xffffff).toString(16)
+            calendars.push({
+                id: data.id,
+                name: data.title,
+                color: colorCode,
+                backgroundColor: colorCode,
+                dragBackgroundColor: colorCode,
+                borderColor: colorCode,
+            })
+        })
+        setItemData(items);
+        setCalendarData(calendars);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getData();
-    },[])
+    }, [])
 
     const template = {
         monthGridHeader(model) {
@@ -139,11 +159,11 @@ export default function CalenderPage() {
             <Calendar
                 ref={calendarRef}
                 height="730px"
-                calendars={ClassData}
+                calendars={calendarData}
                 disableDblClick={true}
                 disableClick={true}
-                isReadOnly={false}
-                events={workData}
+                isReadOnly={true}
+                events={itemData}
                 timezones={[
                     {
                         timezoneOffset: 540,

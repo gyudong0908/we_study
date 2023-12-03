@@ -30,19 +30,20 @@ router.get('/works', function (req, res) {
     })
 })
 
-router.get('/works/user',async function(req,res){
+router.get('/works/user', async function (req, res) {
     const userId = req.session.passport.user;
     try {
         const userInstance = await models.User.findByPk(userId);
         const classesForUser = await userInstance.getClasses({
-            raw:true,
-            include:[
+            raw: true,
+            include: [
                 {
                     model: models.Curriculum,
-                    include:[{
-                        model: models.Work
+                    include: [{
+                        model: models.Work,
+                        required: true,
                     }]
-                }
+                },
             ]
         });
         res.status(200).send(classesForUser);
@@ -51,11 +52,11 @@ router.get('/works/user',async function(req,res){
     }
 })
 
-router.get('/work',function(req,res){
+router.get('/work', function (req, res) {
     const workId = req.query.workId;
-    models.Work.findByPk(workId).then((data)=>{
+    models.Work.findByPk(workId).then((data) => {
         res.status(200).send(data);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send('work 조회 에러');
     })
