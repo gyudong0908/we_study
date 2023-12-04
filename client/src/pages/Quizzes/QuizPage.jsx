@@ -37,12 +37,22 @@ export default function QuizPage(){
                 console.log(response.data)
                 setQuestions([...questions, response.data]);
             }).catch(err=>{
+                if(err.status = 527){
+                    alert('수정 시간이 초과되었습니다!');
+                    window.close();
+                    return
+                }
                 console.log(err);
             })
         }else{
             axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/question?quizId=${quizId}`,saveData ,{ withCredentials: true }).then((response)=>{
                 setQuestions([...questions, response.data]);
             }).catch(err=>{
+                if(err.status = 527){
+                    alert('수정 시간이 초과되었습니다!');
+                    window.close();
+                    return
+                }
                 console.log(err);
             })
         }
@@ -62,15 +72,26 @@ export default function QuizPage(){
         axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/question?questionId=${target.id}`, { withCredentials: true }).then(()=>{
             setQuestions(questions.filter(question=>question.id !== target.id));
         }).catch(err=>{
+            if(err.status = 527){
+                alert('수정 시간이 초과되었습니다!');
+                window.close();
+                return
+            }
             console.log(err);
         })
 
     }
     // 아직 밑에 있는 수정은 단답형이랑 서술형만 가능함
     function editQuestion(questionId, target){
+        console.log(3)
         axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/question?questionId=${questionId}`,target, { withCredentials: true }).then(()=>{
             setQuestions(questions.map(question=>(question.id === questionId? {...question, ...target}: question)));
         }).catch(err=>{
+            if(err.status = 527){
+                alert('수정 시간이 초과되었습니다!');
+                window.close();
+                return
+            }
             console.log(err);
         })
     }

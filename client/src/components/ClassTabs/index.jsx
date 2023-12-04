@@ -44,11 +44,11 @@ function a11yProps(index) {
 
 export default function ClassTabs({ isTeacher, classData, setClassData }) {
   const [value, setValue] = React.useState(0);
-  const {classId} = useParams();
+  const { classId } = useParams();
 
-  React.useEffect(()=>{
-      setValue(0);
-  },[classId])
+  React.useEffect(() => {
+    setValue(0);
+  }, [classId])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -94,7 +94,7 @@ export default function ClassTabs({ isTeacher, classData, setClassData }) {
           aria-label="basic tabs example"
         >
           {tabs.map((tab, index) => (
-            !isTeacher && tab.title === '클래스 설정' ? null :
+            !isTeacher && (tab.title === '클래스 설정' || tab.title === '성적') ? null :
               <Tab key={index} label={tab.title} {...a11yProps(index)} />
           ))}
         </Tabs>
