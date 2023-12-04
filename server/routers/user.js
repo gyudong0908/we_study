@@ -59,4 +59,35 @@ router.get('/user/classes', async function (req, res) {
         res.status(500).send('과제 정보 조회 오류');
     }
 })
+
+
+
+router.get('/user/classes', async (req, res) => {
+    const userId = req.session.passport.user;
+    try {
+        const user = await models.User.findByPk(userId, {
+            include: [
+                {
+                    model: models.Class,
+                    attributes: ['id', 'title'],
+                },
+            ],
+        });
+
+        if (!user) {
+            return res.status(500).json({ message: 'User not found' });
+        }
+        res.json(user.classes);
+    } catch (error) {
+        res.status(500).send('유저 클래스 조회 오류');
+    }
+});
+
+
 module.exports = router;
+
+
+
+
+
+
