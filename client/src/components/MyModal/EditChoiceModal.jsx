@@ -15,23 +15,41 @@ const style = {
   p: 4,
 };
 
-function EditOpendEndedModal({open, handleClose, target, editQuestion,}) {
+function EditChoiceModal({open, handleClose, target, editQuestion,}) {
   const [title, setTitle] = useState('');
   const [score, setScore] = useState('');
-  const [answer, setAnswer] = useState('');
+  const [answer, setAnswer] = useState([]);
   const [reason, setReason] = useState('');
+  const [optionList, setOptionList] = useState([]);
 
   function onEdit() {
     if (title !== '' && answer !== '') {
       const data = {
         title: title,
         score: score,
-        answer: answer,
+        answer: Array.isArray(answer) ? answer : [answer], 
         questionType: target.questionType,
         reason: reason,
       }
       editQuestion(target.id, data);
     }
+  }
+
+  function addOptionArray(){
+    const newOptionList= [...optionList];
+    newOptionList.push(null);
+    setOptionList(newOptionList);
+}
+function modifyOptionList(idx, value){
+    const newOptionList = [...optionList];
+    newOptionList[idx] = {optionText: value};
+    setOptionList(newOptionList);
+}
+
+function removeOption(idx) {
+    const newOptionList = [...optionList];
+    newOptionList.splice(idx, 1);
+    setOptionList(newOptionList);
   }
 
   return (
@@ -57,7 +75,6 @@ function EditOpendEndedModal({open, handleClose, target, editQuestion,}) {
                       // value={title}
                       defaultValue={target.title}
                       multiline
-                      rows={3}
                       sx={{wordBreak:'keep-all', whiteSpace: 'pre-line' }}
                   />
               <TextField id="outlined-basic" label="정답" variant="outlined"  placeholder="정답을 입력하세요" 
@@ -72,9 +89,34 @@ function EditOpendEndedModal({open, handleClose, target, editQuestion,}) {
                   // value={reason}
                   defaultValue={target.reason}
                   multiline
-                  rows={3}
                   sx={{wordBreak:'keep-all', whiteSpace: 'pre-line' }}
               />
+              <Stack direction={'column'} spacing={2}>
+                {target.optionList.map((_, index) => (
+                    <Stack direction={'row'} spacing={1} >
+                        <TextField
+                            key={index}
+                            id={`multiple-choice-${index}`}
+                            label={`선택지 ${index + 1}`}
+                            variant="outlined"
+                            placeholder={`선택지를 입력하세요`}
+                            onChange={(e)=>{modifyOptionList(index, e.target.value)}}
+                            value={optionList[index]?optionList[index].optionText: '' }
+                            sx={{wordBreak:'keep-all', whiteSpace:'pre-line',width:'100%'}}
+                            />
+                        <Button sx={{cursor: 'pointer',color:'#757575'}} onClick={() => { removeOption(index); }}>
+                            <RemoveCircleOutlineRoundedIcon />
+                        </Button>
+                    </Stack>
+                ))}
+                <Stack direction={'row'} sx={{justifyContent:'center'}}>
+                    <Button sx={{cursor:'pointer', width:'50%', color:'#757575'}}
+                        onClick={()=>{ addOptionArray();}}>
+                        <AddCircleRoundedIcon />
+                        <Typography ml={1}>선택지 생성</Typography>
+                    </Button>
+                </Stack>
+              </Stack>
               <Stack direction={'row'} spacing={1} sx={{ justifyContent: 'flex-end' }}>
                   <Button variant='outlined' sx={{width:'10rem',}} onClick={handleClose}>취소</Button>
                   <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{handleClose(); onEdit();}}>수정</Button>
@@ -86,4 +128,4 @@ function EditOpendEndedModal({open, handleClose, target, editQuestion,}) {
 }
 
 
-export default EditOpendEndedModal;
+export default EditChoiceModal;

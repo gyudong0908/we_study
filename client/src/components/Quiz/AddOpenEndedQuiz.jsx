@@ -39,9 +39,8 @@ export default function AddOpenEndedQuiz({close, save}){
             <TextField id="questionField" label="문제" variant="outlined" placeholder="문제를 입력하세요"
                     onChange={(e)=>{setTitle(e.target.value)}} 
                     value={title}
-                    sx={{wordBreak:'keep-all',}}
+                    sx={{whiteSpace:'pre-line', overflow: 'auto'}}
                     multiline
-                    rows={3}
                  />
              <TextField id="outlined-basic" label="정답" variant="outlined"  placeholder="정답을 입력하세요" 
                 onChange={(e)=>{setAnswer(e.target.value)}}
@@ -51,7 +50,7 @@ export default function AddOpenEndedQuiz({close, save}){
                 onChange={(e)=>{setReason(e.target.value)}}
                 value={reason}
                 multiline
-                rows={5}
+                sx={{whiteSpace:'pre-line', overflow: 'auto'}}
             />
             <Stack direction={'row'} spacing={1} sx={{ justifyContent: 'flex-end' }}>
                 <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close();}}>취소</Button>

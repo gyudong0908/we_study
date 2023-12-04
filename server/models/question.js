@@ -35,7 +35,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
         },
         answer: {
-            type: DataTypes.STRING,
+            type: DataTypes.JSON,
+        },
+        reason:{
+            type: DataTypes.TEXT,
         },
         reason:{
             type: DataTypes.TEXT,

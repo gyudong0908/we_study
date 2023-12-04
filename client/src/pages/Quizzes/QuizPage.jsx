@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import EditOpenEndedModal from '../../components/MyModal/EditOpenEndedModal';
+import EditChoiceModal from '../../components/MyModal/EditChoiceModal';
 
 export default function QuizPage(){
     const [anchorEl, setAnchorEl] = useState(null);
@@ -101,6 +102,38 @@ export default function QuizPage(){
         console.log('questions:',questions)
     },[])
 
+    function End(){
+        alert('출제가 완료되었습니다! 퀴즈 탭으로 이동합니다.')
+        window.close();
+    }
+ 
+    function displayAnswer(data) {
+        try {
+          let answerArray = data.answer;
+      
+          // data.answer가 문자열인 경우에만 JSON.parse 사용
+          if (typeof data.answer === 'string') {
+            answerArray = JSON.parse(data.answer.replace(/\\/g, ''));
+          }
+      
+          if (Array.isArray(answerArray)) {
+            return (
+              <>
+                {answerArray.map((answer, index) => (
+                  <p key={index}>{answer}</p>
+                ))}
+              </>
+            );
+          } else {
+            return <span>{answerArray.replace(/"/g, '').split('\n')}</span>;
+          }
+        } catch (error) {
+          console.error('Error parsing answer:', error);
+          return <span>{data.answer.replace(/"/g, '').split('\n')}</span>;
+        }
+      }
+         
+
     return (
         <Stack
             sx={{
@@ -150,9 +183,9 @@ export default function QuizPage(){
                             borderRadius:'10px',
                             padding:'1.5rem',
                             }}>
-                            <Stack direction='column' sx={{width:'60%'}}>
+                            <Stack direction='column' sx={{width:'60%', pr:'1.5rem'}}>
                                 <Typography variant='h6'>[ 문제 {idx+1} ]</Typography>
-                                <Stack sx={{mt:2, mb:2, wordBreak:'keep-all'}}>
+                                <Stack sx={{mt:2, mb:2, whiteSpace:'pre-line', overflow: 'auto'}}>
                                     <Typography variant='subtitle1'>{data.title}</Typography>
                                 </Stack>
                                 {data.Choices &&(
@@ -169,20 +202,27 @@ export default function QuizPage(){
                                 </FormControl>
                             )}
                             </Stack>
-                            <Stack direction='column' spacing={10} sx={{width:'40%', justifyContent:'space-evenly'}}>
+                            <Stack direction='column' spacing={10} sx={{width:'40%',  pl: '1.5rem'}}>
                                 <Stack direction='column' spacing={2}>
                                     <Typography variant='h6'>[ 배점 ]  {data.score}점</Typography>
                                     <Stack direction='column' spacing={1}>
                                         <Typography variant='h6'>[ 정답 ]</Typography>
-                                        <Typography variant='subtitle1' sx={{wordBreak:'keep-all'}}>{data.answer}</Typography>
+                                        <Typography variant='subtitle1' sx={{whiteSpace:'pre-line',overflow: 'auto'}}>{displayAnswer(data)}</Typography>
                                     </Stack>
-                                    <Stack direction='column' spacing={1}>
+                                    <Stack direction='column' spacing={1} justifyContent={'flex-end'}>
                                         <Typography variant='h6'>[ 정답의 근거 ]</Typography>
-                                        <Typography variant='subtitle1' sx={{wordBreak:'keep-all'}}>{data.reason}</Typography>
+                                        <Typography variant='subtitle1' sx={{whiteSpace:'pre-line', whiteSpace:'pre-line', overflow: 'auto'}}>{data.reason}</Typography>
                                     </Stack>
                                 </Stack>
                                 <Stack direction='row' spacing={1} sx={{justifyContent:'flex-end'}}>
-                                    <Button variant='outlined' sx={{width:'10rem'}} onClick={()=>{setModalOpen(true); setTarget(data); }}>수정</Button>
+                                    <Button variant='outlined' sx={{width:'10rem'}}
+                                        onClick={()=>{
+                                            setModalOpen(true);
+                                            setTarget(data);
+                                            if(data.questionType === "객관식"){
+                                                setChoiceModalOpen(true);
+                                            }
+                                            }}>수정</Button>
                                     <Button variant='outlined' sx={{width:'10rem'}} onClick={()=>{onDelete(data)}}>삭제</Button>
                                 </Stack>
                                 
@@ -211,6 +251,17 @@ export default function QuizPage(){
                     handleClose = {()=>{setModalOpen(false)}}
                     target={target}
                     editQuestion={editQuestion}
+                    index={questions.length}
+                    />
+                )
+            }
+            {isChoiceModalOpen && (
+                <EditChoiceModal 
+                    open={isChoiceModalOpen}
+                    handleClose = {()=>{setChoiceModalOpen(false)}}
+                    target={target}
+                    editQuestion={editQuestion}
+                    index={questions.length}
                     />
                 )
             }
@@ -219,6 +270,9 @@ export default function QuizPage(){
                     <AddCircleOutlineOutlinedIcon fontSize='large'/>
                     <Typography variant='h6' ml={1}>문항 생성</Typography>
                 </Button>
+            </Stack>
+            <Stack sx={{ mt: 5, justifyContent:'center', alignItems:'center'}}>
+                <Button variant='contained' sx={{ width: '18rem', height:'5rem', fontSize:'25px', fontWeight:'bold', borderRadius:'10px'}} onClick={()=>{End()}}>퀴즈 탭으로 돌아가기</Button>
             </Stack>
         </Stack>
     )
