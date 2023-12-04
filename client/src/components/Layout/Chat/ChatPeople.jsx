@@ -13,13 +13,11 @@ export default function ChatPeople(props) {
                 return (
                     <Grid container onClick={() => { props.onClickHandler(data.ClassChat.id, data.id, data.ClassChat.title) }} sx={{ cursor: 'pointer', '&:hover': { background: 'rgba(0, 0, 0, 0.1)' } }} >
                         {/* 이 밑은 지금은 icon으로 넣었지만 나중에 profile사진으로 넣을 수 있음 */}
-                        <Grid item sx={{ marginLeft: '10px' }} xs={1}>
-                            <SchoolRoundedIcon sx={{
-                                fontSize: '30px',
-                            }} />
+                        <Grid item sx={{ marginLeft: '10px', justifyContent:'center', alignItems:'center' }} xs={1}>
+                            <SchoolRoundedIcon />
                         </Grid>
                         <Grid item xs={10} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography variant='h5' sx={{ alignItems: 'center', marginLeft: '20px', paddingTop: '3px' }}>{data.ClassChat.title}</Typography>
+                            <Typography variant='h5' sx={{ alignItems: 'center', margin:'1rem'}}>{data.ClassChat.title}</Typography>
                         </Grid >
                     </Grid>
                 )
