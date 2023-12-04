@@ -3,10 +3,10 @@ import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import RemoveCircleOutlineRoundedIcon from '@mui/icons-material/RemoveCircleOutlineRounded';
 import { useState, useEffect } from "react";
 
-export default function AddChoiceQuiz({close, save}){
+export default function AddChoiceQuiz({close, save, index}){
     const [title, setTitle] = useState('');
     const [score, setScore] = useState('');
-    const [answer, setAnswer] = useState('');
+    const [answer, setAnswer] = useState([]);
     const [reason, setReason] = useState('');
     const [optionList, setOptionList] = useState([]);
 
@@ -30,6 +30,15 @@ export default function AddChoiceQuiz({close, save}){
     useEffect(() => {
         console.log(optionList);
     }, [optionList]);
+
+    function onChangeAnswer(event, index) {
+        console.log('Event value:', event.target.value);
+        const selectedOptions = event.target.value.split(',' || ', ' || ' , ').map(option => option.trim());
+        setAnswer(selectedOptions)
+    }
+    useEffect(() => {
+        console.log('answer:', answer);
+    }, [answer]);
 
     function onSave(){
         const saveData = {
@@ -61,25 +70,26 @@ export default function AddChoiceQuiz({close, save}){
                       }}
                     sx={{width:'15rem'}}
                 />
-                <TextField id="answerField" label="정답" variant="outlined" placeholder="정답 선택지 전체를 입력하세요" 
-                    onChange={(e)=>{setAnswer(e.target.value)}}
-                    value={answer}
-                    sx={{ml:2, wordBreak:'keep-all', width:'calc(100% - 15rem)' }}
+                <TextField id="answerField" label="정답" variant="outlined"
+                    placeholder="정답 선택지 전체를 입력하세요. 복수정답의 경우 각 답을 , 로 구분하세요." 
+                    onChange={(e) => { onChangeAnswer(e, index) }}
+                    // value={answer}
+                    sx={{ml:2, wordBreak:'keep-all', width:'calc(100% - 15rem)', whiteSpace:'pre-line'}}
                 />
             </Stack>
             <TextField id="answerReasonField" label="정답의 근거" variant="outlined" placeholder="정답의 근거를 입력하세요"
                     onChange={(e)=>{setReason(e.target.value)}} 
                     value={reason}
-                    sx={{wordBreak:'keep-all',}}
+                    sx={{wordBreak:'keep-all',whiteSpace:'pre-line'}}
                     multiline
-                    rows={3}
+                    // rows={3}
                  />
             <TextField id="questionField" label="문제" variant="outlined" placeholder="문제를 입력하세요"
                     onChange={(e)=>{setTitle(e.target.value)}} 
                     value={title}
-                    sx={{wordBreak:'keep-all',}}
+                    sx={{ whiteSpace:'pre-line', wordBreak:'keep-all',}}
                     multiline
-                    rows={3}
+                    // rows={3}
                  />
             <Stack direction={'column'} spacing={2}>
                 {optionList.map((_, index) => (
@@ -92,7 +102,7 @@ export default function AddChoiceQuiz({close, save}){
                             placeholder={`선택지를 입력하세요`}
                             onChange={(e)=>{modifyOptionList(index, e.target.value)}}
                             value={optionList[index]?optionList[index].optionText: '' }
-                            sx={{wordBreak:'keep-all', width:'100%'}}
+                            sx={{wordBreak:'keep-all', whiteSpace:'pre-line',width:'100%'}}
                             />
                         <Button sx={{cursor: 'pointer',color:'#757575'}} onClick={() => { removeOption(index); }}>
                             <RemoveCircleOutlineRoundedIcon />

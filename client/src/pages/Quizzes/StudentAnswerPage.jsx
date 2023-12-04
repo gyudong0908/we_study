@@ -27,11 +27,35 @@ export default function StudentAnswer(){
             console.log(err);
         })
     }
+
+    function displayAnswer(data) {
+        try {
+          const answerArray = JSON.parse(data.answer.replace(/\\/g, ''));
+      
+          if (Array.isArray(answerArray)) {
+            return (
+              <>
+                {answerArray.map((answer, index) => (
+                  <p key={index}>{answer}</p>
+                ))}
+              </>
+            );
+          } else {
+            return <span>{data.answer.replace(/"/g, '').split('\n')}</span>;
+          }
+        } catch (error) {
+          console.error('Error parsing answer:', error);
+          return <span>{data.answer.replace(/"/g, '').split('\n')}</span>;
+        }
+      }
+
+
     
     useEffect(()=>{
         getAnswer()
-        console.log('questions:',questions)
-    },[])
+        console.log('questions:', quiz)
+    },[]);
+
     return(
         <Stack        
         sx={{
@@ -78,20 +102,20 @@ export default function StudentAnswer(){
                                     : ''),
                             }}
                             >
-                        <Stack direction='column' sx={{width:'50%'}}>
+                        <Stack direction='column' sx={{width:'50%', pr:'1.5rem'}}>
                             <Stack direction='row' sx={{justifyContent:'space-between'}}>
                                 <Typography variant='h6'>[ 문제 {index+1} ]</Typography>
                                 <Typography sx={{pr:'1.5rem'}}>[ 배점 ] {question.score}점</Typography>
                             </Stack>
                                 
-                            <Stack sx={{mt:2, mb:3, wordBreak:'keep-all'}}>
+                            <Stack sx={{mt:2, mb:3, whiteSpace:'pre-line', overflow:'auto'}}>
                                 <Typography variant='subtitle1'>{question.title}</Typography>
                             </Stack>
                             {
                             question.Choices.length !== 0 &&
                                 question.Choices.map((choice, choiceIdx) => (
                                 <Stack direction='column' key={choiceIdx} >
-                                    <Typography sx={{wordBreak:'keep-all'}}>{`${choiceIdx + 1}) ${choice.optionText}`}</Typography>
+                                    <Typography sx={{whiteSpace:'pre-line', overflow:'auto'}}>{`${choiceIdx + 1}) ${choice.optionText}`}</Typography>
                                 </Stack>
                                 ))
                             }
@@ -99,24 +123,12 @@ export default function StudentAnswer(){
                         <Stack direction='column' spacing={3} sx={{width:'50%', justifyContent:'space-evenly',pl:'1.5rem'}}>
                         <Stack direction='column'>
                             <Typography variant='h6'>[ 정답 ]</Typography>
-                            <Typography variant='subtitle1' sx={{wordBreak:'keep-all'}}>{question.answer}</Typography>
+                            <Typography variant='subtitle1' sx={{whiteSpace:'pre-line', overflow:'auto'}}>{displayAnswer(question)}</Typography>
                         </Stack>
                         <Stack direction='column'>
                             <Typography variant='h6'>[ 정답의 근거 ]</Typography>
-                            <Typography variant='subtitle1' sx={{wordBreak:'keep-all'}}>{question.reason}</Typography>
+                            <Typography variant='subtitle1' sx={{whiteSpace:'pre-line', overflow:'auto'}}>{question.reason}</Typography>
                         </Stack>
-                        <>
-                        <div>문제: {question.title}</div>
-                        <div>배점: {question.score}</div>
-                        <div>정답: {question.answer}</div>
-                        {
-                            question.Choices.length !==0?(
-                                        question.Choices.map((choice, choiceIdx)=>{
-                                            return(
-                                                <div>{choice.optionText}</div>
-                                            )}
-                            )): null
-                        }
                         {
                             question.StudentAnswers.map(studentAnswer=>{
                                 return(
@@ -131,7 +143,7 @@ export default function StudentAnswer(){
                                                 </Stack>
                                                 
                                             </Stack>
-                                            <Typography variant='subtitle1' sx={{wordBreak:'keep-all'}}>{studentAnswer.answer}</Typography>
+                                            <Typography variant='subtitle1' sx={{wordBreak:'keep-all'}}>{displayAnswer(studentAnswer)}</Typography>
                                         </Stack>
                                         <FormControlLabel
                                             control={<Checkbox value={studentAnswer.check}

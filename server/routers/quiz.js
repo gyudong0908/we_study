@@ -177,6 +177,58 @@ router.post('/studentAnswer',function(req,res){
         res.status(500).send('학생 정답지 생성 에러');
     })
 })
+
+// router.post('/studentAnswer', function(req, res) {
+//     const userId = req.session.passport.user;
+//     const quizId = req.query.quizId;
+//     const saveData = req.body.map(item => ({ ...item, userId: userId }));
+
+//     function zipArrays(arr1, arr2) {
+//         return arr1.map((item, index) => [item, arr2[index]]);
+//     }
+
+//     models.StudentAnswer.bulkCreate(saveData).then((studentAnswers) => {
+//         models.Question.findAll({
+//             raw: true,
+//             where: { quizId: quizId },
+//             order: [['createdAt', 'ASC']]
+//         }).then(questions => {
+//             for (const [studentAnswer, question] of zipArrays(studentAnswers, questions)) {
+//                 if (question.questionType === "서술형") {
+//                     break;
+//                 }
+
+//                 // 답안과 정답을 비교하기 위해 두 배열을 문자열로 변환
+//                 const studentAnswerStr = Array.isArray(studentAnswer.answer) ?
+//                     studentAnswer.answer.sort().toString() : studentAnswer.answer.toString();
+//                 const correctAnswerStr = Array.isArray(question.answer) ?
+//                     question.answer.sort().toString() : question.answer.toString();
+
+//                 if (studentAnswerStr.trim() === correctAnswerStr.trim()) {
+//                     models.StudentAnswer.update({ check: true }, { where: { id: studentAnswer.id } }).catch(err => {
+//                         console.log(err);
+//                         res.status(500).send('채점 에러 발생');
+//                     });
+//                 } else {
+//                     models.StudentAnswer.update({ check: false }, { where: { id: studentAnswer.id } }).catch(err => {
+//                         console.log(err);
+//                         res.status(500).send('채점 에러 발생');
+//                     });
+//                 }
+//             }
+//             res.sendStatus(200);
+//         }).catch(err => {
+//             console.log(err);
+//             res.status(500).send('채점 에러');
+//         });
+//     }).catch(err => {
+//         console.log(err);
+//         res.status(500).send('학생 정답지 생성 에러');
+//     });
+// });
+
+
+
 router.get('/studentAnswer',function(req,res){
     const userId = req.query.userId;
     const quizId = req.query.quizId;

@@ -8,6 +8,7 @@ export default function QuizSolvePage(){
     const {quizId} = useParams();
     const [quiz, setQuiz] = useState({});
     const [answers, setAnswers] = useState([]);
+    const newAnswers = [...answers];
 
     function getQuizData(){
         axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/quiz?quizId=${quizId}`, { withCredentials: true }).then((response)=>{
@@ -18,11 +19,27 @@ export default function QuizSolvePage(){
             console.log(err);
         })
     }
-    function onChangeAnswer(event, index, questionId){
-        const newAnswers = [...answers];
+    
+    function onChangeEssayAnswer(event, index, questionId){
         newAnswers[index] = {questionId: questionId, answer: event.target.value};
         setAnswers(newAnswers);
     }
+
+    function onChangeChoiceAnswer(event, index, questionId){
+        //현재 질문 관련 모든 체크 박스 확인, 선택 옵션을 배열에 추가
+        const selectedOptions = quiz.Questions[index].Choices
+        .filter((choice, choiceIdx) => event.target.checked && event.target.value === choice.optionText)
+        .map((choice) => choice.optionText);
+
+        
+        if(newAnswers[index]){
+            newAnswers[index].answer = [...newAnswers[index].answer, ...selectedOptions];
+        }else{
+            newAnswers[index] = {questionId: questionId, answer: selectedOptions};
+        }
+        setAnswers(newAnswers);
+    }
+
     function onSubmit(){
         axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/studentAnswer?quizId=${quizId}`,answers, { withCredentials: true }).then(()=>{
             alert('제출되었습니다!');
@@ -32,10 +49,12 @@ export default function QuizSolvePage(){
         })
     }
 
+
     useEffect(()=>{
         getQuizData();        
     },[])
-    console.log(answers)
+    console.log('answers:',answers)
+    console.log('questions:',quiz)
     return(
         <Stack
             sx={{
@@ -79,7 +98,7 @@ export default function QuizSolvePage(){
                                     <Typography sx={{pr:'1.5rem'}}>[ 배점 ] {question.score}점</Typography>
                                 </Stack>
                                 
-                                <Stack sx={{mt:2, mb:2, wordBreak:'keep-all'}}>
+                                <Stack sx={{mt:2, mb:2, whiteSpace:'pre-line', overflow: 'auto'}}>
                                     <Typography variant='subtitle1'>{question.title}</Typography>
                                 </Stack>
                             </Stack>
@@ -87,7 +106,7 @@ export default function QuizSolvePage(){
                             question.Choices.length !==0?(
                                 <FormControl
                                 sx={{width:'50%', pl:'1.5rem'}}
-                                onChange={(e)=>{onChangeAnswer(e,index, question.id);}}>
+                                onChange={(e)=>{onChangeChoiceAnswer(e,index, question.id);}}>
                                     {
                                         question.Choices.map((choice, choiceIdx)=>{
                                             return(
@@ -95,17 +114,17 @@ export default function QuizSolvePage(){
                                                     value={choice.optionText}
                                                     control={<Checkbox />} 
                                                     label={<span>{`${choiceIdx + 1}) ${choice.optionText}`}</span>}
-                                                    sx={{wordBreak:'keep-all'}} />
+                                                    sx={{whiteSpace:'pre-line', overflow: 'auto'}} />
                                             )
                                         })
                                     }
                             </FormControl>
                             ): <TextField 
                                 placeholder="답을 입력하세요"
-                                onChange={(e)=>{onChangeAnswer(e,index, question.id);}}
+                                onChange={(e)=>{onChangeEssayAnswer(e,index, question.id);}}
                                 fullWidth
                                 multiline
-                                sx={{wordBreak:'keep-all',width:'50%', pl:'1.5rem'}}
+                                sx={{whiteSpace:'pre-line', overflow:'auto',width:'50%', pl:'1.5rem'}}
                                 rows={5}
                                 />
                         }

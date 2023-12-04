@@ -78,9 +78,9 @@ export default function Chat({ closeChat }) {
                 <TabButton onClick={() => { setValue(0) }} isActive={value === 0}>
                   <Typography variant='h5'>클래스</Typography>
                 </TabButton>
-                <TabButton onClick={() => { setValue(1) }} isActive={value === 1}>
+                {/* <TabButton onClick={() => { setValue(1) }} isActive={value === 1}>
                   <Typography variant='h5'>개인</Typography>
-                </TabButton>
+                </TabButton> */}
               </Box>
               {
                 value === 0 ? <ChatPeople data={chatUsers} onClickHandler={onClickHandler} /> : <ChatPeople data={personalData} onClickHandler={onClickHandler} />

@@ -39,23 +39,21 @@ export default function AddEssayQuiz({close, save}){
             <TextField id="questionField" label="문제" variant="outlined" placeholder="제목을 입력하세요"
                     onChange={(e)=>{setTitle(e.target.value)}} 
                     value={title}
-                    sx={{wordBreak:'keep-all',}}
+                    sx={{whiteSpace:'pre-line', overflow: 'auto'}}
                     multiline
-                    rows={3}
                  />
              <TextField id="outlined-basic" label="정답" variant="outlined"  placeholder="정답을 입력하세요" 
                 onChange={(e)=>{setAnswer(e.target.value)}}
                 value={answer}
                 multiline
                 rows={5}
-                sx={{wordBreak:'keep-all',}}
+                sx={{whiteSpace:'pre-line', overflow: 'auto'}}
             />
             <TextField id="outlined-basic" label="정답의 근거" variant="outlined"  placeholder="정답의 근거를 입력하세요" 
                 onChange={(e)=>{setReason(e.target.value)}}
                 value={reason}
                 multiline
-                rows={3}
-                sx={{wordBreak:'keep-all',}}
+                sx={{whiteSpace:'pre-line', overflow: 'auto'}}
             />
             <Stack direction={'row'} spacing={1} sx={{ justifyContent: 'flex-end' }}>
                 <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close()}}>취소</Button>
