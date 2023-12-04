@@ -4,18 +4,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 
-export default function QuizSolvePage(){
-    const {quizId} = useParams();
+export default function QuizSolvePage() {
+    const { quizId } = useParams();
     const [quiz, setQuiz] = useState({});
     const [answers, setAnswers] = useState([]);
     const newAnswers = [...answers];
 
-    function getQuizData(){
-        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/quiz?quizId=${quizId}`, { withCredentials: true }).then((response)=>{
+    function getQuizData() {
+        axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/quiz?quizId=${quizId}`, { withCredentials: true }).then((response) => {
             console.log(response);
             setQuiz(response.data);
             setAnswers(new Array(response.data.Questions.length));
-        }).catch(err=>{
+        }).catch(err => {
             console.log(err);
         })
     }
@@ -42,9 +42,15 @@ export default function QuizSolvePage(){
 
     function onSubmit(){
         axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/studentAnswer?quizId=${quizId}`,answers, { withCredentials: true }).then(()=>{
+
             alert('제출되었습니다!');
             window.close();
-        }).catch(err=>{
+        }).catch(err => {
+            if (err.status = 527) {
+                alert('제출 시간이 초과되었습니다!');
+                window.close();
+                return
+            }
             console.log(err);
         })
     }
@@ -62,24 +68,23 @@ export default function QuizSolvePage(){
                 marginTop: '115px',
                 marginLeft: '320px',
                 marginRight: '50px',
-                marginBottom: '150px', 
+                marginBottom: '150px',
             }}>
-        {
-            quiz &&(
-                <Stack sx={{justifyContent:'center', alignItems:'center'}}>
-                    <Typography variant='h3' fontWeight={'bold'}>{quiz.title}</Typography>
-                    <Typography sx={{color:'#757575', mt:1}}>※ 퀴즈 응시 중에는 페이지를 새로고침 하지 마십시오. ※</Typography>
-                    <Typography variant='h6' sx={{mt:3}}>퀴즈 응시 기간 : {dayjs(quiz.startDateTime).format('YYYY-MM-DD hh:mm A')} ~ {dayjs(quiz.dueDateTime).format('YYYY-MM-DD hh:mm A')}</Typography>
-                    <Typography variant='subtitle1' sx={{
-                        mt:1,
-                        wordBreak:'keep-all',
+      {quiz && (
+                    <Stack sx={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <Typography variant='h3' fontWeight={'bold'}>{quiz.title}</Typography>
+                        <Typography sx={{ color: '#757575', mt: 1 }}>※ 퀴즈 응시 중에는 페이지를 새로고침 하지 마십시오. ※</Typography>
+                        <Typography variant='h6' sx={{ mt: 3 }}>퀴즈 응시 기간 : {dayjs(quiz.startDateTime).format('YYYY-MM-DD hh:mm A')} ~ {dayjs(quiz.dueDateTime).format('YYYY-MM-DD hh:mm A')}</Typography>
+                        <Typography variant='subtitle1' sx={{
+                            mt: 1,
+                            wordBreak: 'keep-all',
                         }}>
-                        {quiz.description}
-                    </Typography>
-                </Stack>
-            )
-        }
-          <Stack sx={{justifyContent:'center', alignItems:'center', mt:5}}>
+                            {quiz.description}
+                        </Typography>
+                    </Stack>
+                )
+            }
+            <Stack sx={{ justifyContent: 'center', alignItems: 'center', mt: 5 }}>
             {
                 quiz.Questions&&(
                 quiz.Questions.map((question, index)=>{
@@ -140,11 +145,11 @@ export default function QuizSolvePage(){
                     sx={{width:'15rem', padding:'0.5rem'}}
                     onClick={()=>{onSubmit();}}>
                         <Typography variant="h5">제출</Typography>
-                </Button>
+                    </Button>
+                </Stack>
             </Stack>
-    </Stack>
-      
-        
-    </Stack>
+
+
+        </Stack>
     )
 }

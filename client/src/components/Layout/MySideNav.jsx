@@ -14,8 +14,11 @@ function MySideNav() {
     const classDatas = useSelector((state) => state.classCards);
     const user = useSelector((state) => state.userData);
 
-    const [timer, setTimer] = useState(0);
+    const [timer, setTimer] = useState(0); // 위에 있는 타이머
     const [timerRunning, setTimerRunning] = useState(false); // 타이머가 실행 중인지 여부
+
+    const [currentStudyTime, setCurrentStudyTime] = useState(0); // 아래에 있는 타이머
+    const [resetDisabled, setResetDisabled] = useState(false); // Reset 버튼 활성/비활성 상태
 
     const [startClicked, setStartClicked] = useState(false);
     const [stopDisabled, setStopDisabled] = useState(true);
@@ -30,6 +33,18 @@ function MySideNav() {
         const formattedSeconds = String(seconds).padStart(2, '0');
 
         return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    };
+
+    // Reset 버튼을 눌렀을 때 실행되는 함수
+    const handleResetTime = () => {
+        setCurrentStudyTime((prevStudyTime) => prevStudyTime + timer); // 아래 타이머에 위 타이머 시간 추가
+        setTimer(0); // 위 타이머 초기화
+        sessionStorage.removeItem('startTime');
+        sessionStorage.removeItem('timer');
+        // setResetDisabled(true);  Reset 버튼 비활성화
+
+
+
     };
 
 
@@ -67,6 +82,17 @@ function MySideNav() {
 
         return () => clearInterval(intervalId);
     }, [timerRunning]);
+
+    useEffect(() => {
+        const storedCurrentStudyTime = sessionStorage.getItem('currentStudyTime');
+        if (storedCurrentStudyTime !== null) {
+            setCurrentStudyTime(parseInt(storedCurrentStudyTime, 10));
+        }
+    }, []);
+
+    useEffect(() => {
+        sessionStorage.setItem('currentStudyTime', String(currentStudyTime));
+    }, [currentStudyTime]);
 
 
     const dispatch = useDispatch();
@@ -156,6 +182,15 @@ function MySideNav() {
                             }}
                                 disabled={startClicked}
                             >Start</ListItemButton>
+
+                            <ListItemButton
+                                onClick={handleResetTime}
+                                disabled={false}  //Reset 버튼 항상 활성화
+                            >
+                                Reset
+                            </ListItemButton>
+
+
                             <ListItemButton
                                 onClick={() => {
                                     handleStopTime();
@@ -165,34 +200,45 @@ function MySideNav() {
 
                             >Stop</ListItemButton>
                         </Stack>
+
+
+
+                        <Typography variant="body1" gutterBottom>
+                            현재 공부 시간
+                        </Typography>
+                        {/* 아래에 있는 타이머 */}
+                        <Typography variant="h3" gutterBottom>
+                            {formatTime(currentStudyTime)}
+                        </Typography>
+
                     </ListItem>
                 </List>
                 <Divider />
                 <Stack>
                     <List>
                         {['누적 학습 시간 랭킹', '캘린더', '프로필 설정'].map((text, index) => (
-                            <ListItem key={index} disablePadding sx={{paddingTop:'0.2rem', paddingBottom:'0.2rem'}} >
+                            <ListItem key={index} disablePadding sx={{ paddingTop: '0.2rem', paddingBottom: '0.2rem' }} >
                                 <ListItemButton component={Link}
-                                    to={index === 0 ? '/mypage/rank' : 
-                                        index === 1 ? '/mypage/calender' : 
-                                        index === 2 ? '/mypage/setting' : '/mypage'}>
-                                    <ListItemIcon sx={{paddingLeft:'0.5rem'}}>
+                                    to={index === 0 ? '/mypage/rank' :
+                                        index === 1 ? '/mypage/calender' :
+                                            index === 2 ? '/mypage/setting' : '/mypage'}>
+                                    <ListItemIcon sx={{ paddingLeft: '0.5rem' }}>
                                         {index === 0 ? <MilitaryTechRoundedIcon /> :
-                                            index === 1 ? <CalendarMonthRoundedIcon /> : 
-                                            <SettingsRoundedIcon />}
+                                            index === 1 ? <CalendarMonthRoundedIcon /> :
+                                                <SettingsRoundedIcon />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
                             </ListItem>
                         ))}
-                        <Divider sx={{marginTop:'0.5rem', marginBottom:'0.5rem'}}/>
+                        <Divider sx={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
                         {classDatas.map((classData, index) => (
-                            <ListItem key={index} disablePadding sx={{paddingTop:'0.2rem', paddingBottom:'0.2rem'}}>
+                            <ListItem key={index} disablePadding sx={{ paddingTop: '0.2rem', paddingBottom: '0.2rem' }}>
                                 <ListItemButton onClick={() => { navigate(`/mypage/classes/${classData.id}`) }}>
-                                    <ListItemIcon sx={{paddingLeft:'0.5rem'}}>
+                                    <ListItemIcon sx={{ paddingLeft: '0.5rem' }}>
                                         <SchoolRoundedIcon />
                                     </ListItemIcon>
-                                    <ListItemText sx={{wordBreak:'keep-all'}} primary={classData.title} />
+                                    <ListItemText sx={{ wordBreak: 'keep-all' }} primary={classData.title} />
                                 </ListItemButton>
                             </ListItem>
                         ))}
@@ -209,14 +255,14 @@ function MySideNav() {
                     variant="permanent"
                     open
                     PaperProps={{
-                        sx:{ 
+                        sx: {
                             width: "270px",
-                            backgroundColor:'#fff',
+                            backgroundColor: '#fff',
                             zIndex: '1',
-                            overflowX:'hidden',
-                            overflowY:'auto',
-                            paddingBottom:'1.5rem',
-                            paddingTop:'1rem',
+                            overflowX: 'hidden',
+                            overflowY: 'auto',
+                            paddingBottom: '1.5rem',
+                            paddingTop: '1rem',
                             // paddingRight:'0.3rem',
                             // paddingLeft: '0.5rem',
                         },

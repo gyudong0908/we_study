@@ -31,16 +31,18 @@ export default function ClassWork({ isTeacher }) {
           <InputWork isTeacher={isTeacher} works={works} setWorks={setWorks} ></InputWork>
         )
       }
-      {works.map((topic, index) => (
-        <Stack key={index} sx={{ mb: 5 }}>
-          <Stack sx={{ borderBottom: '1.5px solid black', mb: 2 }}>
-            <Typography variant="h4" component="span" sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea', wordBreak: 'keep-all', wordWrap: 'break-word' }}>
-              {topic.title}
-            </Typography>
+      {works.map((topic, index) => {
+        return (
+          <Stack key={index} sx={{ mb: 5 }}>
+            <Stack sx={{ borderBottom: '1.5px solid black', mb: 2 }}>
+              <Typography variant="h4" component="span" sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea', wordBreak: 'keep-all', wordWrap: 'break-word' }}>
+                {topic.title}
+              </Typography>
+            </Stack>
+            <WorkAccordion isTeacher={isTeacher} works={works} setWorks={setWorks} assignments={topic.Works} topicId={topic.id} />
           </Stack>
-          <WorkAccordion isTeacher={isTeacher} works={works} setWorks={setWorks} assignments={topic.Works} topicId={topic.id} />
-        </Stack>
-      ))}
+        )
+      })}
     </>
   );
 }

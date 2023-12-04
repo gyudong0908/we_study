@@ -12,11 +12,10 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
   const [target, setTarget] = useState('');
   const [isAlertOpen, setAlertOpen] = useState(false);
   const [deleteData, setDeleteData] = useState({});
-  console.log('topicId: ',topicId);
 
   useEffect(() => {
     // filteredAssignments 배열 내의 모든 객체의 topicId를 출력
-    console.log('assignments:', assignments);
+    // console.log('assignments:', assignments);
   }, [assignments]);
 
   function onClickDelete(target) {
@@ -42,7 +41,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
                 <Typography variant='h6' sx={{ wordBreak: 'keep-all', wordWrap: 'break-word' }}>{assignment.title}</Typography>
               </Grid>
               <Grid item xs={3} sx={{ paddingRight: '5px' }}>
-                <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end', whiteSpace: 'pre'  }}>{dayjs(assignment.createdAt).format('YYYY-MM-DD hh:mm A')}</Typography>
+                <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end', whiteSpace: 'pre' }}>{dayjs(assignment.createdAt).format('YYYY-MM-DD hh:mm A')}</Typography>
               </Grid>
             </Grid>
           </AccordionSummary>
@@ -61,7 +60,7 @@ export default function WorkAccordion({ isTeacher, assignments, topicId, works, 
                 }}>
                   <Button variant="outlined" size='large'>📑 제출된 과제 확인하기</Button>
                 </Link>
-                <Button variant="outlined" sx={{ width: '10%' }} onClick={()=>{setDeleteData(assignment); setAlertOpen(true)}}>삭제</Button>
+                <Button variant="outlined" sx={{ width: '10%' }} onClick={() => { setDeleteData(assignment); setAlertOpen(true) }}>삭제</Button>
                 <Button variant="outlined" onClick={() => { setModalOpen(true); setTarget(assignment); }} sx={{ width: '10%' }}>수정</Button>
 
               </Stack>

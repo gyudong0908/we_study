@@ -40,6 +40,9 @@ module.exports = (sequelize, DataTypes) => {
         reason:{
             type: DataTypes.TEXT,
         },
+        reason:{
+            type: DataTypes.TEXT,
+        },
     }, {
         sequelize,
         modelName: 'Question', // 모델 이름 바꿔줘야함

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
+const sequelize = require('sequelize');
 
 router.use(express.json());
 
@@ -28,18 +29,19 @@ router.get('/curriculums', function (req, res) {
         res.status(500).send('curriculum 조회 에러 발생');
     })
 })
-router.get('/curriculums/work',function(req,res){
+router.get('/curriculums/work', function (req, res) {
     const classId = req.query.classId;
     models.Curriculum.findAll({
-        where:{
+        where: {
             classId: classId
         },
-        include:[{
+        include: [{
             model: models.Work
-        }]
-    }).then(data=>{
+        }],
+        order: [[[sequelize.literal("Curriculum.title = '기타'"), 'ASC']]]
+    }).then(data => {
         res.status(200).send(data);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send('work 목록 조회 에러');
     })

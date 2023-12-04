@@ -18,11 +18,11 @@ router.get('/user', function (req, res) {
         console.log(err)
     })
 })
-router.get('/userinfo', function(req,res){
+router.get('/userinfo', function (req, res) {
     const userId = req.query.userId;
-    models.User.findByPk(userId).then((data)=>{
+    models.User.findByPk(userId).then((data) => {
         res.status(200).send(data);
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.status(500).send('user정보 조회 에러 발생');
     })
@@ -49,4 +49,14 @@ router.put('/user', upload.single('file'), function (req, res) {
     })
 })
 
+router.get('/user/classes', async function (req, res) {
+    const userId = req.session.passport.user;
+    try {
+        const userInstance = await models.User.findByPk(userId);
+        const classesForUser = await userInstance.getClasses();
+        res.status(200).send(classesForUser);
+    } catch (error) {
+        res.status(500).send('과제 정보 조회 오류');
+    }
+})
 module.exports = router;
