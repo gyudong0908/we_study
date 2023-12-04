@@ -54,12 +54,18 @@ export default function WorksForTeacher() {
                 // marginTop: '100px',
                 // marginLeft: '270px',
                 // marginRight: '70px',
-                // marginBottom: '200px'
-                direction: 'column',
-                marginTop: '115px',
-                marginLeft: '320px',
-                marginRight: '50px',
-                marginBottom: '150px',
+                // marginBottom: '200px',
+
+                // direction: 'column',
+                // marginTop: '115px',
+                // marginLeft: '320px',
+                // marginRight: '50px',
+                // marginBottom: '150px',
+                direction:'column',
+                marginTop:'115px',
+                marginLeft:'20rem',
+                marginRight:'10rem',
+                marginBottom:'10rem'
             }}>
 
             <Stack sx={{ borderBottom: '1.5px solid black', mb: 2 }}>

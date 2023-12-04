@@ -24,11 +24,16 @@ export default function QuizResultsPage(){
     return(
         <Stack
         sx={{
-            direction: 'column',
-            marginTop: '115px',
-            marginLeft: '320px',
-            marginRight: '50px',
-            marginBottom: '150px',
+            // direction: 'column',
+            // marginTop: '115px',
+            // marginLeft: '320px',
+            // marginRight: '50px',
+            // marginBottom: '150px',
+            direction:'column',
+            marginTop:'115px',
+            marginLeft:'20rem',
+            marginRight:'10rem',
+            marginBottom:'10rem'
           }}
         >
             <Stack sx={{ mb: 2, alignItems: 'flex-end' }}>

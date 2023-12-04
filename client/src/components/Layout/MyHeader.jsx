@@ -1,6 +1,6 @@
 import { useState, React, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {AppBar, Stack, Typography, Toolbar, IconButton, Menu, Avatar, Tooltip, Badge, MenuItem} from '@mui/material';
+import {AppBar, Stack, Typography, Toolbar, IconButton, Menu, Avatar, Tooltip, Badge, MenuItem,} from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -11,6 +11,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { useLocation } from 'react-router-dom';
 import InvoteClassModal from '../MyModal/InvoteClassModal';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
+import logo from '../../../public/images/logo.png';
   
   function MyHeader() {
     const userSettings = ['누적 학습 시간 랭킹', 'Calendar','Setting', 'Logout'];
@@ -104,7 +105,9 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
                   zIndex: (theme) => theme.zIndex.drawer +1
               }}>
               <Toolbar disableGutters width='100%'>
-                <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'black' }} />
+              <Stack sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, width:'30px', height:'30px' }}>
+                <img src={logo} alt="Logo" style={{ maxWidth: '100%', height: 'auto' }} />
+              </Stack>
                 <Typography variant="h6" noWrap component={Link} to='/mypage'
                   sx={{
                       mr: 2,
@@ -118,7 +121,9 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
                       justifyContent: 'center',
                   }}>WeStudy</Typography>
                 
-                <AdbIcon sx={{ display: { xs: 'flex', md: 'none', color:'black' }, mr: 1 }} />
+                <Stack sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, width:'30px', height:'30px' }}>
+                  <img src={logo} alt="Logo" style={{ maxWidth: '100%', height: 'auto' }} />
+                </Stack>
                 <Typography variant="h5" noWrap component={Link} to='/mypage'
                   sx={{
                       mr: 2,

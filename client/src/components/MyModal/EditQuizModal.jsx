@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
 
 const style = {
   position: 'absolute',
@@ -18,12 +19,11 @@ const style = {
 };
 
 function EditQuizModal({open, handleClose, quiz, editQuiz}) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [dueDateTime, setDueDateTime] = useState();
-  const [startDateTime, setStartDateTime] = useState();
+  const [title, setTitle] = useState(quiz.title);
+  const [description, setDescription] = useState(quiz.description);
+  const [dueDateTime, setDueDateTime] = useState(dayjs(quiz.dueDateTime));
+  const [startDateTime, setStartDateTime] = useState(dayjs(quiz.startDateTime));
   function onEdit() {
-    if (title !== '' && dueDateTime !== '') {
       const data = {
         title: title,
         description: description,
@@ -33,7 +33,6 @@ function EditQuizModal({open, handleClose, quiz, editQuiz}) {
       editQuiz(quiz.id, data);
 
     }
-  }
 
   return (
     <div>
@@ -89,6 +88,7 @@ function Picker({ startDateTime, dueDateTime, setStartDateTime, setDueDateTime }
         <DateTimePicker
           label="Start Time"
           value={startDateTime}
+          d
           onChange={(value) => setStartDateTime(value)}
         />
         <DateTimePicker

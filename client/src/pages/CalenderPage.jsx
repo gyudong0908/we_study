@@ -141,10 +141,14 @@ export default function CalenderPage() {
             // marginTop: '70px',
             // marginLeft: '270px',
             // marginRight: '70px',
-            marginTop: '100px',
-            marginLeft: '320px',
-            marginRight: '50px',
-            marginBottom: '150px',
+            // marginTop: '100px',
+            // marginLeft: '320px',
+            // marginRight: '50px',
+            // marginBottom: '150px',
+            marginTop:'115px',
+            marginLeft:'20rem',
+            marginRight:'10rem',
+            marginBottom:'10rem'
         }}
         >
             <Stack direction='row' alignItems='center' justifyContent='space-between'>

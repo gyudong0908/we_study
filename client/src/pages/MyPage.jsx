@@ -41,11 +41,17 @@ export default function MyPage() {
         // marginLeft: '270px',
         // marginRight: '270px',
         // marginBottom: '200px',
-        direction: 'column',
-        marginTop: '115px',
-        marginLeft: '320px',
-        marginRight: '50px',
-        marginBottom: '150px',
+
+        // direction: 'column',
+        // marginTop: '115px',
+        // marginLeft: '320px',
+        // marginRight: '50px',
+        // marginBottom: '150px',
+        direction:'column',
+        marginTop:'115px',
+        marginLeft:'20rem',
+        marginRight:'10rem',
+        marginBottom:'10rem'
       }}>
       <Stack direction='column' spacing={10}>
         <Stack direction="column" spacing={1}>

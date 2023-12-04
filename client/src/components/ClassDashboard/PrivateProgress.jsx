@@ -28,33 +28,9 @@ const ServerDay = (props) => {
   );
 };
 
-// function CircularProgressWithLabel(props) {
-//   return (
-//     <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center', marginBottom: '40px' }}>
-//       <CircularProgress variant="determinate" {...props} size={300} />
-//       <Box
-//         sx={{
-//           top: 0,
-//           left: 0,
-//           bottom: 0,
-//           right: 0,
-//           display: 'flex',
-//           alignItems: 'center',
-//           justifyContent: 'center',
-//           position: 'absolute',
-//         }}
-//       >
-//         <Typography variant="h4" component="div" color="text.secondary" fontWeight='bold'>
-//           {props.value}%
-//         </Typography>
-//       </Box>
-//     </Box>
-//   );
-// }
-
 const CircularProgressBar = ({ percentage }) => {
   return (
-    <div style={{ width: '15vw', height: '15vh' }}>
+    <div style={{ width: '11rem', height: '11rem' }}>
       <CircularProgressbar
         value={percentage}
         text={`${percentage}%`}
@@ -98,15 +74,14 @@ export default function PrivateProgress() {
   }, [])
 
   return (
-    <Stack justifyContent='center'>
+    <Stack sx={{overflow:'hidden', justifyContent:'center'}}>
       <Stack sx={{ borderBottom: '1.5px solid black', mb: 2 }}>
         <Typography variant='h4' sx={{ mb: 1, fontWeight: 'bold', color: '#0091ea' }} >나의 학습 진행 상황</Typography>
       </Stack>
-      <Stack direction='row' spacing={5}>
-        <Stack direction='column' spacing={5} sx={{textAlign:'center',}}>
-          <Typography variant='h4' fontWeight='bold'>출석</Typography>
-          <LocalizationProvider dateAdapter={AdapterDayjs} sx={{}}>
-            <DemoContainer components={['DateCalendar', 'DateCalendar']}>
+      <Stack direction='row' sx={{mb:5, justifyContent:'space-evenly'}}>
+        <Stack direction='column' spacing={3} sx={{textAlign:'center',alignItems:'center'}}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} >
+            <DemoContainer components={['DateCalendar', 'DateCalendar']} sx={{width:'20rem', height:'20rem', padding:0}}>
               <DateCalendar value={dayjs()} readOnly
                 slots={{
                   day: ServerDay,
@@ -120,14 +95,18 @@ export default function PrivateProgress() {
               />
             </DemoContainer>
           </LocalizationProvider>
-          <Button onClick={attendance}>출석</Button>
+          <Button variant='contained' 
+            sx={{width:'10rem'}}
+            onClick={attendance}>
+            <Typography>출석</Typography>
+          </Button>
         </Stack >
-        <Stack textAlign='center' direction='column' spacing={5} alignItems='center'>
-          <Typography variant='h4' fontWeight='bold'>과제</Typography>
-          <CircularProgressBar percentage={30}/>
+        <Stack justifyContent={'center'} direction='column' spacing={5} alignItems='center'>
+          <Typography variant='h5' fontWeight='bold'>[ 과제 제출률 ]</Typography>
+          <CircularProgressBar percentage={100}/>
         </Stack>
-        <Stack textAlign='center' direction='column' spacing={5} alignItems='center'>
-          <Typography variant='h4' fontWeight='bold'>퀴즈</Typography>
+        <Stack justifyContent={'center'} direction='column' spacing={5} alignItems='center'>
+          <Typography variant='h5' fontWeight='bold'>[ 퀴즈 제출률 ]</Typography>
           <CircularProgressBar percentage={80}/>
         </Stack>
       </Stack>

@@ -137,18 +137,12 @@ router.delete('/question', function (req, res) {
 router.post('/question/choice', function (req, res) {
     const quizId = req.query.quizId;
     const optionText = req.body.optionText;
-    models.Question.findByPk(questionId, {
-        include: [{
-            model: models.Quiz,
-            attributes: ['startDateTime']
-        }]
-    }).then((question) => {
-
-        if (new Date(question.Quiz.startDateTime).getTime() < new Date().getTime()) {
+    models.Quiz.findByPk(quizId)
+    .then((quiz) => {
+        if (new Date(quiz.startDateTime).getTime() < new Date().getTime()) {
             res.status(527).send('퀴즈 수정시간이 오버되었습니다');
             return
         }
-
         models.Question.create({ ...req.body, quizId: quizId }).then((question) => {
             const modifiedOptions = optionText.map(option => ({ ...option, questionId: question.id }));
             models.Choice.bulkCreate(modifiedOptions).then((choice) => {
