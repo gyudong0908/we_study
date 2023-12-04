@@ -2,7 +2,7 @@ import { Stack, TextField, Button } from "@mui/material"
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useState } from "react";
 
-export default function AddOpenEndedQuiz({close, save}){
+export default function AddEssayQuiz({close, save}){
     const [title, setTitle] = useState('');
     const [score, setScore] = useState('');
     const [answer, setAnswer] = useState('');
@@ -12,7 +12,7 @@ export default function AddOpenEndedQuiz({close, save}){
             title: title,
             score: score,
             answer: answer,
-            questionType: "단답형",
+            questionType: "서술형",
             reason: reason,
         };
         save(saveData);
@@ -36,7 +36,7 @@ export default function AddOpenEndedQuiz({close, save}){
                     sx={{width:'15rem'}}
                 />
             </Stack>
-            <TextField id="questionField" label="문제" variant="outlined" placeholder="문제를 입력하세요"
+            <TextField id="questionField" label="문제" variant="outlined" placeholder="제목을 입력하세요"
                     onChange={(e)=>{setTitle(e.target.value)}} 
                     value={title}
                     sx={{wordBreak:'keep-all',}}
@@ -46,15 +46,19 @@ export default function AddOpenEndedQuiz({close, save}){
              <TextField id="outlined-basic" label="정답" variant="outlined"  placeholder="정답을 입력하세요" 
                 onChange={(e)=>{setAnswer(e.target.value)}}
                 value={answer}
+                multiline
+                rows={5}
+                sx={{wordBreak:'keep-all',}}
             />
             <TextField id="outlined-basic" label="정답의 근거" variant="outlined"  placeholder="정답의 근거를 입력하세요" 
                 onChange={(e)=>{setReason(e.target.value)}}
                 value={reason}
                 multiline
-                rows={5}
+                rows={3}
+                sx={{wordBreak:'keep-all',}}
             />
             <Stack direction={'row'} spacing={1} sx={{ justifyContent: 'flex-end' }}>
-                <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close();}}>취소</Button>
+                <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close()}}>취소</Button>
                 <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close(); onSave();}}>확인</Button>
             </Stack>
         </Stack>

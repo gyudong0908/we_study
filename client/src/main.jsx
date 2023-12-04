@@ -22,7 +22,10 @@ import WorksForTeacher from './pages/Works/WorksForTeacher.jsx';
 import WorksForStudent from './pages/Works/WorksForStudent.jsx';
 import WorkDetailForStudent from './pages/Works/WorkDetailForStudent.jsx';
 import WorkDetailForTeacher from './pages/Works/WorkDetailForTeacher.jsx';
-import QuizPage from './pages/QuizPage.jsx';
+import QuizPage from './pages/Quizzes/QuizPage.jsx';
+import QuizSolvePage from './pages/Quizzes/QuizSolvePage.jsx';
+import StudentAnswer from './pages/Quizzes/StudentAnswerPage.jsx';
+import QuizResultsPage from './pages/Quizzes/QuizResultsPage.jsx';
 
 import { initializeUserData } from './reducer/userdata.js';
 
@@ -72,8 +75,20 @@ const router = createBrowserRouter([
         element: <CalenderPage />,
       },
       {
-        path: 'quiz',
+        path: 'quiz/:quizId',
         element: <QuizPage />,
+      },
+      {
+        path: 'quiz/solve/:quizId',
+        element: <QuizSolvePage />
+      },
+      {
+        path: 'quiz/:quizId/answer/:studentId',
+        element: <StudentAnswer />
+      },
+      {
+        path: 'quiz/results/:classId',
+        element: <QuizResultsPage />
       },
     ],
   },

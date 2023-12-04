@@ -44,7 +44,6 @@ function createData(name, code, population) {
 // ];
 
 export default function StickyHeadTable({ data }) {
-  console.log("왜 없는거야", data);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 

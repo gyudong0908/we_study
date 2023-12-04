@@ -11,11 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            // Choice.belongsTo(models.ClassChat, { foreignKey: 'chatId', onDelete: 'CASCADE' });
-            Choice.belongsTo(models.Quiz, {
-                foreignKey: 'id',
-            
-            });
+            Choice.belongsTo(models.Question, { foreignKey: 'questionId' , onDelete: 'CASCADE'});
         }
     }
     Choice.init({
@@ -23,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
+        },
+        questionId:{
+            type: DataTypes.INTEGER,
         },
         optionText: {
             type: DataTypes.STRING,

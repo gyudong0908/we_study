@@ -55,9 +55,9 @@ function InvoteClassModal({ open, handleClose }) {
               value={code}
             />
           </Stack>
-          <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 2 }}>
-            <Button variant="outlined" type="reset" onClick={handleClose}>취소</Button>
-            <Button variant="outlined" onClick={() => { joinClass(); handleClose(); }}>참가</Button>
+          <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ mt: 5 }}>
+            <Button variant="outlined" type="reset" sx={{width:'20%'}} onClick={handleClose}>취소</Button>
+            <Button variant="outlined" sx={{width:'20%'}} onClick={() => { joinClass(); handleClose(); }}>참가</Button>
           </Stack>
         </Stack>
       </Modal>

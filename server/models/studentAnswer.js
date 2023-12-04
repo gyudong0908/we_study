@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Quiz extends Model { // 클래스 이름 모델 이름으로 바꿔 줘야함
+    class StudentAnswer extends Model { // 클래스 이름 모델 이름으로 바꿔 줘야함
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,44 +11,34 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Quiz.belongsTo(models.Class, { foreignKey: 'classId' , onDelete: 'CASCADE'});
-            Quiz.hasMany(models.Question, { foreignKey: 'quizId' });
-
+            StudentAnswer.belongsTo(models.Question, { foreignKey: 'questionId' , onDelete: 'CASCADE'});
+            StudentAnswer.belongsTo(models.User, { foreignKey: 'userId' , onDelete: 'CASCADE'});
         }
     }
-    Quiz.init({
+    StudentAnswer.init({
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        classId:{
+        questionId:{
             type: DataTypes.INTEGER,
         },
-        dueDateTime: {
-            type: DataTypes.DATE,
+        userId:{
+            type: DataTypes.INTEGER,
         },
-        title:{
+        answer: {
             type: DataTypes.STRING,
         },
-        description:{
-            type: DataTypes.TEXT,
-        },
-        depoly:{
+        check: {
             type: DataTypes.BOOLEAN,
-        },
-        startDateTime:{
-            type: DataTypes.DATE,
-        },
-        reason:{
-            type: DataTypes.TEXT,
         },
     }, {
         sequelize,
-        modelName: 'Quiz', // 모델 이름 바꿔줘야함
+        modelName: 'StudentAnswer', // 모델 이름 바꿔줘야함
         timestamps: true,
         underscored: true,
-        tableName: 'quizzes', // 테이블 이름 바꿔줘야함
+        tableName: 'studentAnswers', // 테이블 이름 바꿔줘야함
     });
-    return Quiz; // return 할때 모델 이름으로 바꿔줘야함
+    return StudentAnswer; // return 할때 모델 이름으로 바꿔줘야함
 };

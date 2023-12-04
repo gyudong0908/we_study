@@ -1,64 +1,119 @@
-import { Stack, TextField, Button } from "@mui/material"
+import { Stack, TextField, Button, Checkbox, Typography } from "@mui/material"
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
-import { useState } from "react";
+import RemoveCircleOutlineRoundedIcon from '@mui/icons-material/RemoveCircleOutlineRounded';
+import { useState, useEffect } from "react";
+
 export default function AddChoiceQuiz({close, save}){
-    const [choiceCount, setCoiceCount] = useState(1);
-    const [question, setQuestion] = useState('');
+    const [title, setTitle] = useState('');
     const [score, setScore] = useState('');
     const [answer, setAnswer] = useState('');
+    const [reason, setReason] = useState('');
     const [optionList, setOptionList] = useState([]);
 
     function addOptionArray(){
         const newOptionList= [...optionList];
-        newChoiceList.push(null);
-        setChoiceList(newOptionList);
+        newOptionList.push(null);
+        setOptionList(newOptionList);
     }
     function modifyOptionList(idx, value){
         const newOptionList = [...optionList];
-        newOptionList[idx] = {content: value};
+        newOptionList[idx] = {optionText: value};
         setOptionList(newOptionList);
     }
+
+    function removeOption(idx) {
+        const newOptionList = [...optionList];
+        newOptionList.splice(idx, 1);
+        setOptionList(newOptionList);
+      }
+
+    useEffect(() => {
+        console.log(optionList);
+    }, [optionList]);
+
     function onSave(){
         const saveData = {
-            question: question,
+            title: title,
             score: score,
             answer: answer,
             optionText: optionList,
+            questionType: "객관식",
+            reason: reason,
         }
         save(saveData);
     }
 
     return(
-        <Stack>
-            <Stack direction={'row'}>
-                
-                <TextField id="filled-basic" label="제목" variant="filled" placeholder="제목을 입력하세요"
-                    onChange={(e)=>{setQuestion(e.target.value)}} 
-                    value={question}
-                 />
-                <TextField id="filled-basic" label="점수" variant="filled" placeholder="배점을 입력하세요" 
+        <Stack spacing={2} sx={{
+            mt:5, mb:5, 
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+            borderRadius:'20px',
+            padding:'1.5rem',
+            }}
+        >
+            <Stack direction={'row'} sx={{mb:2}}>
+                <TextField id="scoreField" label="배점" variant="outlined" placeholder="배점을 입력하세요" 
                     onChange={(e)=>{setScore(e.target.value)}}
                     value={score}
+                    InputProps={{
+                        endAdornment: '점',
+                        inputMode: 'numeric', // 숫자만 입력 받음
+                      }}
+                    sx={{width:'15rem'}}
                 />
-                <TextField id="filled-basic" label="정답" variant="filled" placeholder="정답을 입력하세요" 
+                <TextField id="answerField" label="정답" variant="outlined" placeholder="정답 선택지 전체를 입력하세요" 
                     onChange={(e)=>{setAnswer(e.target.value)}}
                     value={answer}
+                    sx={{ml:2, wordBreak:'keep-all', width:'calc(100% - 15rem)' }}
                 />
             </Stack>
-            {[...Array(choiceCount)].map((_, index) => (
-                <TextField
-                key={index}
-                id={`filled-basic-${index}`}
-                label={`선택지 ${index + 1}`}
-                variant="filled"
-                placeholder={`선택지를 입력하세요`}
-                onChange={(e)=>{modifyOptionList(index, e.target.value)}}
-                />
-            ))}
-            <Stack alignItems={'center'}>
-            <AddCircleRoundedIcon sx={{cursor: 'pointer'}} onClick={()=>{setChoiceCount(()=>(choiceCount+1)); addOptionArray();}}></AddCircleRoundedIcon>
+            <TextField id="answerReasonField" label="정답의 근거" variant="outlined" placeholder="정답의 근거를 입력하세요"
+                    onChange={(e)=>{setReason(e.target.value)}} 
+                    value={reason}
+                    sx={{wordBreak:'keep-all',}}
+                    multiline
+                    rows={3}
+                 />
+            <TextField id="questionField" label="문제" variant="outlined" placeholder="문제를 입력하세요"
+                    onChange={(e)=>{setTitle(e.target.value)}} 
+                    value={title}
+                    sx={{wordBreak:'keep-all',}}
+                    multiline
+                    rows={3}
+                 />
+            <Stack direction={'column'} spacing={2}>
+                {optionList.map((_, index) => (
+                    <Stack direction={'row'} spacing={1} >
+                        <TextField
+                            key={index}
+                            id={`multiple-choice-${index}`}
+                            label={`선택지 ${index + 1}`}
+                            variant="outlined"
+                            placeholder={`선택지를 입력하세요`}
+                            onChange={(e)=>{modifyOptionList(index, e.target.value)}}
+                            value={optionList[index]?optionList[index].optionText: '' }
+                            sx={{wordBreak:'keep-all', width:'100%'}}
+                            />
+                        <Button sx={{cursor: 'pointer',color:'#757575'}} onClick={() => { removeOption(index); }}>
+                            <RemoveCircleOutlineRoundedIcon />
+                        </Button>
+                    </Stack>
+                ))}
+                <Stack direction={'row'} sx={{justifyContent:'center'}}>
+                    <Button sx={{cursor:'pointer', width:'50%', color:'#757575'}}
+                        onClick={()=>{ addOptionArray();}}>
+                        <AddCircleRoundedIcon />
+                        <Typography ml={1}>선택지 생성</Typography>
+                    </Button>
+                </Stack>
+                <Stack direction={'row'} spacing={1} sx={{ justifyContent: 'flex-end' }}>
+                    <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close();}}>취소</Button>
+                    <Button variant='outlined' sx={{width:'10rem',}} onClick={()=>{close(); onSave();}}>확인</Button>
+                </Stack>
             </Stack>
-            <Button onClick={()=>{close(); onSave();}}>확인</Button>
+            
+            
         </Stack>
     )
 }
+
