@@ -1,173 +1,107 @@
-// import { React, useState } from 'react';
-// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import * as React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination,
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Select, MenuItem,
   Paper, Divider } from '@mui/material';
 import { Typography, Stack, Box } from '@mui/material';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 
-const columns = [
-  { id: "QuizTitle", label: '과제명', width: 200 },
-  { id: "dueDateTime", label: '제출시간', width: 100 },
-  { id: "grade", label: '성적', width: 100 },
-];
-
-export default function QuizGradeTable({ curriculums, setCurriculums }) {
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedCurriculum, setSelectedCurriculum] = useState(null);
-  const [selectedWork, setSelectedWork] = useState(null);
+export default function QuizGradeTable({ quizzes, setQuizzes }) {
+  const [selectedUser, setSelectedUser] = useState('학생명');
+  const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [sumGrade, setSumgrade] = useState();
-  const [count, setCount] = useState();
+  let [count, setCount] = useState(0);
 
-  
-  const uniqueUsers = new Set(
-    curriculums.flatMap((curriculum) =>
-      curriculum.Works.flatMap((work) =>
-        work.Submits.map((submit) => submit.User.nickName)
-      )
-    )
-  );
+  let uniqueUsers = new Set(quizzes.map((quiz) => quiz.nick_name));
+  console.log('uniqueUsers:', uniqueUsers);
 
   React.useEffect(() => {
-    // 여기서 selectedUser 또는 selectedCurriculum이 변경될 때 성적의 합계를 계산합니다.
     let sum = 0;
-    let count = 0;
-
-    curriculums.map((curriculum) => {
-      if (selectedCurriculum && curriculum.title !== selectedCurriculum) {
-        return null;
+    quizzes.forEach((quiz) => {
+      if (!selectedUser || selectedUser === "학생명") {
+        sum += quiz.grade;
+        count += 1;
+      } else if (selectedUser === quiz.nick_name) {
+        sum += quiz.grade;
+        count += 1;
       }
-      return curriculum.Works.map((work) =>
-        work.Submits.map((submit) => {
-          if (!selectedUser) {
-            sum += submit.grade;
-            count +=1
-            return (
-              <TableRow key={submit.id}>
-                <TableCell>{submit.User.nickName}</TableCell>
-                <TableCell>{curriculum.title}</TableCell>
-                <TableCell>{work.title}</TableCell>
-                <TableCell>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mm A')}</TableCell>
-                <TableCell>{submit.grade}</TableCell>
-              </TableRow>
-            )
-          } else if (selectedUser === submit.User.nickName) {
-            sum += submit.grade;
-            count +=1
-            return (
-              <TableRow key={submit.id}>
-                <TableCell>{submit.User.nickName}</TableCell>
-                <TableCell>{curriculum.title}</TableCell>
-                <TableCell>{work.title}</TableCell>
-                <TableCell>
-                  <Typography sx={{textAlign:'center'}}>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography sx={{textAlign:'center'}}>{submit.grade}</Typography>
-                </TableCell>
-              </TableRow>)
-          }
-        }
-        )
-      )
-    }
-    )
-
+    });
+  
     setSumgrade(sum);
     setCount(count);
-  }, [[],selectedUser, selectedCurriculum]);
-
+    
+  }, [selectedUser]);
+  
+  
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden',}}>
+    <Paper sx={{ width: '100%', overflow: 'auto' }}>
       <TableContainer sx={{ maxHeight: 440, }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               <TableCell sx={{ width: 150 }}>
-                <select value={selectedUser} onChange={(e) => { setSelectedUser(e.target.value) }}>
-                  <option value="">Select a user</option>
+                <Select value={selectedUser} onChange={(e) => { setSelectedUser(e.target.value) }}>
+                  <MenuItem value="학생명">학생명</MenuItem>
                   {
                     [...uniqueUsers].map((user, idx) => (
-                      <option key={idx} value={user}>
+                      <MenuItem key={idx} value={user}>
                         {user}
-                      </option>
+                      </MenuItem>
                     ))
                   }
-                </select>
+                </Select>
               </TableCell>
-              {/* <TableCell sx={{ width: 150 }}>
-                <select value={selectedCurriculum} onChange={(e) => { setSelectedCurriculum(e.target.value) }}>
-                  <option value="">Select a Curriculum</option>
-                  {curriculums.map((curriculum) => (curriculum.Works.length !== 0 ?
-                    <option key={curriculum.id} value={curriculum.title}>
-                      {curriculum.title}
-                    </option> : null
-                  ))}
-                </select>
-              </TableCell> */}
-              <TableCell sx={{ width: 200, textAlign:'center' }}>
-                과제명
+              <TableCell sx={{ width: 200, textAlign: 'center', whiteSpace:'pre-line', textOverflow:'ellipsis' }}>
+                퀴즈명
               </TableCell>
-              <TableCell sx={{ width: 200, textAlign:'center' }}>
+              <TableCell sx={{ width: 200, textAlign: 'center' }}>
                 제출시간
               </TableCell>
-              <TableCell sx={{ width: 100, textAlign:'center' }}>
+              <TableCell sx={{ width: 100, textAlign: 'center', justifyContent:'center' }}>
                 성적
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {/* 선택한 유저에 맞는 데이터 렌더링 */}
-            {curriculums.length !== 0 ?
-              curriculums.map((curriculum) => {
-                if (selectedCurriculum && curriculum.title !== selectedCurriculum) {
-                  return null;
+            {quizzes.length !== 0 ?
+              quizzes.map((quiz) => {
+                if (!selectedUser|| selectedUser === '학생명') {
+                  return (
+                    <>
+                      <TableRow key={quiz.id}>
+                        <TableCell>{quiz.nick_name}</TableCell>
+                        <TableCell>{quiz.title}</TableCell>
+                        <TableCell sx={{textAlign: 'center', wordBreak:'keep-all'}}>{dayjs(quiz.updatedAt).format('YYYY-MM-DD hh:mmA')}</TableCell>
+                        <TableCell>{quiz.grade}</TableCell>
+                      </TableRow>
+                    </>
+                  );
+                } else if (selectedUser === quiz.nick_name) {
+                  return (
+                    <>
+                      <TableRow key={quiz.id}>
+                        <TableCell>{quiz.nick_name}</TableCell>
+                        <TableCell>{quiz.title}</TableCell>
+                        <TableCell>
+                          <Typography sx={{ wordBreak:'keep-all', textAlign: 'center' }}>{dayjs(quiz.updatedAt).format('YYYY-MM-DD hh:mmA')}</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography sx={{ textAlign: 'center',}}>{quiz.grade}</Typography>
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  );
                 }
-                return curriculum.Works.map((work) =>
-                  work.Submits.map((submit) => {
-                    if (!selectedUser) {
-                      return (
-                        <TableRow key={submit.id}>
-                          <TableCell>{submit.User.nickName}</TableCell>
-                          <TableCell>{curriculum.title}</TableCell>
-                          <TableCell>{work.title}</TableCell>
-                          <TableCell>
-                            <Typography sx={{textAlign:'center', wordBreak:'keep-all'}}>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mmA')}</Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Typography sx={{textAlign:'center'}}>{submit.grade}</Typography>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    } else if (selectedUser === submit.User.nickName) {
-                      return (
-                        <TableRow key={submit.id}>
-                          <TableCell>{submit.User.nickName}</TableCell>
-                          <TableCell>{curriculum.title}</TableCell>
-                          <TableCell>{work.title}</TableCell>
-                          <TableCell>
-                            <Typography sx={{textAlign:'center', wordBreak:'keep-all'}}>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mmA')}</Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Typography sx={{textAlign:'center'}}>{submit.grade}</Typography>
-                          </TableCell>
-                        </TableRow>)
-                    }
-                  }
-                  )
-                )
-              }
-              )
-              : null}
+              }) : null}
           </TableBody>
         </Table>
       </TableContainer>
       <Divider variant='large' />
-      <Stack direction='row' sx={{alignItems:'center', justifyContent:'space-between', padding:'15px'}}>
-        <Typography sx={{ml:1, fontWeight:'bold'}}>Average</Typography>
-        <Typography sx={{mr:1, fontWeight:'bold'}}>{(sumGrade/count).toFixed(1)} 점</Typography>
+      <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between', padding: '15px' }}>
+        <Typography sx={{ ml: 1, fontWeight: 'bold' }}>Average</Typography>
+        <Typography sx={{ mr: 1, fontWeight: 'bold' }}>{(sumGrade / count).toFixed(1)} 점</Typography>
       </Stack>
     </Paper>
   );
+  
 }

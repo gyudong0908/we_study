@@ -34,11 +34,17 @@ export default function ClassPage() {
 
     <Stack
       sx={{
-        direction: 'column',
-        marginTop: '115px',
-        marginLeft: '320px',
-        marginRight: '50px',
-        marginBottom: '150px',
+        direction:'column',
+        marginTop:'115px',
+        marginLeft:'25rem',
+        marginRight:'10rem',
+        marginBottom:'10rem'
+
+        // direction: 'column',
+        // marginTop: '115px',
+        // marginLeft: '320px',
+        // marginRight: '50px',
+        // marginBottom: '150px',
 
           // marginTop:'120px',
           // marginLeft:'300px',

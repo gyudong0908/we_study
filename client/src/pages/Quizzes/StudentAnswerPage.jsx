@@ -59,11 +59,16 @@ export default function StudentAnswer(){
     return(
         <Stack        
         sx={{
-            direction: 'column',
-            marginTop: '115px',
-            marginLeft: '320px',
-            marginRight: '50px',
-            marginBottom: '150px', 
+            // direction: 'column',
+            // marginTop: '115px',
+            // marginLeft: '320px',
+            // marginRight: '50px',
+            // marginBottom: '150px', 
+            direction:'column',
+            marginTop:'115px',
+            marginLeft:'20rem',
+            marginRight:'10rem',
+            marginBottom:'10rem'
         }}>
         {
             quiz &&(

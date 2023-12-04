@@ -35,7 +35,10 @@ export default function ClassSetting({ isTeacher, classData, setClassData }) {
     return (
         <>
             <Box>
-                <Typography variant='h4' sx={{ mb: 2, fontWeight: 'bold', color: '#0091ea' }}>클래스 세부 정보</Typography>
+                <Stack sx={{ borderBottom: '1.5px solid black', mb: 3,}}>
+                    <Typography variant='h4' sx={{ mb: 2, fontWeight: 'bold', color: '#0091ea' }}>클래스 세부 정보</Typography>
+                </Stack>
+                
                 <Stack sx={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '5px', p: 4, mt: 2, mb: 3 }}>
                     <Stack sx={{ mb: 3 }}>
                         <TextField id="outlined-basic" label="클래스이름(필수)" variant="outlined" value={newClassData.title}
@@ -52,7 +55,10 @@ export default function ClassSetting({ isTeacher, classData, setClassData }) {
                 </Stack>
                 <Button variant="outlined" size='large' sx={{ float: 'right', width: '20%' }} onClick={saveClassData}>저장</Button>
 
-                <Typography variant='h4' sx={{ mb: 2, fontWeight: 'bold', color: '#0091ea', mt: 15 }}>클래스 초대 코드 관리</Typography>
+                <Stack sx={{ borderBottom: '1.5px solid black', mb: 3,}}>
+                    <Typography variant='h4' sx={{ mb: 2, fontWeight: 'bold', color: '#0091ea', mt:15 }}>클래스 초대 코드 관리</Typography>
+                </Stack>
+                
                 <Stack sx={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '5px', p: 4, mt: 2, mb: 3 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Typography variant='h6'>클래스 코드</Typography>

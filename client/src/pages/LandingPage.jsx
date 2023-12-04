@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Stack, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, Stack, } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import loginImg from '../../public/images/web_neutral_sq_SI@1x.png';
+import logo from '../../public/images/logo.png';
 
 function LandingPage() {
     const handleClick = () => {
@@ -25,7 +26,9 @@ function LandingPage() {
                 zIndex: (theme) => theme.zIndex.drawer + 1
             }}>
                 <Toolbar disableGutters width='100%'>
-                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'black' }} />
+                <Stack sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, width:'30px', height:'30px' }}>
+                    <img src={logo} alt="Logo" style={{ maxWidth: '100%', height: 'auto' }} />
+                </Stack>
                     <Typography variant='h6' noWrap component={Link} to='/mypage' sx={{
                         mr: 2,
                         display: { xs: 'none', md: 'flex' },
@@ -39,7 +42,9 @@ function LandingPage() {
 
                     }}>WeStudy</Typography>
 
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: 'black' }} />
+                <Stack sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, width:'30px', height:'30px' }}>
+                  <img src={logo} alt="Logo" style={{ maxWidth: '100%', height: 'auto' }} />
+                </Stack>
                     <Typography variant='h5' noWrap component={Link} to='/mypage' sx={{
                         mr: 2,
                         display: { xs: 'flex', md: 'none' },

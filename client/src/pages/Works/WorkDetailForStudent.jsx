@@ -56,12 +56,17 @@ export default function WorkDetailForStudent() {
             {submitData.length !== 0 ?
                 <Stack
                     sx={{
-                        direction: 'column',
-                        spacing: '10px',
-                        marginTop: '100px',
-                        marginLeft: '270px',
-                        marginRight: '70px',
-                        marginBottom: '200px'
+                        // direction: 'column',
+                        // spacing: '10px',
+                        // marginTop: '100px',
+                        // marginLeft: '270px',
+                        // marginRight: '70px',
+                        // marginBottom: '200px'
+                        direction:'column',
+                        marginTop:'115px',
+                        marginLeft:'20rem',
+                        marginRight:'10rem',
+                        marginBottom:'10rem'
                     }}>
                     <Stack sx={{ mb: 2, alignItems: 'flex-end' }}>
                         <Button variant='outlined' sx={{ width: '20%' }} onClick={handleGoBack}>목록</Button>
