@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+
       autoIncrement: true
     },
     userId: {
@@ -40,3 +41,4 @@ module.exports = (sequelize, DataTypes) => {
   });
   return Rank; // return 할때 모델 이름으로 바꿔줘야함
 };
+
