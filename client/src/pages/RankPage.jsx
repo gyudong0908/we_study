@@ -19,10 +19,10 @@ const card = (
 );
 
 export default function RankPage() {
-  const [selectedClass, setSelectedClass] = React.useState(''); // 선택한 클래스 상태 추가
-  const [data, setData] = React.useState([]); //임시로 추가해 줌
-  const [dataByClass, setDataByClass] = React.useState([]); // 선택한 클래스의 사용자 랭킹
-
+  const [selectedClass, setSelectedClass] = React.useState('');
+  const [data, setData] = React.useState([]);
+  const [dataByClass, setDataByClass] = React.useState([]);
+  const [userClass, setUserClass] = React.useState([]);
 
   const handleChange = async (event) => {
     const classId = event.target.value;
@@ -46,35 +46,35 @@ export default function RankPage() {
     }
   };
 
+  async function getUserClass() {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/user/classes`, { withCredentials: true });
+      console.log(response.data);
+      setUserClass(response.data);
+      if (response.data) {
+        setSelectedClass(response.data[0].id);
+        try {
+          const rankResponse = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/rank?classId=${response.data[0].id}`, { withCredentials: true });
+          setDataByClass(rankResponse.data);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+
   React.useEffect(() => {
     fetchData()
-    // .then((response) => {
-    //   console.log("fsfs:", response.data)
-    //   setData(response.data);
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
+    getUserClass()
   }, []);
-
-  //아래꺼 함수로 변환해야 한다고 함.
-  // React.useEffect(() => {
-  //   axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/rank`, { withCredentials: true }).then((response) => {
-  //     console.log(response.data);
-  //   }).catch(err => {
-  //     console.log(err);
-  //   })
-  // })
 
   return (
     <Stack
       sx={{
-        // direction: 'column',
-        // spacing: 'px',
-        // marginTop: '100px',
-        // marginLeft: '300px',
-        // marginRight: '70px',
-        // marginBottom: '200px',
         direction: 'column',
         marginTop: '115px',
         marginLeft: '320px',
@@ -108,19 +108,11 @@ export default function RankPage() {
                 style={{ fontSize: '18px' }}
               >
                 <MenuItem value="">Select a class</MenuItem>
-                {/* 여기에 클래스 옵션들을 가져와서 렌더링 */}
-                {/* 예시: */}
-                {/* <MenuItem value="1">Class 1</MenuItem>
-                <MenuItem value="2">Class 2</MenuItem>
-                <MenuItem value="3">Class 3</MenuItem>
-                <MenuItem value="4">Class 4</MenuItem> */}
-                {/* ... */}
-              </Select>
+                {userClass.map((row, index) => {
+                  return <MenuItem value={row.id} key={index}>{row.title}</MenuItem>
+                })}
 
-              {/* <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select> */}
+              </Select>
 
             </FormControl>
           </div>
@@ -133,7 +125,6 @@ export default function RankPage() {
         spacing={2}
       >
         <StickyHeadTable data={data} />
-        {/* StickyHeadTable에 서버에서 가져온 데이터를 전달 */}
         <StickyHeadTable data={dataByClass} />
 
       </Stack>

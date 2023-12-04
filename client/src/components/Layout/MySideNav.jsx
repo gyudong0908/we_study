@@ -15,7 +15,7 @@ function MySideNav() {
     const user = useSelector((state) => state.userData);
 
     const [timer, setTimer] = useState(0); // 위에 있는 타이머
-    const [timerRunning, setTimerRunning] = useState(false); // 타이머가 실행 중인지 여부
+    const [timerRunning, setTimerRunning] = useState(false);
 
     const [currentStudyTime, setCurrentStudyTime] = useState(0); // 아래에 있는 타이머
     const [resetDisabled, setResetDisabled] = useState(false); // Reset 버튼 활성/비활성 상태
@@ -37,11 +37,11 @@ function MySideNav() {
 
     // Reset 버튼을 눌렀을 때 실행되는 함수
     const handleResetTime = () => {
-        setCurrentStudyTime((prevStudyTime) => prevStudyTime + timer); // 아래 타이머에 위 타이머 시간 추가
-        setTimer(0); // 위 타이머 초기화
+        setCurrentStudyTime((prevStudyTime) => prevStudyTime + timer);
+        setTimer(0);
         sessionStorage.removeItem('startTime');
         sessionStorage.removeItem('timer');
-        // setResetDisabled(true);  Reset 버튼 비활성화
+
 
 
 
@@ -61,10 +61,10 @@ function MySideNav() {
             setTimer(timeDifferenceInSeconds);
             setTimerRunning(true);
         } else if (storedTimer !== null) {
-            setStartClicked(false);  //임시로 false로 바꿈
-            setStopDisabled(true);    //임시로 true로 바꿈
+            setStartClicked(false);
+            setStopDisabled(true);
             setTimer(parseInt(storedTimer, 10));
-            setTimerRunning(false);  //임시로 false로 바꿈
+            setTimerRunning(false);
         }
     }, []);
 
@@ -121,21 +121,19 @@ function MySideNav() {
         setStopDisabled(false);
         setTimerRunning(true);
 
-        // 서버에 데이터를 업데이트하는 요청을 보냅니다.
+
         axios.post(`http://localhost:8081/rank`, { startTime: startTime }, { withCredentials: true })
             .then((response) => {
-                // 업데이트 성공 시 처리 로직
                 console.log('시작 시간이 업데이트되었습니다.');
             })
             .catch((error) => {
-                // 에러 처리 로직
                 console.log('여긴 에러')
                 console.error('시작 시간 업데이트 중 오류가 발생했습니다:', error);
             });
     };
 
     const handleStopTime = () => {
-        const stopTime = new Date(); // Stop 버튼을 눌렀을 때의 현재 시각을 가져옵니다.
+        const stopTime = new Date();
         sessionStorage.removeItem('startTime');
         sessionStorage.setItem('timer', timer);
 
@@ -143,7 +141,7 @@ function MySideNav() {
         setStopDisabled(true);
         setTimerRunning(false);
 
-        // 서버에 데이터를 업데이트하는 요청을 보냅니다.
+
         axios.post(`http://localhost:8081/rank/stop`, { stopTime: stopTime }, { withCredentials: true })
             .then((response) => {
                 console.log('종료 시간이 업데이트되었습니다.');
@@ -173,7 +171,6 @@ function MySideNav() {
                         sx={{ textAlign: 'center', flexDirection: 'column' }}>
                         <ListItemText
                             primaryTypographyProps={{ fontSize: '45px' }}
-                            // primary="00:00:00" />
                             primary={formatTime(timer)} />
                         <Stack flexDirection='row'>
                             <ListItemButton onClick={() => {
@@ -203,13 +200,15 @@ function MySideNav() {
 
 
 
-                        <Typography variant="body1" gutterBottom>
-                            현재 공부 시간
-                        </Typography>
-                        {/* 아래에 있는 타이머 */}
-                        <Typography variant="h3" gutterBottom>
-                            {formatTime(currentStudyTime)}
-                        </Typography>
+                        <Stack sx={{ marginTop: '15px' }}>
+                            <Typography variant="body1" gutterBottom>
+                                현재 공부 시간
+                            </Typography>
+                            <Typography variant="h3" gutterBottom sx={{ fontSize: '40px' }}>
+                                {formatTime(currentStudyTime)}
+                            </Typography>
+                        </Stack>
+
 
                     </ListItem>
                 </List>
@@ -263,8 +262,6 @@ function MySideNav() {
                             overflowY: 'auto',
                             paddingBottom: '1.5rem',
                             paddingTop: '1rem',
-                            // paddingRight:'0.3rem',
-                            // paddingLeft: '0.5rem',
                         },
                     }}
                     sx={{

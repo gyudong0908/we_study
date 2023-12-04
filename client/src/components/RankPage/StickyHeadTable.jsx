@@ -9,10 +9,10 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 const columns = [
-  { id: 'name', label: '랭킹', minWidth: 170 },
-  { id: 'code', label: 'ID', minWidth: 100 },
+  { id: 'ranking', label: '랭킹', minWidth: 170 },
+  { id: 'id', label: 'ID', minWidth: 100 },
   {
-    id: 'population',
+    id: 'studytime',
     label: '누적 학습 시간',
     minWidth: 170,
     align: 'right',
@@ -20,34 +20,9 @@ const columns = [
   },
 ];
 
-function createData(name, code, population) {
-
-  return { name, code, population };
-}
-
-// const rows = [
-// createData('unlucky8', 'IN', 1324171354),
-// createData('China', 'CN', 1403500365),
-// createData('Italy', 'IT', 60483973),
-// createData('United States', 'US', 327167434),
-// createData('Canada', 'CA', 37602103),
-// createData('Australia', 'AU', 25475400),
-// createData('Germany', 'DE', 83019200),
-// createData('Ireland', 'IE', 4857000),
-// createData('Mexico', 'MX', 12657769),
-// createData('Japan', 'JP', 126317000),
-// createData('France', 'FR', 67022000),
-// createData('United Kingdom', 'GB', 67545757),
-// createData('Russia', 'RU', 146793744),
-// createData('Nigeria', 'NG', 200962417),
-// createData('Brazil', 'BR', 210147125),
-// ];
-
 export default function StickyHeadTable({ data }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  // const rows = data;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
