@@ -159,7 +159,6 @@ router.post('/question/choice', function (req, res) {
         console.log(err);
         res.status(500).send('퀴즈 시작시간 조회 에러');
     })
-
 })
 
 router.put('/choice', function (req, res) {
@@ -192,7 +191,9 @@ router.post('/studentAnswer', function (req, res) {
             return
         }
         function zipArrays(arr1, arr2) {
-            return arr1.map((item, index) => [item, arr2[index]]);
+            const sumarr =  arr1.map((item, index) => [item.dataValues, arr2[index]]);
+            // console.log(sumarr)
+            return sumarr
         }
         models.StudentAnswer.bulkCreate(saveData).then((studentAnswers) => {
             models.Question.findAll({
@@ -201,30 +202,46 @@ router.post('/studentAnswer', function (req, res) {
                 order: [['createdAt', 'ASC']]
             }).then(questions => {
                 // 이제 여기에 채점 로직을 구현 하면 된다!
-                console.log(questions)
                 for (const [studentAnswer, question] of zipArrays(studentAnswers, questions)) {
-                    console.log(studentAnswer)
-                    console.log(question)
+                    // console.log(question)
                     if (question.questionType === "서술형") {
-                        break;
+                        continue;
+                    }else if(question.questionType === "객관식"){
+                        const questionAnswerArr = question.answer.split(',');
+                        const studentAnswerArr = studentAnswer.answer.split(',');
+                        questionAnswerArr.sort();
+                        studentAnswerArr.sort();
+                        if (questionAnswerArr.toString() == studentAnswerArr.toString()) {
+                            models.StudentAnswer.update({ check: true }, { where: { id: studentAnswer.id } }).catch(err => {
+                                console.log(err);
+                                res.status(500).send('채점 에러 발생')
+                            })
+                        } else {
+                            models.StudentAnswer.update({ check: false }, { where: { id: studentAnswer.id } }).catch(err => {
+                                console.log(err);
+                                res.status(500).send('채점 에러 발생')
+                            })
+                        }    
+                    }else if(question.questionType === "단답형"){
+                        const answerArr = question.answer.split(',');
+                        if(answerArr.some(item=>item.trim() === studentAnswer.answer)){
+                            models.StudentAnswer.update({ check: true }, { where: { id: studentAnswer.id } }).catch(err => {
+                                console.log(err);
+                                res.status(500).send('채점 에러 발생')
+                            })
+                        } else {
+                            models.StudentAnswer.update({ check: false }, { where: { id: studentAnswer.id } }).catch(err => {
+                                console.log(err);
+                                res.status(500).send('채점 에러 발생')
+                            })
+                        }  
+                        }
                     }
-                    if (studentAnswer.answer === question.answer) {
-                        models.StudentAnswer.update({ check: true }, { where: { id: studentAnswer.id } }).catch(err => {
-                            console.log(err);
-                            res.status(500).send('채점 에러 발생')
-                        })
-                    } else {
-                        models.StudentAnswer.update({ check: false }, { where: { id: studentAnswer.id } }).catch(err => {
-                            console.log(err);
-                            res.status(500).send('채점 에러 발생')
-                        })
-                    }
-                }
+                
                 res.sendStatus(200);
-
             }).catch(err => {
                 console.log(err);
-                res.status(500).send('채점 에러')
+                res.status(500).send('채점 에러');
             })
         }).catch(err => {
             console.log(err);
@@ -263,6 +280,7 @@ router.get('/studentAnswer', function (req, res) {
         res.status(500).send('학생 답안지 조회 에러');
     })
 })
+
 router.get('/studentAnswers', function (req, res) {
     const classId = req.query.classId;
     models.Quiz.findAll({

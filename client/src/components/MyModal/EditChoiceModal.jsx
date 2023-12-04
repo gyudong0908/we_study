@@ -27,7 +27,7 @@ function EditChoiceModal({open, handleClose, target, editQuestion,}) {
       const data = {
         title: title,
         score: score,
-        answer: Array.isArray(answer) ? answer : [answer], 
+        answer: Array.isArray(answer) ? answer: [answer], 
         questionType: target.questionType,
         reason: reason,
       }
