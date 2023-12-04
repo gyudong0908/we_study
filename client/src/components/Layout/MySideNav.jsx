@@ -203,11 +203,13 @@ function MySideNav() {
 
 
 
-                        <Typography variant="body1" gutterBottom>
-                            현재 공부 시간
+                        <Typography variant="body1" gutterBottom sx={{
+                            mt:5, color:'#0091ea', fontWeight:'bold'
+                        }}>
+                            오늘의 누적 학습 시간
                         </Typography>
                         {/* 아래에 있는 타이머 */}
-                        <Typography variant="h3" gutterBottom>
+                        <Typography variant="h4" gutterBottom>
                             {formatTime(currentStudyTime)}
                         </Typography>
 

@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 export default function ClassGrade({ isTeacher }) {
   const { classId } = useParams();
   const [curriculums, setCurriculums] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
+
   function getSubmitData() {
     axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/submits?classId=${classId}`, { withCredentials: true }).then(data => {
       console.log(data.data.Curriculums)
@@ -16,7 +18,8 @@ export default function ClassGrade({ isTeacher }) {
   }
   function getQuizGradeData() {
     axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/student/quiz/grade?classId=${classId}`, { withCredentials: true }).then(data => {
-      console.log(data.data)
+      console.log('quizzes:',data.data);
+      setQuizzes(data.data);
     })
   }
 
@@ -31,9 +34,21 @@ export default function ClassGrade({ isTeacher }) {
           학생 성적 관리
         </Typography>
       </Stack>
-      <Stack direction={'row'} spacing={2}>
-        <WorkGradeTable curriculums={curriculums} setCurriculums={setCurriculums} />
-        <QuizGradeTable curriculums={curriculums} setCurriculums={setCurriculums} />
+      <Stack direction={'column'} spacing={10}>
+        <Stack>
+          <Typography variant="h5" sx={{mb:2, fontWeight:'bold'}}>
+            [ 과제 ]
+          </Typography>
+          <WorkGradeTable curriculums={curriculums} setCurriculums={setCurriculums} />
+        </Stack>
+        <Stack>
+          <Typography variant='h5' sx={{mb:2, fontWeight:'bold'}}>
+            [ 퀴즈 ]
+          </Typography>
+          <QuizGradeTable quizzes={quizzes} setQuizzes={setQuizzes} curriculums={curriculums} setCurriculums={setCurriculums}/>
+        </Stack>
+
+        
       </Stack>
     </Stack>
   );

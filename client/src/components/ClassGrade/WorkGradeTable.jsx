@@ -1,27 +1,24 @@
-// import { React, useState } from 'react';
-// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import * as React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination,
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Select, MenuItem,
   Paper, Divider } from '@mui/material';
 import { Typography, Stack, Box } from '@mui/material';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 
-const columns = [
-  { id: "topic", label: '단원명', width: 150 },
-  { id: "workTitle", label: '과제명', width: 700 },
-  { id: "dueDateTime", label: '제출시간', width: 100 },
-  { id: "grade", label: '성적', width: 100 },
-];
+// const columns = [
+//   { id: "topic", label: '단원명', width: 150 },
+//   { id: "workTitle", label: '과제명', width: 700 },
+//   { id: "dueDateTime", label: '제출시간', width: 100 },
+//   { id: "grade", label: '성적', width: 100 },
+// ];
 
 function createData(name, topic, workTitle, dueDateTime, grade) {
   return { name, topic, workTitle, dueDateTime };
 }
 
 export default function WorkGradeTable({ curriculums, setCurriculums }) {
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedCurriculum, setSelectedCurriculum] = useState(null);
-  const [selectedWork, setSelectedWork] = useState(null);
+  const [selectedUser, setSelectedUser] = useState('학생명');
+  const [selectedCurriculum, setSelectedCurriculum] = useState('커리큘럼');
   const [sumGrade, setSumgrade] = useState();
   const [count, setCount] = useState();
 
@@ -48,30 +45,9 @@ export default function WorkGradeTable({ curriculums, setCurriculums }) {
           if (!selectedUser) {
             sum += submit.grade;
             count +=1
-            return (
-              <TableRow key={submit.id}>
-                <TableCell>{submit.User.nickName}</TableCell>
-                <TableCell>{curriculum.title}</TableCell>
-                <TableCell>{work.title}</TableCell>
-                <TableCell>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mm A')}</TableCell>
-                <TableCell>{submit.grade}</TableCell>
-              </TableRow>
-            )
           } else if (selectedUser === submit.User.nickName) {
             sum += submit.grade;
             count +=1
-            return (
-              <TableRow key={submit.id}>
-                <TableCell>{submit.User.nickName}</TableCell>
-                <TableCell>{curriculum.title}</TableCell>
-                <TableCell>{work.title}</TableCell>
-                <TableCell>
-                  <Typography sx={{textAlign:'center'}}>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography sx={{textAlign:'center'}}>{submit.grade}</Typography>
-                </TableCell>
-              </TableRow>)
           }
         }
         )
@@ -84,40 +60,40 @@ export default function WorkGradeTable({ curriculums, setCurriculums }) {
   }, [[],selectedUser, selectedCurriculum]);
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden',}}>
+    <Paper sx={{ width: '100%', overflow: 'auto',}}>
       <TableContainer sx={{ maxHeight: 440, }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               <TableCell sx={{ width: 150 }}>
-                <select value={selectedUser} onChange={(e) => { setSelectedUser(e.target.value) }}>
-                  <option value="">Select a user</option>
+                <Select value={selectedUser} onChange={(e) => { setSelectedUser(e.target.value) }}>
+                  <MenuItem value="학생명">학생명</MenuItem>
                   {
                     [...uniqueUsers].map((user, idx) => (
-                      <option key={idx} value={user}>
+                      <MenuItem key={idx} value={user}>
                         {user}
-                      </option>
+                      </MenuItem>
                     ))
                   }
-                </select>
+                </Select>
               </TableCell>
               <TableCell sx={{ width: 150 }}>
-                <select value={selectedCurriculum} onChange={(e) => { setSelectedCurriculum(e.target.value) }}>
-                  <option value="">Select a Curriculum</option>
+                <Select value={selectedCurriculum} onChange={(e) => { setSelectedCurriculum(e.target.value) }}>
+                  <MenuItem value="커리큘럼">커리큘럼</MenuItem>
                   {curriculums.map((curriculum) => (curriculum.Works.length !== 0 ?
-                    <option key={curriculum.id} value={curriculum.title}>
+                    <MenuItem key={curriculum.id} value={curriculum.title}>
                       {curriculum.title}
-                    </option> : null
+                    </MenuItem> : null
                   ))}
-                </select>
+                </Select>
               </TableCell>
-              <TableCell sx={{ width: 700, textAlign:'center' }}>
+              <TableCell sx={{ width: 200, textAlign:'center', }}>
                 과제명
               </TableCell>
               <TableCell sx={{ width: 200, textAlign:'center' }}>
                 제출시간
               </TableCell>
-              <TableCell sx={{ width: 100, textAlign:'center' }}>
+              <TableCell sx={{ width: 100, textAlign:'center', justifyContent:'center' }}>
                 성적
               </TableCell>
             </TableRow>
@@ -126,17 +102,17 @@ export default function WorkGradeTable({ curriculums, setCurriculums }) {
             {/* 선택한 유저에 맞는 데이터 렌더링 */}
             {curriculums.length !== 0 ?
               curriculums.map((curriculum) => {
-                if (selectedCurriculum && curriculum.title !== selectedCurriculum) {
+                if (selectedCurriculum && curriculum.title !== selectedCurriculum && selectedCurriculum !== '커리큘럼') {
                   return null;
                 }
                 return curriculum.Works.map((work) =>
                   work.Submits.map((submit) => {
-                    if (!selectedUser) {
+                    if (!selectedUser|| selectedUser === '학생명') {
                       return (
                         <TableRow key={submit.id}>
                           <TableCell>{submit.User.nickName}</TableCell>
-                          <TableCell>{curriculum.title}</TableCell>
-                          <TableCell>{work.title}</TableCell>
+                          <TableCell sx={{whiteSpace:'pre-line', textOverflow:'ellipsis'}}>{curriculum.title}</TableCell>
+                          <TableCell sx={{whiteSpace:'pre-line', textOverflow:'ellipsis'}}>{work.title}</TableCell>
                           <TableCell>
                             <Typography sx={{textAlign:'center', wordBreak:'keep-all'}}>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mmA')}</Typography>
                           </TableCell>
@@ -149,8 +125,8 @@ export default function WorkGradeTable({ curriculums, setCurriculums }) {
                       return (
                         <TableRow key={submit.id}>
                           <TableCell>{submit.User.nickName}</TableCell>
-                          <TableCell>{curriculum.title}</TableCell>
-                          <TableCell>{work.title}</TableCell>
+                          <TableCell sx={{whiteSpace:'pre-line', textOverflow:'ellipsis'}}>{curriculum.title}</TableCell>
+                          <TableCell sx={{whiteSpace:'pre-line', textOverflow:'ellipsis'}}>{work.title}</TableCell>
                           <TableCell>
                             <Typography sx={{textAlign:'center', wordBreak:'keep-all'}}>{dayjs(submit.updatedAt).format('YYYY-MM-DD hh:mmA')}</Typography>
                           </TableCell>
@@ -169,7 +145,7 @@ export default function WorkGradeTable({ curriculums, setCurriculums }) {
         </Table>
       </TableContainer>
       <Divider variant='large' />
-      <Stack direction='row' sx={{alignItems:'center', justifyContent:'space-between', padding:'15px'}}>
+      <Stack direction='row' sx={{alignItems:'center', justifyContent: 'space-between', padding:'15px'}}>
         <Typography sx={{ml:1, fontWeight:'bold'}}>Average</Typography>
         <Typography sx={{mr:1, fontWeight:'bold'}}>{(sumGrade/count).toFixed(1)} 점</Typography>
       </Stack>

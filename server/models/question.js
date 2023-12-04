@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
         },
         answer: {
-            type: DataTypes.TEXT,
+            type: DataTypes.STRING,
         },
         reason:{
             type: DataTypes.TEXT,

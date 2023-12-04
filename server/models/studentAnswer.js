@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
         },
         answer: {
-            type: DataTypes.TEXT,
+            type: DataTypes.STRING,
         },
         check: {
             type: DataTypes.BOOLEAN,
