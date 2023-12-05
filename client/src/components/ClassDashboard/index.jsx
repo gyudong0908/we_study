@@ -37,11 +37,12 @@ export default function ClassDashboard({ isTeacher }) {
   // }
   async function fetchData() {
     try {
-      const progressData = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/progress?classId=${classId}`, { withCredentials: true });
-      setProgress(progressData.data);
-
+      // 완료
+      const progressWorkData = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/progress/work?classId=${classId}`, { withCredentials: true });
+      const progressData = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/progress/quiz?classId=${classId}`, { withCredentials: true });
       const attendanceData = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/attendances?classId=${classId}`, { withCredentials: true });
       setAttendances(attendanceData.data);
+      setProgress(progressWorkData.data.map((progressWorkData, idx)=>{return {id: progressData[idx].id, nickName: progressData[idx].nickName, countSubmits: progressWorkData.countSubmits, countQuiz:progressData[idx].countQuiz}}))
     } catch (err) {
       console.error(err);
     }
