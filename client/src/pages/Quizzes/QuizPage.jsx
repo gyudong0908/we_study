@@ -38,7 +38,7 @@ export default function QuizPage(){
                 console.log(response.data)
                 setQuestions([...questions, response.data]);
             }).catch(err=>{
-                if(err.status = 527){
+                if(err.status === 527){
                     alert('수정 시간이 초과되었습니다!');
                     window.close();
                     return
@@ -49,7 +49,7 @@ export default function QuizPage(){
             axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/question?quizId=${quizId}`,saveData ,{ withCredentials: true }).then((response)=>{
                 setQuestions([...questions, response.data]);
             }).catch(err=>{
-                if(err.status = 527){
+                if(err.status === 527){
                     alert('수정 시간이 초과되었습니다!');
                     window.close();
                     return
@@ -73,7 +73,7 @@ export default function QuizPage(){
         axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/question?questionId=${target.id}`, { withCredentials: true }).then(()=>{
             setQuestions(questions.filter(question=>question.id !== target.id));
         }).catch(err=>{
-            if(err.status = 527){
+            if(err.status === 527){
                 alert('수정 시간이 초과되었습니다!');
                 window.close();
                 return
@@ -83,18 +83,34 @@ export default function QuizPage(){
 
     }
     // 아직 밑에 있는 수정은 단답형이랑 서술형만 가능함
-    function editQuestion(questionId, target){
-        console.log(3)
-        axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/question?questionId=${questionId}`,target, { withCredentials: true }).then(()=>{
-            setQuestions(questions.map(question=>(question.id === questionId? {...question, ...target}: question)));
-        }).catch(err=>{
-            if(err.status = 527){
-                alert('수정 시간이 초과되었습니다!');
-                window.close();
-                return
-            }
-            console.log(err);
-        })
+    function editQuestion(questionId, target){   
+        console.log(target.questionType)
+        if(target.questionType === "객관식"){
+            axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/question/choice?questionId=${questionId}`,target, { withCredentials: true }).then(()=>{
+                const newObject = { ['Choices']: target.optionText, ...target };
+                console.log("뉴:", newObject)
+                setQuestions(questions.map(question=>(question.id === questionId? {...question, ...newObject}: question)));
+            }).catch(err=>{
+                if(err.status === 527){
+                    alert('수정 시간이 초과되었습니다!');                
+                    window.close();
+                    return
+                }
+                console.log(err);
+            })    
+
+        }else{
+            axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/question?questionId=${questionId}`,target, { withCredentials: true }).then(()=>{
+                setQuestions(questions.map(question=>(question.id === questionId? {...question, ...target}: question)));
+            }).catch(err=>{
+                if(err.status === 527){
+                    alert('수정 시간이 초과되었습니다!');
+                    window.close();
+                    return
+                }
+                console.log(err);
+            })    
+        }
     }
 
     useEffect(()=>{
@@ -109,29 +125,20 @@ export default function QuizPage(){
  
     function displayAnswer(data) {
         try {
-          let answerArray = data.answer;
-      
-          // data.answer가 문자열인 경우에만 JSON.parse 사용
-          if (typeof data.answer === 'string') {
-            answerArray = JSON.parse(data.answer.replace(/\\/g, ''));
-          }
-      
+          let answerArray = data.answer.split(',');      
           if (Array.isArray(answerArray)) {
             return (
               <>
                 {answerArray.map((answer, index) => (
-                  <p key={index}>{answer}</p>
+                  <p key={index}>{answer.trim()}</p>
                 ))}
               </>
             );
-          } else {
-            return <span>{answerArray.replace(/"/g, '').split('\n')}</span>;
-          }
-        } catch (error) {
-          console.error('Error parsing answer:', error);
-          return <span>{data.answer.replace(/"/g, '').split('\n')}</span>;
+                }
+            }catch(err){
+                console.log(err);
+            }
         }
-      }
          
 
     return (
@@ -222,10 +229,11 @@ export default function QuizPage(){
                                 <Stack direction='row' spacing={1} sx={{justifyContent:'flex-end'}}>
                                     <Button variant='outlined' sx={{width:'10rem'}}
                                         onClick={()=>{
-                                            setModalOpen(true);
                                             setTarget(data);
                                             if(data.questionType === "객관식"){
                                                 setChoiceModalOpen(true);
+                                            }else{
+                                                setModalOpen(true);
                                             }
                                             }}>수정</Button>
                                     <Button variant='outlined' sx={{width:'10rem'}} onClick={()=>{onDelete(data)}}>삭제</Button>
