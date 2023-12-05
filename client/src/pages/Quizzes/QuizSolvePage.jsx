@@ -27,22 +27,35 @@ export default function QuizSolvePage() {
 
     function onChangeChoiceAnswer(event, index, questionId){
         //현재 질문 관련 모든 체크 박스 확인, 선택 옵션을 배열에 추가
-        const selectedOptions = quiz.Questions[index].Choices
-        .filter((choice, choiceIdx) => event.target.checked && event.target.value === choice.optionText)
-        .map((choice) => choice.optionText);
-
-        
-        if(newAnswers[index]){
-            newAnswers[index].answer = [...newAnswers[index].answer, ...selectedOptions];
+        // const selectedOptions = quiz.Questions[index].Choices
+        // .filter((choice, choiceIdx) => event.target.checked && event.target.value === choice.optionText)
+        // .map((choice) => choice.optionText);
+        if(event.target.checked){
+            if(newAnswers[index]){
+                newAnswers[index].answer = [...newAnswers[index].answer, event.target.value];
+            }else{
+                newAnswers[index] = {questionId: questionId, answer: [event.target.value]};
+            }
+            setAnswers(newAnswers);    
         }else{
-            newAnswers[index] = {questionId: questionId, answer: selectedOptions};
+            newAnswers[index].answer = newAnswers[index].answer.filter(answer=>answer !== event.target.value);
         }
-        setAnswers(newAnswers);
     }
 
     function onSubmit(){
-        axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/studentAnswer?quizId=${quizId}`,answers, { withCredentials: true }).then(()=>{
+        const submitData = [...answers];
 
+        submitData.map(answer=>{
+            if(answer.answer instanceof Array){
+                let answerToString = "";
+                answer.answer.map(data=>{
+                    answerToString += data +","
+                })
+                answer.answer = answerToString.slice(0,-1);
+            }
+        })
+
+        axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/studentAnswer?quizId=${quizId}`,answers, { withCredentials: true }).then(()=>{
             alert('제출되었습니다!');
             window.close();
         }).catch(err => {

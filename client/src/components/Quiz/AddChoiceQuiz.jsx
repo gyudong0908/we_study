@@ -41,10 +41,15 @@ export default function AddChoiceQuiz({close, save, index}){
     }, [answer]);
 
     function onSave(){
+        let answerToString = ''
+        answer.map(item=>{
+          answerToString += item + ","
+        })
+        console.log(answerToString)
         const saveData = {
             title: title,
             score: score,
-            answer: answer,
+            answer: answerToString.slice(0,-1),
             optionText: optionList,
             questionType: "객관식",
             reason: reason,
