@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Stack, } from '@mui/material';
-import AdbIcon from '@mui/icons-material/Adb';
+import { AppBar, Toolbar, Typography, Stack, Button } from '@mui/material';
 import loginImg from '../../public/images/web_neutral_sq_SI@1x.png';
 import logo from '../../public/images/logo.png';
 

@@ -5,23 +5,57 @@ import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
 export default function MemoView({ selectMemo, moveList, moveEdit }) {
     return (
-        <Stack sx={{ margin: '4px' }}>
+        <Stack>
+        <Stack direction='row' sx={{mb:1, alignItems:'center'}}>
             <ArrowBackRoundedIcon onClick={moveList} sx={{ cursor: 'pointer' }} />
-            <Stack direction='row' justifyContent='space-between'>
-                <Typography sx={{ marginBottom: 2 }}>제목: {selectMemo.title}</Typography>
-                <Typography>{dayjs(selectMemo.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
+            <Stack sx={{
+                    alignItems:'center',
+                    justifyContent:'center',
+                    width:'17rem',
+                }}>
+                    <Typography variant="h5">📝</Typography> 
             </Stack>
-            <TextField
-                multiline
-                focused
-                rows={10}
-                InputProps={{
-                    readOnly: true,
-                }}
-                value={selectMemo.content}
-                variant="standard"
-            ></TextField>
-            <Button onClick={() => { moveEdit(selectMemo) }}>수정하기</Button>
+            <Typography variant='caption'>{dayjs(selectMemo.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
+        </Stack>
+        <Stack sx={{
+                overflowY:'auto',
+                height:'230px',
+                padding:'0.5rem',
+                // backgroundColor:'grey'
+            }}>
+            <Typography sx={{
+                mb:2,
+                fontSize:'1.2rem',
+                color:'navy',
+                wordBreak:'break-all',
+                overflowWrap:'break-word',
+                }}>
+                {selectMemo.title}</Typography>
+            <Typography sx={{
+                width:'100%',
+                wordBreak:'break-all',
+                whiteSpace:'pre-line',
+                overflowWrap:'break-word',
+                overflowY:'auto',
+                }}>
+                {selectMemo.content}</Typography>
+            <Stack sx={{
+                    width:'100%',
+                    justifyContent:'center',
+                    alignItems:'center',
+                }}>
+                <Button 
+                    variant='outlined'
+                    onClick={() => { moveEdit(selectMemo) }}
+                    sx={{
+                        position: 'absolute',
+                        bottom: 13,
+                        width:'6rem',
+                        height:'2.5rem',
+                    }}
+                >수정하기</Button>
+            </Stack>
+        </Stack>
         </Stack>
     )
 }

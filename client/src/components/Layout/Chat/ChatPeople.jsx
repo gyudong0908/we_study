@@ -12,12 +12,11 @@ export default function ChatPeople(props) {
             {props.data.map(data => {
                 return (
                     <Grid container onClick={() => { props.onClickHandler(data.ClassChat.id, data.id, data.ClassChat.title) }} sx={{ cursor: 'pointer', '&:hover': { background: 'rgba(0, 0, 0, 0.1)' } }} >
-                        {/* 이 밑은 지금은 icon으로 넣었지만 나중에 profile사진으로 넣을 수 있음 */}
-                        <Grid item sx={{ marginLeft: '10px', justifyContent:'center', alignItems:'center' }} xs={1}>
-                            <SchoolRoundedIcon />
+                        <Grid item sx={{ margin:'10px', justifyContent:'center', alignItems:'center' }} xs={1}>
+                            <SchoolRoundedIcon size='large'/>
                         </Grid>
-                        <Grid item xs={10} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography variant='h5' sx={{ alignItems: 'center', margin:'1rem'}}>{data.ClassChat.title}</Typography>
+                        <Grid item xs={10} sx={{ display: 'flex', justifyContent: 'space-between', alignItems:'center' }}>
+                            <Typography variant='h6'>{data.ClassChat.title}</Typography>
                         </Grid >
                     </Grid>
                 )

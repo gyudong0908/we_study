@@ -1,9 +1,9 @@
 import io from "socket.io-client";
-import { TextField, Grid, Button, Typography, Box, Stack, Avatar } from '@mui/material';
+import { Button, Typography, Box, Stack, Avatar, InputBase } from '@mui/material';
 import { useRef, useEffect, useState } from "react";
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { useSelector } from 'react-redux';
-import ModeCommentRoundedIcon from '@mui/icons-material/ModeCommentRounded';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
@@ -11,8 +11,19 @@ function RightChat({ content, createdAt }) {
     return (
         <Stack>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', marginBottom: '10px' }}>
-                <Typography variant='body2' sx={{ marginTop: '12px' }}>{dayjs(createdAt).format('h:mm:ss A')}</Typography>
-                <Typography sx={{ backgroundColor: 'yellow', margin: '3px', border: '1px solid black', maxWidth: 270, borderBottomLeftRadius: '8px', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', padding: '3px' }} variant='body1'>{content}</Typography>
+                <Typography variant='caption' sx={{ marginTop: '12px' }}>{dayjs(createdAt).format('h:mmA')}</Typography>
+                <Typography sx={{ 
+                    boxShadow: '0 2px 3px rgba(0, 0, 0, 0.2)',
+                    backgroundColor:'#00a5ff',
+                    margin: '1px 1px 1px 5px', 
+                    maxWidth: 270, 
+                    borderBottomLeftRadius: '8px', 
+                    borderTopLeftRadius: '8px', 
+                    borderTopRightRadius: '8px', 
+                    padding: '0.5rem',
+                    color:'navy'
+                    }} 
+                    variant='body1'>{content}</Typography>
             </Box>
         </Stack>
     )
@@ -21,14 +32,25 @@ function RightChat({ content, createdAt }) {
 function LeftChat({ content, user, createdAt }) {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', marginBottom: '10px' }}>
-            <Avatar sx={{ height: 50, width: 50 }} src={user.downloadPath} />
+            <Avatar sx={{ height: '2rem', width: '2rem', marginBottom:'10px' }} src={user.downloadPath} />
             <Stack>
-                <Typography>{user.nickName}</Typography>
                 <Typography sx={{
-                     borderBottomRightRadius: '8px', borderTopLeftRadius: '8px', borderTopRightRadius: '8px', padding: '3px',
-                     backgroundColor: 'yellow', margin: '3px', border: '1px solid black',  maxWidth: 270 }} variant='body1'>{content}</Typography>
+                    ml:'5px'
+                }}
+                variant="caption">{user.nickName}</Typography>
+                <Typography sx={{
+                    borderBottomRightRadius: '8px',
+                    borderTopRightRadius: '8px',
+                    borderBottomLeftRadius: '8px',
+                    padding: '0.5rem',
+                    boxShadow: '0 2px 3px rgba(0, 0, 0, 0.2)',
+                    backgroundColor:'white',
+                    margin: '3px 5px 1px 5px', 
+                    maxWidth: 270 
+                }} 
+                variant='body1'>{content}</Typography>
             </Stack>
-            <Typography variant='body2' sx={{ marginTop: '12px' }}>{dayjs(createdAt).format('h:mm:ss A')}</Typography>
+            <Typography variant='caption' sx={{ marginTop: '12px' }}>{dayjs(createdAt).format('h:mm A')}</Typography>
         </Box>
     )
 }
@@ -76,12 +98,26 @@ export default function ChatDisplay({ rewind, value, classChatId, chatTitle, cha
         <>
             {
                 isLoading ?
-                    <>
-                        <ArrowBackRoundedIcon sx={{ cursor: 'pointer' }} onClick={() => { rewind(); }} />
-                        <Typography variant="h4">{chatTitle}</Typography>
+                    <Stack>
+                        <Stack direction='row' sx={{mb:2}}>
+                            <ArrowBackRoundedIcon sx={{ cursor: 'pointer',  }} onClick={() => { rewind(); }} />
+                            <Stack sx={{
+                                alignItems:'center',
+                                justifyContent:'center',
+                                width:'21rem'}}>
+                                <Typography variant="h5" sx={{fontWeight:'bold', }}>{chatTitle}</Typography> 
+                            </Stack>
+                        </Stack>
+                            
                         <Stack
                             ref={stackRef}
-                            sx={{ overflowY: 'auto', height: '330px', marginBottom: `10px`, borderBottom: '1px solid black' }}>
+                            sx={{ 
+                                overflowY: 'auto',
+                                height: '350px',
+                                mb:1,
+                                padding:'0.5rem',
+                                overflowWrap:'break-word',
+                            }}>
                             {
                                 contents.map(data => {
                                     return (
@@ -97,24 +133,38 @@ export default function ChatDisplay({ rewind, value, classChatId, chatTitle, cha
                             }
                         </Stack>
                         <Box display='flex' alignItems='center'>
-                            <Box flex={1}>
-                                <TextField
-                                    hiddenLabel
-                                    id="filled-hidden-label-small"
+                            <Stack
+                                sx={{
+                                    width:'300px',
+                                    height:'6rem',
+                                    whiteSpace:'pre-line',
+                                    overflowY:'auto',
+                                    wordBreak:'break-all',
+                                    mr:1
+                                }}
+                            >
+                                <InputBase
                                     placeholder="입력하세요"
-                                    variant="filled"
-                                    size="small"
                                     onChange={(e) => { setSendData(e.target.value) }}
                                     value={sendData}
-                                    sx={{ width: '100%' }}
-                                    onKeyUp={(e) => { if (e.key === 'Enter') { send() } }}
+                                    onKeyPress={(e) => {if (e.key === 'Enter') { send() } }}
+                                    fullWidth
+                                    multiline
                                 />
-                            </Box>
-                            <Box>
-                                <Button variant="contained" color="success" onClick={send}>보내기</Button>
-                            </Box>
+                            </Stack>
+                            <Button
+                                variant="outlined"
+                                onClick={send}
+                                sx={{
+                                    height:"3rem",
+                                    width:'3rem',
+                                    justifyContent:'center',
+                                    alignItems:'center',
+                                }}>
+                                <SendRoundedIcon />
+                            </Button>
                         </Box >
-                    </> : null
+                    </Stack> : null
             }
         </>
     )

@@ -66,13 +66,21 @@ export default function Memo({ closeMemo }) {
             flexShrink: 0,
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
             position: 'fixed',
-            bottom: 0,
-            right: 0,
+            bottom: 10,
+            right: 10,
             background: '#b3e5fc',
-            borderRadius: '20px',
-            padding: '10px'
+            borderRadius: '10px',
+            padding: '15px',
+            zIndex: (theme) => theme.zIndex.drawer +1
         }}>
-            <CloseIcon sx={{ position: 'absolute', right: 0, cursor: 'pointer' }} onClick={closeMemo}></CloseIcon>
+            <Stack sx={{display:'inline-block', textAlign:'right'}}>
+                <CloseIcon sx={{
+                    color:'black',
+                    cursor: 'pointer',
+                    '&:hover': { transform: 'scale(1.1)' },
+                    }} onClick={closeMemo} />
+            </Stack>
+            
 
             {(state === 'list') &&
                 (

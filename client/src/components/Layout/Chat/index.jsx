@@ -2,7 +2,7 @@ import * as React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import ChatPeople from './ChatPeople';
 import ChatDisplay from './ChatDisplay';
-import { Button, styled, Typography, Box, Stack } from '@mui/material';
+import { Button, styled, Typography, Box, Stack, Divider } from '@mui/material';
 import axios from 'axios';
 import io from "socket.io-client";
 
@@ -55,18 +55,20 @@ export default function Chat({ closeChat }) {
   return (
     <Stack sx={{
       width: 400,
-      height: 500,
+      height: 550,
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
       position: 'fixed',
-      bottom: 0,
-      right: 0,
+      bottom: 10,
+      right: 10,
       background: 'white',
+      padding:'15px',
+      borderRadius:'10px',
+      zIndex: (theme) => theme.zIndex.drawer +1
     }}>
       <Stack>
-        <Stack sx={{ textAlign: 'right', display: 'inline-block' }}>
+        <Stack sx={{ textAlign: 'right', display: 'inline-block', }}>
           <CloseIcon onClick={() => { closeChat(); socket.disconnect(); }} sx={{
             cursor: 'pointer',
-            margin: '10px',
             color: 'black',
             '&:hover': { transform: 'scale(1.1)' },
           }} />
@@ -74,10 +76,16 @@ export default function Chat({ closeChat }) {
         {
           chatId !== null ? <ChatDisplay rewind={rewind} value={value} classChatId={chatId} chatTitle={chatTitle} chatUserId={chatUserId} socket={socket} /> : (
             <div>
-              <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
-                <TabButton onClick={() => { setValue(0) }} isActive={value === 0}>
-                  <Typography variant='h5'>클래스</Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '5px', }}>
+                <TabButton sx={{
+                  border:'0px',
+                  borderRadius:'10px',
+                }}
+                // onClick={() => { setValue(0) }} isActive={value === 0}
+                >
+                  <Typography variant='h5' sx={{color:'#0091ea', fontWeight:'bold'}}>💬 클래스 채팅 💬</Typography>
                 </TabButton>
+                
                 {/* <TabButton onClick={() => { setValue(1) }} isActive={value === 1}>
                   <Typography variant='h5'>개인</Typography>
                 </TabButton> */}
