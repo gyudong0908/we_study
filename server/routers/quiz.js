@@ -161,6 +161,47 @@ router.post('/question/choice', function (req, res) {
     })
 })
 
+router.put('/question/choice', function (req, res) {
+    const questionId = req.query.questionId;
+    const optionText = req.body.optionText;
+    models.Question.findByPk(questionId, {
+        include: [{
+            model: models.Quiz,
+            attributes: ['startDateTime']
+        }]
+    }).then((question) => {
+        if (new Date(question.Quiz.startDateTime).getTime() < new Date().getTime()) {
+            res.status(527).send('퀴즈 수정시간이 오버되었습니다');
+            return
+        }
+        models.Question.update(req.body, { where: { id: questionId } }).then(() => {
+            models.Choice.destroy({
+                where:{
+                    questionId: questionId
+                }
+            }).then(()=>{
+                const modifiedOptions = optionText.map(option => ({ ...option, questionId: question.id }));
+                models.Choice.bulkCreate(modifiedOptions).then(()=>{
+                    res.sendStatus(200);
+                }).catch(err=>{
+                    console.log(err);
+                    res.status(500).send('Choice 생성 오류');
+                })
+            }).catch(err=>{
+                console.log(err)
+                res.status(500).send('Choice 삭제 오류');
+            })
+        }).catch(err => {
+            console.log(err);
+            res.status(500).send('퀴즈 수정 에러 발생');
+        })
+
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send('퀴즈 시작 시간 조회 오류')
+    })
+})
+
 router.put('/choice', function (req, res) {
     const choiceId = req.query.choiceId;
     models.Choice.update(req.body, { where: { id: choiceId } }).then(() => {
@@ -236,8 +277,7 @@ router.post('/studentAnswer', function (req, res) {
                             })
                         }  
                         }
-                    }
-                
+                    }                
                 res.sendStatus(200);
             }).catch(err => {
                 console.log(err);
@@ -303,8 +343,9 @@ router.get('/studentAnswers', function (req, res) {
                 }]
             }
         ],
-        group: ['id', 'Questions.StudentAnswers.User.id']
+        group: ['Quiz.id', 'Questions.StudentAnswers.User.id']
     }).then((quiz) => {
+        console.log(quiz)
         res.status(200).send(quiz);
     }).catch(err => {
         console.log(err);

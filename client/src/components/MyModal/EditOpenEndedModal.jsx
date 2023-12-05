@@ -16,10 +16,10 @@ const style = {
 };
 
 function EditOpendEndedModal({open, handleClose, target, editQuestion,}) {
-  const [title, setTitle] = useState('');
-  const [score, setScore] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [reason, setReason] = useState('');
+  const [title, setTitle] = useState(target.title);
+  const [score, setScore] = useState(target.score);
+  const [answer, setAnswer] = useState(target.answer);
+  const [reason, setReason] = useState(target.reason);
 
   function onEdit() {
     if (title !== '' && answer !== '') {
@@ -48,29 +48,29 @@ function EditOpendEndedModal({open, handleClose, target, editQuestion,}) {
                           endAdornment: '점',
                       }}
                       sx={{width:'15rem'}}
-                      defaultValue={target.score}
-                      // value={target.score}
+                      // defaultValue={target.score}
+                      value={score}
                   />
               </Stack>
               <TextField id="questionField" label="문제" variant="outlined" placeholder="문제를 입력하세요"
                       onChange={(e)=>{setTitle(e.target.value)}} 
-                      // value={title}
-                      defaultValue={target.title}
+                      value={title}
+                      // defaultValue={target.title}
                       multiline
                       rows={3}
                       sx={{wordBreak:'keep-all', whiteSpace: 'pre-line' }}
                   />
               <TextField id="outlined-basic" label="정답" variant="outlined"  placeholder="정답을 입력하세요" 
                   onChange={(e)=>{setAnswer(e.target.value)}}
-                  // value={answer}
-                  defaultValue={target.answer}
+                  value={answer}
+                  // defaultValue={target.answer}
                   multiline
                   rows={3}
               />
               <TextField id="outlined-basic" label="정답의 근거" variant="outlined"  placeholder="정답의 근거를 입력하세요" 
                   onChange={(e)=>{setReason(e.target.value)}}
-                  // value={reason}
-                  defaultValue={target.reason}
+                  value={reason}
+                  // defaultValue={target.reason}
                   multiline
                   rows={3}
                   sx={{wordBreak:'keep-all', whiteSpace: 'pre-line' }}

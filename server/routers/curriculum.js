@@ -21,7 +21,8 @@ router.get('/curriculums', function (req, res) {
         raw: true,
         where: {
             classId: classId,
-        }
+        },
+        order: [[[sequelize.literal("Curriculum.title = '기타'"), 'ASC']]]
     }).then((curriculums => {
         res.status(200).send(curriculums);
     })).catch(err => {

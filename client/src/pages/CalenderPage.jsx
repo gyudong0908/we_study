@@ -15,11 +15,10 @@ export default function CalenderPage() {
         const workResponse = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/works/user`, { withCredentials: true });
         const quizResponse = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/quizzes/user`, { withCredentials: true });
         const classesResponse = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/user/classes`, { withCredentials: true });
-        console.log(workResponse.data)
+        const colorList = ['#C2FFB8','#E8887A','#FFC873','#FFF966','#6AE8DC','#C2A3FF','#FF99B3']
 
         let items = [];
         let calendars = [];
-        // let classIds = [];
         workResponse.data.map((data, idx) => {
             items.push({
                 id: idx,
@@ -30,7 +29,7 @@ export default function CalenderPage() {
                 isAllday: true,
                 category: 'allday',
                 isReadOnly: true,
-                color: 'white',
+                color: 'black',
                 // backgroundColor: colorCode,
                 // borderColor: 'none',
                 customStyle: {
@@ -49,9 +48,9 @@ export default function CalenderPage() {
                 start: data['Quizzes.startDateTime'],
                 end: data['Quizzes.dueDateTime'],
                 isAllday: true,
-                category: 'allday',
+                category: 'task',
                 isReadOnly: true,
-                color: 'white',
+                color: 'black',
                 // backgroundColor: colorCode,
                 // borderColor: 'none',
                 customStyle: {
@@ -62,8 +61,8 @@ export default function CalenderPage() {
                 }
             })
         })
-        classesResponse.data.map(data => {
-            let colorCode = "#" + Math.round(Math.random() * 0xffffff).toString(16)
+        classesResponse.data.map((data,idx) => {
+            const colorCode = colorList[idx % 7]
             calendars.push({
                 id: data.id,
                 name: data.title,
@@ -146,8 +145,8 @@ export default function CalenderPage() {
             // marginRight: '50px',
             // marginBottom: '150px',
             marginTop:'115px',
-            marginLeft:'20rem',
-            marginRight:'10rem',
+            marginLeft:'30rem',
+            marginRight:'20rem',
             marginBottom:'10rem'
         }}
         >
@@ -162,7 +161,7 @@ export default function CalenderPage() {
 
             <Calendar
                 ref={calendarRef}
-                height="730px"
+                height="630px"                
                 calendars={calendarData}
                 disableDblClick={true}
                 disableClick={true}
@@ -188,7 +187,7 @@ export default function CalenderPage() {
                     // visibleWeeksCount: 1, // 보고 싶은 주의 수 정하기
                     // isAlways6Weeks: true,
                     // workweek: true, // 주말 빼기
-                    visibleEventCount: 2, // 보고 싶은 이벤수 정하기
+                    visibleEventCount: 1, // 보고 싶은 이벤수 정하기
                 }}
             />
         </Box>
