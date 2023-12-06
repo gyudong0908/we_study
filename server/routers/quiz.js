@@ -252,6 +252,8 @@ router.post('/studentAnswer', function (req, res) {
                         const studentAnswerArr = studentAnswer.answer.split(',');
                         questionAnswerArr.sort();
                         studentAnswerArr.sort();
+                        console.log(questionAnswerArr)
+                        console.log(studentAnswerArr)
                         if (questionAnswerArr.toString() == studentAnswerArr.toString()) {
                             models.StudentAnswer.update({ check: true }, { where: { id: studentAnswer.id } }).catch(err => {
                                 console.log(err);

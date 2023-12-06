@@ -43,7 +43,7 @@ export default function AddChoiceQuiz({close, save, index}){
     function onSave(){
         let answerToString = ''
         answer.map(item=>{
-          answerToString += item + ","
+          answerToString += item.trim() + ","
         })
         console.log(answerToString)
         const saveData = {
