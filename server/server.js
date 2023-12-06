@@ -19,10 +19,19 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors({
-  origin: process.env.frontAddress, // 클라이언트 애플리케이션의 도메인으로 변경
-  credentials: true, // 'include' 모드를 사용할 때 credentials 옵션 설정
-}));
+
+const allowOrigins = [process.env.frontAddress]
+const corsOptions = {
+  credentials: true,
+  origin: function(origin, callback) {
+    if (allowOrigins.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+app.use(cors(corsOptions));
 
 // 미들웨어: 모든 URL에 대한 액세스를 차단
 app.use((req, res, next) => {
