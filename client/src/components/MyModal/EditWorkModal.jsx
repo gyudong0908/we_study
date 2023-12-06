@@ -5,6 +5,7 @@ import axios from 'axios';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
 
 const style = {
   position: 'absolute',
@@ -21,7 +22,7 @@ const style = {
 function EditWorkModal({ onClose, target, works, setWorks}) {
   const [editTitle, setEditTitle] = useState(target.title);
   const [editDescription, setEditDescription] = useState(target.description);
-  const [editDueDateTime, setEditDueDateTime] = useState();
+  const [editDueDateTime, setEditDueDateTime] = useState(dayjs(target.dueDateTime));
 
   const UpdateWork = () => {
     const updateData = {
