@@ -6,7 +6,7 @@ const socketModule = require('./websocket/websocket.js');
 const models = require("./models/index.js");
 const dotenv = require('dotenv').config();
 const cors = require('cors');
-console.log(process.env.callback)
+
 // 세션 미들웨어 설정
 app.use(session({
   secret: process.env.sessionSecret, // 세션 암호화에 사용될 키 (필요한 경우 변경)
@@ -31,9 +31,8 @@ app.use(passport.session());
 //     }
 //   }
 // }
-// app.use(cors(corsOptions));
 app.use(cors({
-  origin: [`${process.env.frontAddress}`], // 클라이언트 애플리케이션의 도메인으로 변경
+  origin: `${process.env.frontAddress}`, // 클라이언트 애플리케이션의 도메인으로 변경
   credentials: true, // 'include' 모드를 사용할 때 credentials 옵션 설정
 }));
 
