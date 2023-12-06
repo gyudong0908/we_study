@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Stack, Button } from '@mui/material';
 import loginImg from '../../public/images/web_neutral_sq_SI@1x.png';
 import logo from '../../public/images/logo.png';
+import serviceInfo1 from '../../public/images/LP1.png';
+import serviceInfo2 from '../../public/images/LP2.png';
+import serviceInfo3 from '../../public/images/LP3.png';
+import serviceInfo4 from '../../public/images/LP4.png';
 
 function LandingPage() {
     const handleClick = () => {
@@ -76,17 +80,17 @@ function LandingPage() {
 };
 
 const body = (
-    <Stack sx={{
+    <Stack 
+        spacing={10}
+        sx={{
         direction: 'column',
-        spacing: 'px',
-        marginTop: '100px',
-        padding: '0px 24px',
+        marginTop: '7rem',
+        padding: '0px 20rem',
     }}>
-        동규님께 이실직고 :
-        지난주 목요일의 야심찼던 포부가 무색하게 이번 주말에는 프로그래밍은 거의 하지 않았읍니다.
-        새벽에 열심히 하려고 했는데 지금 너무 졸려서 자야할 것 같읍니다^_ㅠ
-        이번주 다시 열심히 해보도록 하겠읍니다 아자아자 파..파이팅(눈치)<br></br>
-        &nbsp;&nbsp;&nbsp;댓글: 아닙니다... 제가 더 열심히 하면 되죠... ui는 망가질거 같지만 힘내 볼게요 ㅠㅠㅠㅠ(장난)
+        <img src={serviceInfo1} alt="serviceInfo1" style={{ maxWidth: '100%', height: 'auto' }} />
+        <img src={serviceInfo2} alt="serviceInfo2" style={{ maxWidth: '100%', height: 'auto' }} />
+        <img src={serviceInfo3} alt="serviceInfo3" style={{ maxWidth: '100%', height: 'auto' }} />
+        <img src={serviceInfo4} alt="serviceInfo4" style={{ maxWidth: '100%', height: 'auto' }} />
     </Stack>
 );
 
