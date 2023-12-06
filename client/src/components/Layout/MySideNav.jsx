@@ -14,11 +14,11 @@ function MySideNav() {
     const classDatas = useSelector((state) => state.classCards);
     const user = useSelector((state) => state.userData);
 
-    const [timer, setTimer] = useState(0); // 위에 있는 타이머
+    const [timer, setTimer] = useState(0);
     const [timerRunning, setTimerRunning] = useState(false);
 
-    const [currentStudyTime, setCurrentStudyTime] = useState(0); // 아래에 있는 타이머
-    const [resetDisabled, setResetDisabled] = useState(false); // Reset 버튼 활성/비활성 상태
+    const [currentStudyTime, setCurrentStudyTime] = useState(0);
+    const [resetDisabled, setResetDisabled] = useState(false);
 
     const [startClicked, setStartClicked] = useState(false);
     const [stopDisabled, setStopDisabled] = useState(true);
@@ -35,25 +35,19 @@ function MySideNav() {
         return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
     };
 
-    // Reset 버튼을 눌렀을 때 실행되는 함수
     const handleResetTime = () => {
         setCurrentStudyTime((prevStudyTime) => prevStudyTime + timer);
         setTimer(0);
         sessionStorage.removeItem('startTime');
         sessionStorage.removeItem('timer');
-
-
-
-
     };
-
 
     useEffect(() => {
         const startTimeFromStorage = sessionStorage.getItem('startTime');
         const storedTimer = sessionStorage.getItem('timer');
 
         if (startTimeFromStorage !== null) {
-            const currentTime = new Date().getTime(); // 현재 시간을 가져옵니다.
+            const currentTime = new Date().getTime();
             const timeDifferenceInSeconds = Math.floor((currentTime - startTimeFromStorage) / 1000);
 
             setStartClicked(true);
@@ -77,7 +71,7 @@ function MySideNav() {
             }, 1000);
         }
         else {
-            clearInterval(intervalId); // 타이머가 멈추면 interval을 지웁니다.
+            clearInterval(intervalId);
         }
 
         return () => clearInterval(intervalId);
@@ -109,18 +103,15 @@ function MySideNav() {
         })
     }
 
-
     const handleStartTime = () => {
         const storedTimer = sessionStorage.getItem('timer');
-        const startTime = new Date(); // 현재 시각을 가져옵니다.
-
+        const startTime = new Date();
         const timeDifference = storedTimer !== null ? parseInt(storedTimer, 10) : 0;
         sessionStorage.setItem('startTime', startTime.getTime() - (timeDifference * 1000));
 
         setStartClicked(true);
         setStopDisabled(false);
         setTimerRunning(true);
-
 
         axios.post(`http://localhost:8081/rank`, { startTime: startTime }, { withCredentials: true })
             .then((response) => {
@@ -140,7 +131,6 @@ function MySideNav() {
         setStartClicked(false);
         setStopDisabled(true);
         setTimerRunning(false);
-
 
         axios.post(`http://localhost:8081/rank/stop`, { stopTime: stopTime }, { withCredentials: true })
             .then((response) => {
@@ -175,14 +165,13 @@ function MySideNav() {
                         <Stack flexDirection='row'>
                             <ListItemButton onClick={() => {
                                 handleStartTime();
-
                             }}
                                 disabled={startClicked}
                             >Start</ListItemButton>
 
                             <ListItemButton
                                 onClick={handleResetTime}
-                                disabled={false}  //Reset 버튼 항상 활성화
+                                disabled={startClicked}
                             >
                                 Reset
                             </ListItemButton>
@@ -191,18 +180,13 @@ function MySideNav() {
                             <ListItemButton
                                 onClick={() => {
                                     handleStopTime();
-
                                 }}
                                 disabled={stopDisabled}
-
                             >Stop</ListItemButton>
                         </Stack>
 
-
-
-
                         <Typography variant="body1" gutterBottom sx={{
-                            mt:5, color:'#0091ea', fontWeight:'bold'
+                            mt: 5, color: '#0091ea', fontWeight: 'bold'
                         }}>
                             오늘의 누적 학습 시간
                         </Typography>
@@ -210,7 +194,6 @@ function MySideNav() {
                         <Typography variant="h4" gutterBottom>
                             {formatTime(currentStudyTime)}
                         </Typography>
-
                     </ListItem>
                 </List>
                 <Divider />
