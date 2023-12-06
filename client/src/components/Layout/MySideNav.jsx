@@ -113,7 +113,7 @@ function MySideNav() {
         setStopDisabled(false);
         setTimerRunning(true);
 
-        axios.post(`http://localhost:8081/rank`, { startTime: startTime }, { withCredentials: true })
+        axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/rank`, { startTime: startTime }, { withCredentials: true })
             .then((response) => {
                 console.log('시작 시간이 업데이트되었습니다.');
             })
@@ -132,7 +132,7 @@ function MySideNav() {
         setStopDisabled(true);
         setTimerRunning(false);
 
-        axios.post(`http://localhost:8081/rank/stop`, { stopTime: stopTime }, { withCredentials: true })
+        axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/rank/stop`, { stopTime: stopTime }, { withCredentials: true })
             .then((response) => {
                 console.log('종료 시간이 업데이트되었습니다.');
                 console.log(response.data)
