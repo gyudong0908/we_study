@@ -1,12 +1,13 @@
 const { Server } = require('socket.io');
 const models = require('../models');
+const dotenv = require('dotenv').config();
 module.exports = (httpServer) => {
   const messageQueue = [];
 
 
   const io = new Server(httpServer, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: process.env.frontAddress,
       methods: ["GET", "POST"]
     }
   });

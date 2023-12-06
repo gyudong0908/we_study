@@ -12,7 +12,7 @@ export default function Chat({ closeChat }) {
   const [chatTitle, setChatTitle] = React.useState('');
   const [chatUserId, setChatUserId] = React.useState();
   const [chatUsers, setChatUsers] = React.useState([]);
-  const socket = io.connect("http://localhost:8081");
+  const socket = io.connect(import.meta.env.VITE_SERVER_ADDRESS);
 
   const TabButton = styled(Button)(({ theme, isActive }) => ({
     margin: '10px',
