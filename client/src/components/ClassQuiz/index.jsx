@@ -24,7 +24,7 @@ export default function ClassQuiz({ isTeacher }) {
     axios.post(`${import.meta.env.VITE_SERVER_ADDRESS}/quiz?classId=${classId}`, target, { withCredentials: true }).then((response) => {
       setQuizzes([...quizzes, response.data]);
       // 새 창 열기
-      const newWindow = window.open(`http://localhost:5173/mypage/quiz/${response.data.id}`, '_blank');
+      const newWindow = window.open(`/mypage/quiz/${response.data.id}`, '_blank');
       if (newWindow) {
         // 새 창이 정상적으로 열렸을 때 처리
         // 모달 닫기
