@@ -12,7 +12,7 @@ router.post('/create/submit',upload.single('file'), function (req, res) {
     let fileData = {}
     if (req.file) {
         const fileName = req.file.filename;
-        const downloadPath = `${req.protocol}://${req.hostname}:${8081}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
+        const downloadPath = `${req.protocol}://${req.hostname}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
         const filePath = req.file.path;
         fileData = { filePath: filePath, downloadPath: downloadPath, fileName: fileName };
     }
@@ -74,7 +74,7 @@ router.put('/submit',upload.single('file'), function (req, res) {
     if (req.file) {
         console.log()
         const fileName = req.file.filename;
-        const downloadPath = `${req.protocol}://${req.hostname}:${8081}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
+        const downloadPath = `${req.protocol}://${req.hostname}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
         const filePath = req.file.path;        
         fileData = { filePath: filePath, downloadPath: downloadPath, fileName: fileName };
     }
