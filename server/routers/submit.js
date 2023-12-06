@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models');
 const upload = require('../config/multerConfig.js');
+const dotenv = require('dotenv').config();
 const fs = require('fs');
 
 router.use(express.json());
@@ -12,7 +13,7 @@ router.post('/create/submit',upload.single('file'), function (req, res) {
     let fileData = {}
     if (req.file) {
         const fileName = req.file.filename;
-        const downloadPath = `${req.protocol}://${req.hostname}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
+        const downloadPath = `${process.env.protocol}://${req.hostname}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
         const filePath = req.file.path;
         fileData = { filePath: filePath, downloadPath: downloadPath, fileName: fileName };
     }
@@ -74,7 +75,7 @@ router.put('/submit',upload.single('file'), function (req, res) {
     if (req.file) {
         console.log()
         const fileName = req.file.filename;
-        const downloadPath = `${req.protocol}://${req.hostname}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
+        const downloadPath = `${process.env.protocol}://${req.hostname}/download/submit/${userId}/${encodeURIComponent(fileName)}`;
         const filePath = req.file.path;        
         fileData = { filePath: filePath, downloadPath: downloadPath, fileName: fileName };
     }
