@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import dayjs from 'dayjs';
 
 
-export default function StudentAnswer(){
+export default function StudentAnswerTeacher(){
     const {quizId, studentId} = useParams();
     const [quiz, setQuiz] = useState({});
     const [questions, setQuestions] = useState([]);
@@ -19,7 +19,15 @@ export default function StudentAnswer(){
             console.log(err)
         })    
     }
-    
+    function editAnswer(questionId, target){
+        console.log(target)
+        axios.put(`${import.meta.env.VITE_SERVER_ADDRESS}/studentAnswer?answerId=${target.id}`,target ,{ withCredentials: true }).then(()=>{
+            setQuestions(questions.map(question=>(question.id === questionId? {...question, StudentAnswers:[target]}: question)));
+        }).catch(err=>{ 
+            console.log(err);
+        })
+    }
+
     function displayAnswer(data) {
         try {
           const answerArray = JSON.parse(data.answer.replace(/\\/g, ''));
@@ -142,6 +150,13 @@ export default function StudentAnswer(){
                                             </Stack>
                                             <Typography variant='subtitle1' sx={{wordBreak:'keep-all'}}>{displayAnswer(studentAnswer)}</Typography>
                                         </Stack>
+                                        <FormControlLabel
+                                            control={<Checkbox value={studentAnswer.check}
+                                            onChange={(e)=>{
+                                                editAnswer(question.id, {...studentAnswer, check:e.target.checked})}} />}
+                                            label="채점 수정" 
+                                            sx={{justifyContent:'flex-end'}}
+                                            />
                                     </>
                                 )
                             })

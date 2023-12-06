@@ -39,7 +39,7 @@ export default function QuizResultdAccordion({quiz}){
                                     {/* <TableCell component="th" scope="row" align="center">{user.nickName}</TableCell> */}
                                     <TableCell align="center"
                                         onClick={() => {
-                                            navigate(`/mypage/quiz/${quiz.id}/answer/${studentAnswer.User.id}`);
+                                            navigate(`/mypage/quiz/${quiz.id}/answer/teacher/${studentAnswer.User.id}`);
                                         }}
                                         sx={{
                                             align: 'center',

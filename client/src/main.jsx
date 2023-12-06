@@ -26,6 +26,7 @@ import QuizPage from './pages/Quizzes/QuizPage.jsx';
 import QuizSolvePage from './pages/Quizzes/QuizSolvePage.jsx';
 import StudentAnswer from './pages/Quizzes/StudentAnswerPage.jsx';
 import QuizResultsPage from './pages/Quizzes/QuizResultsPage.jsx';
+import StudentAnswerTeacher from './pages/Quizzes/StudentAnswerTeacherPage.jsx';
 
 import { initializeUserData } from './reducer/userdata.js';
 
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
       {
         path: 'quiz/:quizId/answer/:studentId',
         element: <StudentAnswer />
+      },
+      {
+        path: 'quiz/:quizId/answer/teacher/:studentId',
+        element: <StudentAnswerTeacher />
       },
       {
         path: 'quiz/results/:classId',
