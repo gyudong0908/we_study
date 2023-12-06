@@ -7,8 +7,7 @@ import dayjs from 'dayjs';
 
 export default function QuizGradeTable({ quizzes, setQuizzes }) {
   const [selectedUser, setSelectedUser] = useState('학생명');
-  const [selectedQuiz, setSelectedQuiz] = useState(null);
-  const [sumGrade, setSumgrade] = useState();
+  const [sumGrade, setSumgrade] = useState(0);
   let [count, setCount] = useState(0);
 
   let uniqueUsers = new Set(quizzes.map((quiz) => quiz.nick_name));
@@ -16,12 +15,13 @@ export default function QuizGradeTable({ quizzes, setQuizzes }) {
 
   React.useEffect(() => {
     let sum = 0;
+    let count = 0;
     quizzes.forEach((quiz) => {
       if (!selectedUser || selectedUser === "학생명") {
-        sum += quiz.grade;
+        sum += parseInt(quiz.grade);
         count += 1;
       } else if (selectedUser === quiz.nick_name) {
-        sum += quiz.grade;
+        sum += parseInt(quiz.grade);
         count += 1;
       }
     });
@@ -30,7 +30,6 @@ export default function QuizGradeTable({ quizzes, setQuizzes }) {
     setCount(count);
     
   }, [selectedUser]);
-  
   
   return (
     <Paper sx={{ width: '100%', overflow: 'auto' }}>

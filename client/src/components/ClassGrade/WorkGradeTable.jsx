@@ -37,12 +37,12 @@ export default function WorkGradeTable({ curriculums, setCurriculums }) {
     let count = 0;
 
     curriculums.map((curriculum) => {
-      if (selectedCurriculum && curriculum.title !== selectedCurriculum) {
+      if (selectedCurriculum && curriculum.title !== selectedCurriculum && selectedCurriculum !== '커리큘럼') {
         return null;
       }
       return curriculum.Works.map((work) =>
         work.Submits.map((submit) => {
-          if (!selectedUser) {
+          if (!selectedUser || selectedUser === '학생명') {
             sum += submit.grade;
             count +=1
           } else if (selectedUser === submit.User.nickName) {

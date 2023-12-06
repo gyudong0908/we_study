@@ -29,6 +29,7 @@ const ServerDay = (props) => {
 };
 
 const CircularProgressBar = ({ percentage }) => {
+  console.log(percentage)
   return (
     <div style={{ width: '11rem', height: '11rem' }}>
       <CircularProgressbar
@@ -48,6 +49,7 @@ const CircularProgressBar = ({ percentage }) => {
 
 export default function PrivateProgress() {
   const [highlightedDays, setHighlightedDays] = useState([]);
+  const [progress, setProgress] = useState({});
   const { classId } = useParams();
 
   function getAttendance() {
@@ -69,8 +71,20 @@ export default function PrivateProgress() {
       })
   }
 
+  async function getProgresss(){
+    try{
+      const progressWork = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/progress/private/work?classId=${classId}`, { withCredentials: true })
+      const progressQuiz = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/progress/private/quiz?classId=${classId}`, { withCredentials: true })
+      setProgress({totalSubmitCount: progressWork.data.totalSubmitCount, mySubmitCount: progressWork.data.mySubmitCount, totalQuizCount: progressQuiz.data.totalQuizCount, myQuizCount: progressQuiz.data.myQuizCount})
+    }catch(err){
+      console.log(err);
+    }
+  }
+  console.log(progress)
+// console.log(progress.totalSubmitCount / progress.mySubmitCount)
   useEffect(() => {
     getAttendance();
+    getProgresss();
   }, [])
 
   return (
@@ -103,11 +117,11 @@ export default function PrivateProgress() {
         </Stack >
         <Stack justifyContent={'center'} direction='column' spacing={5} alignItems='center'>
           <Typography variant='h5' fontWeight='bold'>[ 과제 제출률 ]</Typography>
-          <CircularProgressBar percentage={100}/>
+          <CircularProgressBar percentage={Math.floor((progress.mySubmitCount / progress.totalSubmitCount) *100) }/>
         </Stack>
         <Stack justifyContent={'center'} direction='column' spacing={5} alignItems='center'>
           <Typography variant='h5' fontWeight='bold'>[ 퀴즈 제출률 ]</Typography>
-          <CircularProgressBar percentage={80}/>
+          <CircularProgressBar percentage={Math.floor((progress.myQuizCount / progress.totalQuizCount)*100)}/>
         </Stack>
       </Stack>
     </Stack>

@@ -11,38 +11,14 @@ export default function ClassDashboard({ isTeacher }) {
   const [curriculums, setCurriculums] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { classId} = useParams();
-
-  const [attendances, setAttendances] = useState([]);
-  // function getAttendances() {
-  //   console.log(777777777777777)
-  //   axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/attendances?classId=${classId}`, { withCredentials: true 
-  //   }).then(data => {            
-  //     setAttendances(data.data);
-  //   }).catch(err => {
-  //     console.log(777777777777777)
-  //     console.log(err);
-  //   })
-  // }
-  console.log('attendances:',attendances);
-
-
-
   const [progress, setProgress] = useState([]);
-  // function getProgress() {
-  //   axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/progress?classId=${classId}`, { withCredentials: true }).then(data => {
-  //     setProgress(data.data);
-  //   }).catch(err => {
-  //     console.log(err);
-  //   })
-  // }
+
   async function fetchData() {
     try {
-      // 완료
       const progressWorkData = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/progress/work?classId=${classId}`, { withCredentials: true });
       const progressData = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/progress/quiz?classId=${classId}`, { withCredentials: true });
       const attendanceData = await axios.get(`${import.meta.env.VITE_SERVER_ADDRESS}/class/attendances?classId=${classId}`, { withCredentials: true });
-      setAttendances(attendanceData.data);
-      setProgress(progressWorkData.data.map((progressWorkData, idx)=>{return {id: progressData[idx].id, nickName: progressData[idx].nickName, countSubmits: progressWorkData.countSubmits, countQuiz:progressData[idx].countQuiz}}))
+      setProgress(progressWorkData.data.map((progressWorkData, idx)=>{return {id: progressData.data[idx].id, nickName: progressData.data[idx].nick_name, countSubmits: progressWorkData.countSubmits, countQuiz:progressData.data[idx].countQuiz, totalAttendance: attendanceData.data[idx].totalAttendance}}))
     } catch (err) {
       console.error(err);
     }
@@ -52,8 +28,6 @@ export default function ClassDashboard({ isTeacher }) {
   console.log('progress:',progress);
 
   useEffect(() => {
-    // getProgress(); 
-    // getAttendances(); 
     fetchData();
   }, [classId])
 
@@ -94,7 +68,7 @@ export default function ClassDashboard({ isTeacher }) {
           }
           {
             isTeacher && (
-              <StudyProgress progress={progress} setProgress={setProgress} attendances={attendances}/>
+              <StudyProgress progress={progress}/>
             )
           }
           <Stack sx={{ borderBottom: '1.5px solid black', mb: 2, mt: 5 }}>
