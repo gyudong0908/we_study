@@ -6,7 +6,7 @@ const socketModule = require('./websocket/websocket.js');
 const models = require("./models/index.js");
 const dotenv = require('dotenv').config();
 const cors = require('cors');
-
+console.log(process.env.callback)
 // 세션 미들웨어 설정
 app.use(session({
   secret: process.env.sessionSecret, // 세션 암호화에 사용될 키 (필요한 경우 변경)
