@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Stack, Button } from '@mui/material';
+import AdbIcon from '@mui/icons-material/Adb';
 import loginImg from '../../public/images/web_neutral_sq_SI@1x.png';
 import logo from '../../public/images/logo.png';
 import serviceInfo1 from '../../public/images/LP1.png';
@@ -29,9 +30,9 @@ function LandingPage() {
                 zIndex: (theme) => theme.zIndex.drawer + 1
             }}>
                 <Toolbar disableGutters width='100%'>
-                <Stack sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, width:'30px', height:'30px' }}>
-                    <img src={logo} alt="Logo" style={{ maxWidth: '100%', height: 'auto' }} />
-                </Stack>
+                    <Stack sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, width: '30px', height: '30px' }}>
+                        <img src={logo} alt="Logo" style={{ maxWidth: '100%', height: 'auto' }} />
+                    </Stack>
                     <Typography variant='h6' noWrap component={Link} to='/mypage' sx={{
                         mr: 2,
                         display: { xs: 'none', md: 'flex' },
@@ -39,15 +40,15 @@ function LandingPage() {
                         textDecoration: 'none',
                         justifyContent: 'center',
                         fontWeight: 700,
-                        background : 'linear-gradient(to bottom, #0091ea 35%, #6200ea)',
+                        background: 'linear-gradient(to bottom, #0091ea 35%, #6200ea)',
                         WebkitBackgroundClip: 'text',
-                        color: 'transparent', 
+                        color: 'transparent',
 
                     }}>WeStudy</Typography>
 
-                <Stack sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, width:'30px', height:'30px' }}>
-                  <img src={logo} alt="Logo" style={{ maxWidth: '100%', height: 'auto' }} />
-                </Stack>
+                    <Stack sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, width: '30px', height: '30px' }}>
+                        <img src={logo} alt="Logo" style={{ maxWidth: '100%', height: 'auto' }} />
+                    </Stack>
                     <Typography variant='h5' noWrap component={Link} to='/mypage' sx={{
                         mr: 2,
                         display: { xs: 'flex', md: 'none' },
@@ -55,9 +56,9 @@ function LandingPage() {
                         fontFamily: 'lobster',
                         textDecoration: 'none',
                         fontWeight: 700,
-                        background : 'linear-gradient(to bottom, #0091ea 35%, #6200ea)',
+                        background: 'linear-gradient(to bottom, #0091ea 35%, #6200ea)',
                         WebkitBackgroundClip: 'text',
-                        color: 'transparent', 
+                        color: 'transparent',
                     }}>WeStudy</Typography>
 
                     <Stack

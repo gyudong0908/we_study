@@ -6,7 +6,7 @@ router.use(express.json());
 
 
 router.get('/rank', async (req, res) => {
-    const { classId } = req.query; // 클라이언트에서 전달된 선택한 클래스 ID
+    const { classId } = req.query;
     try {
         let results;
 
