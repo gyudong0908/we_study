@@ -31,18 +31,12 @@ app.use(passport.session());
 //     }
 //   }
 // }
-// app.use(cors(corsOptions));
-// app.use(cors({
-//   origin: [process.env.frontAddress], // 클라이언트 애플리케이션의 도메인으로 변경
-//   credentials: true, // 'include' 모드를 사용할 때 credentials 옵션 설정
-// }));
-app.all("*", function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", process.env.frontAddress);
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
+app.use(cors(corsOptions));
+app.use(cors({
+  origin: [`${process.env.frontAddress}`,], // 클라이언트 애플리케이션의 도메인으로 변경
+  credentials: true, // 'include' 모드를 사용할 때 credentials 옵션 설정
+}));
+
 
 // 미들웨어: 모든 URL에 대한 액세스를 차단
 app.use((req, res, next) => {
