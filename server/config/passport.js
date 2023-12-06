@@ -16,9 +16,9 @@ passport.use(new KakaoStrategy({
 },
 
     function (request, accessToken, refreshToken, profile, done) {
-        // console.log(profile)
+        console.log(profile)
         const user = {
-            email: profile.emails[0].value,
+            email: profile._json.kakao_account.email,
             nickName: profile.displayName
         }
         done(null, user);

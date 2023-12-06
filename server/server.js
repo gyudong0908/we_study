@@ -31,10 +31,7 @@ app.use(passport.session());
 //     }
 //   }
 // }
-console.log({
-  origin: process.env.frontAddress, // 클라이언트 애플리케이션의 도메인으로 변경
-  credentials: true, // 'include' 모드를 사용할 때 credentials 옵션 설정
-})
+
 app.use(cors({
   origin: process.env.frontAddress, // 클라이언트 애플리케이션의 도메인으로 변경
   credentials: true, // 'include' 모드를 사용할 때 credentials 옵션 설정
@@ -44,7 +41,7 @@ app.use(cors({
 // 미들웨어: 모든 URL에 대한 액세스를 차단
 app.use((req, res, next) => {
   // `/public` URL에 대한 액세스는 허용
-  if (req.url.match(/^\/auth\/google/) || req.url === '/') {
+  if (req.url.match(/^\/login/) || req.url === '/') {
     return next(); // 다음 미들웨어 또는 라우트로 진행
   }
   // Passport.js의 isAuthenticated 메서드를 사용하여 로그인 여부 확인

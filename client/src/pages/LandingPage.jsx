@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Stack, Button } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
-import loginImg from '../../public/images/web_neutral_sq_SI@1x.png';
+import loginImg from '../../public/images/kakao_login_medium_narrow (1).png';
 import logo from '../../public/images/logo.png';
 import serviceInfo1 from '../../public/images/LP1.png';
 import serviceInfo2 from '../../public/images/LP2.png';
@@ -11,7 +11,7 @@ import serviceInfo4 from '../../public/images/LP4.png';
 
 function LandingPage() {
     const handleClick = () => {
-        window.location.href = `${import.meta.env.VITE_SERVER_ADDRESS}/auth/google`;
+        window.location.href = `${import.meta.env.VITE_SERVER_ADDRESS}/login/auth/kakao`;
     };
 
     return (
@@ -69,7 +69,7 @@ function LandingPage() {
                             color: 'black',
                         }}>
                         <Button onClick={handleClick}>
-                            <img src={loginImg} alt="Sign in with Google"
+                            <img src={loginImg} alt="Sign in with KaKao"
                                 style={{ boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)' }} />
                         </Button>
                     </Stack>

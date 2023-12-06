@@ -2,10 +2,10 @@ const router = require('express').Router();
 const passport = require('../config/passport.js');
 const models = require('../models');
 
-router.get('/auth/google',
+router.get('/login/auth/kakao',
 	passport.authenticate('kakao', {
 		scope:
-			['email', 'profile']
+			['profile_nickname', 'account_email']
 	}
 	));
 
@@ -20,8 +20,8 @@ router.get("/logout", async (req, res, next) => {
 	});
 });
 
-router.get('/auth/google/callback',
-	passport.authenticate('google', {
+router.get('/login/oauth2/code/kakao',
+	passport.authenticate('kakao', {
 		successRedirect: process.env.frontAddress + '/mypage',
 		failureRedirect: process.env.frontAddress
 	}), function (req, res) {
