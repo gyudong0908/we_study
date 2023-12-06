@@ -58,12 +58,12 @@ export default function QuizAccordion({ isTeacher, quiz, editQuiz, onDelete, sub
               {(new Date(quiz.startDateTime).getTime() < new Date().getTime()) && (new Date(quiz.dueDateTime).getTime() > new Date().getTime()) &&
                 !isSubmit &&
                 <Button variant="outlined" size='large'
-                  onClick={() => { window.open(`http://localhost:5173/mypage/quiz/solve/${quiz.id}`, '_blank'); }}
+                  onClick={() => { window.open(`/quiz/solve/${quiz.id}`, '_blank'); }}
                 >📝 퀴즈 응시하기</Button>
               }
               {isSubmit &&
                 <Button variant="outlined" size='large'
-                  onClick={() => { window.open(`http://localhost:5173/mypage/quiz/${quiz.id}/answer/${user.userData.id}`, '_blank'); }}
+                  onClick={() => { window.open(`/quiz/${quiz.id}/answer/${user.userData.id}`, '_blank'); }}
                 >📝 결과 확인하기</Button>
               }
             </Stack>
