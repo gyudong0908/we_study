@@ -1,13 +1,20 @@
 var passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const KakaoStrategy = require('passport-kakao').Strategy;
 const dotenv = require('dotenv').config();
 const models = require('../models');
-passport.use(new GoogleStrategy({
-    clientID: process.env.googleClientId,
-    clientSecret: process.env.googleClientSecret,
+// passport.use(new GoogleStrategy({
+//     clientID: process.env.googleClientId,
+//     clientSecret: process.env.googleClientSecret,
+//     callbackURL: process.env.callback,
+//     passReqToCallback: true
+// },
+
+passport.use(new KakaoStrategy({
+    clientID: process.env.kakaoClientId,
     callbackURL: process.env.callback,
-    passReqToCallback: true
 },
+
     function (request, accessToken, refreshToken, profile, done) {
         // console.log(profile)
         const user = {

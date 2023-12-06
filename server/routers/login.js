@@ -3,7 +3,7 @@ const passport = require('../config/passport.js');
 const models = require('../models');
 
 router.get('/auth/google',
-	passport.authenticate('google', {
+	passport.authenticate('kakao', {
 		scope:
 			['email', 'profile']
 	}
