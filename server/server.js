@@ -31,8 +31,12 @@ app.use(passport.session());
 //     }
 //   }
 // }
+console.log({
+  origin: process.env.frontAddress, // 클라이언트 애플리케이션의 도메인으로 변경
+  credentials: true, // 'include' 모드를 사용할 때 credentials 옵션 설정
+})
 app.use(cors({
-  origin: `${process.env.frontAddress}`, // 클라이언트 애플리케이션의 도메인으로 변경
+  origin: process.env.frontAddress, // 클라이언트 애플리케이션의 도메인으로 변경
   credentials: true, // 'include' 모드를 사용할 때 credentials 옵션 설정
 }));
 
