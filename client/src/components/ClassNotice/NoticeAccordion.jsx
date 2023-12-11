@@ -1,63 +1,71 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Button, Stack, TextField } from '@mui/material';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
+import { Grid, Accordion, AccordionDetails, AccordionSummary, Stack, Button, Typography } from '@mui/material';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import { useState } from 'react';
+import EditNoticeModal from '../MyModal/EditNoticeModal';
+import DeleteAlertModal from '../MyModal/DeleteAlertModal';
 
-export default function NoticeAccordion({ isTeacher, notices }) {
+
+export default function NoticeAccordion({ isTeacher, notices, setNotices }) {
+  const [deleteData, setDeleteData] = useState({});
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [target, setTarget] = useState('');
+  const [isAlertOpen, setAlertOpen] = useState(false);
+
+  function onClickDelete(target) {
+    axios.delete(`${import.meta.env.VITE_SERVER_ADDRESS}/notice?noticeId=${target.id}`, { withCredentials: true }).then(() => {
+      const newNotices = notices.filter(notice => notice.id !== target.id);
+      setNotices(newNotices);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
   return (
     <>
-      {isTeacher && (
-        <Accordion sx={{ mb: 10 }}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            ✍️ 공지사항을 입력하세요.
-          </AccordionSummary>
-          <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-            <TextField
-              id="outlined-basic"
-              label="제목을 입력하세요."
-              variant="outlined"
-              fullWidth
-              sx={{ mb: 2 }}
-              required
-            />
-            <TextField
-              id="outlined-basic"
-              label="내용을 입력하세요."
-              variant="outlined"
-              fullWidth
-              multiline
-              rows={8}
-              sx={{ mb: 2 }}
-              required
-            />
-            <Stack direction="row" justifyContent="flex-end" gap={1}>
-              <Button variant="outlined" type="reset">
-                취소
-              </Button>
-              <Button variant="outlined">저장</Button>
-            </Stack>
-          </AccordionDetails>
-        </Accordion>
-      )}
       {notices.map((notice, index) => (
-        <Accordion>
+        <Accordion key={index}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
-            id="panel1a-header"
+            id="notice-header"
+            sx={{ margin: '5px' }}
           >
-            {notice.title}
+            <Grid container spacing={0} sx={{ alignItems: 'center' }}>
+              <Grid item xs={9}>
+                <Typography variant='h6' sx={{ wordBreak: 'keep-all', wordWrap: 'break-word' }}>{notice.title}</Typography>
+              </Grid>
+              <Grid item xs={3} sx={{ paddingRight: '5px' }}>
+                <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'flex-end', whiteSpace: 'pre'  }}>{dayjs(notice.updatedAt).format('YYYY-MM-DD hh:mm A')}</Typography>
+              </Grid>
+            </Grid>
           </AccordionSummary>
-          <AccordionDetails sx={{ whiteSpace: 'pre-line' }}>
-            {notice.content}
+          <AccordionDetails sx={{ whiteSpace: 'pre-line', margin: '5px' }}>
+            <Stack sx={{ mr: 2, ml: 2, mb: 6 }}>
+              <Typography sx={{ wordBreak: 'keep-all', wordWrap: 'break-word', }}>{notice.content}</Typography>
+            </Stack>
+            {isTeacher && (
+              <Stack direction="row" justifyContent="flex-end" gap={1} sx={{ marginTop: '15px' }}>
+                <Button variant="outlined" onClick={() => { setDeleteData(notice); setAlertOpen(true) }}>삭제</Button>
+                <Button variant="outlined" onClick={() => { setModalOpen(true); setTarget(notice); }}>수정</Button>
+              </Stack>
+            )}
+
           </AccordionDetails>
         </Accordion>
       ))}
+      {
+        isAlertOpen && (
+          <DeleteAlertModal deleteData={deleteData} onClose={() => setAlertOpen(false)} onClickDelete={onClickDelete} />
+        )
+      }
+
+      {
+        isModalOpen && (
+          <EditNoticeModal target={target} notices={notices} setNotices={setNotices} onClose={() => setModalOpen(false)} />
+        )
+      }
     </>
   );
 }

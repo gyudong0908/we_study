@@ -1,13 +1,20 @@
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import ClassDashboard from '../ClassDashboard';
 import ClassNotice from '../ClassNotice';
+import ClassPeople from '../ClassPeople';
+import ClassWork from '../ClassWork';
+import ClassSetting from '../ClassSetting';
+import ClassGrade from '../ClassGrade';
+import ClassQuiz from '../ClassQuiz';
+import { useParams } from 'react-router-dom';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
+
 
   return (
     <div
@@ -17,7 +24,7 @@ function CustomTabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Stack sx={{ p: 3 }}>{children}</Stack>}
     </div>
   );
 }
@@ -35,8 +42,13 @@ function a11yProps(index) {
   };
 }
 
-export default function ClassTabs({ isTeacher, curriculums, notices }) {
+export default function ClassTabs({ isTeacher, classData, setClassData }) {
   const [value, setValue] = React.useState(0);
+  const { classId } = useParams();
+
+  React.useEffect(() => {
+    setValue(0);
+  }, [classId])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -45,48 +57,53 @@ export default function ClassTabs({ isTeacher, curriculums, notices }) {
   const tabs = [
     {
       title: '대시보드',
-      content: <ClassDashboard curriculums={curriculums} />,
+      content: <ClassDashboard isTeacher={isTeacher} />,
     },
     {
       title: '공지사항',
-      content: <ClassNotice notices={notices} isTeacher={isTeacher} />,
+      content: <ClassNotice isTeacher={isTeacher} />,
     },
     {
-      title: '할일목록',
-      content: <div>할일목록 내용</div>,
+      title: '과제',
+      content: <ClassWork isTeacher={isTeacher} />,
+    },
+    {
+      title: '퀴즈',
+      content: <ClassQuiz isTeacher={isTeacher} />,
     },
     {
       title: '참여자',
-      content: <div>참여자 내용</div>,
+      content: <ClassPeople />,
     },
     {
       title: '성적',
-      content: <div>성적 내용</div>,
+      content: <ClassGrade isTeacher={isTeacher} />,
     },
     {
       title: '클래스 설정',
-      content: <div>클래스 설정 내용</div>,
+      content: <ClassSetting isTeacher={isTeacher} classData={classData} setClassData={setClassData} />,
     },
   ];
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+    <Stack sx={{ width: '100%' }}>
+      <Stack sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
         >
           {tabs.map((tab, index) => (
-            <Tab key={index} label={tab.title} {...a11yProps(index)} />
+            !isTeacher && (tab.title === '클래스 설정' || tab.title === '성적') ? null :
+              <Tab key={index} label={tab.title} {...a11yProps(index)} />
           ))}
         </Tabs>
-      </Box>
+      </Stack>
       {tabs.map((tab, index) => (
         <CustomTabPanel key={index} value={value} index={index}>
           {tab.content}
         </CustomTabPanel>
       ))}
-    </Box>
+    </Stack>
   );
 }

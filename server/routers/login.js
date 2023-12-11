@@ -1,26 +1,30 @@
 const router = require('express').Router();
 const passport = require('../config/passport.js');
+const models = require('../models');
 
-router.get('/auth/google',
-  passport.authenticate('google', { scope:
-      [ 'email', 'profile','https://www.googleapis.com/auth/classroom.courses','https://www.googleapis.com/auth/classroom.rosters' ] }
-));
+router.get('/login/auth/kakao',
+	passport.authenticate('kakao', {
+		scope:
+			['profile_nickname', 'account_email']
+	}
+	));
 
 router.get("/logout", async (req, res, next) => {
 	req.logout((err) => {
 		req.session.destroy();
 		if (err) {
-			res.redirect(process.env.frontAddress);
+			res.status(500).send('error 발생');
 		} else {
-			res.status(200).send("server ok: 로그아웃 완료");
+			res.redirect(process.env.frontAddress);
 		}
 	});
 });
 
-router.get( '/auth/google/callback',
-    passport.authenticate( 'google', {
-        successRedirect: process.env.frontAddress,
-        failureRedirect: process.env.frontAddress
-}),function(req,res){
-});
+router.get('/login/oauth2/code/kakao',
+	passport.authenticate('kakao', {
+		successRedirect: process.env.frontAddress + '/mypage',
+		failureRedirect: process.env.frontAddress
+	}), function (req, res) {
+	});
+
 module.exports = router;
